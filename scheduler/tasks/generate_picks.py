@@ -9,7 +9,7 @@ from model.features.builder import build_match_features
 from model.predict import predict_match
 
 
-MODEL_VERSION = "v1"
+MODEL_VERSION = "v1-test"
 
 
 def _load_teams_elo(db) -> dict:

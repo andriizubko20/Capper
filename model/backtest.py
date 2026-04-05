@@ -216,4 +216,4 @@ if __name__ == "__main__":
     dataset = build_dataset(matches, stats, odds, teams, injuries_df=injuries)
     logger.info(f"Dataset: {len(dataset)} rows")
 
-    backtest(dataset, train_window=1500)
+    backtest(dataset, train_window=1500, version="v1-test")

@@ -181,5 +181,5 @@ if __name__ == "__main__":
         exit(1)
 
     logger.info("Training model...")
-    metrics = train(dataset)
+    metrics = train(dataset, version="v1-test")
     logger.info(f"Done: {metrics}")

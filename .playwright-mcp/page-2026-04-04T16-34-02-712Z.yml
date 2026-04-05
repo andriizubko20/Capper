@@ -1,0 +1,535 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - navigation "Sidebar for SStats.net - Football API" [ref=e5]:
+      - search [ref=e7] [cursor=pointer]:
+        - img [ref=e8]
+        - generic [ref=e11]:
+          - generic [ref=e12]: Open Search
+          - text: Search
+        - generic [ref=e13]:
+          - generic [ref=e14]: "Keyboard Shortcut:"
+          - generic [ref=e15]:
+            - generic [ref=e16]: Command
+            - text: ⌘ k
+      - list [ref=e17]:
+        - listitem [ref=e18]:
+          - button "Introduction" [ref=e19] [cursor=pointer]:
+            - generic [ref=e20]: Introduction
+        - listitem [ref=e21]:
+          - button "Close Group Аккаунт" [expanded] [ref=e23] [cursor=pointer]:
+            - generic [ref=e25]:
+              - img [ref=e26]
+              - generic [ref=e29]: Close Group
+            - generic [ref=e30]: Аккаунт
+          - list [ref=e31]:
+            - listitem [ref=e32]:
+              - 'button "Аккаунт HTTP Method: GET" [ref=e33] [cursor=pointer]':
+                - generic [ref=e38]: Аккаунт
+                - generic [ref=e39]:
+                  - generic [ref=e40]: "HTTP Method:"
+                  - text: GET
+        - listitem [ref=e41]:
+          - button "Open Group Excel таблицы" [ref=e43] [cursor=pointer]:
+            - generic [ref=e45]:
+              - img [ref=e46]
+              - generic [ref=e49]: Open Group
+            - generic [ref=e50]: Excel таблицы
+        - listitem [ref=e51]:
+          - button "Open Group Матчи" [ref=e53] [cursor=pointer]:
+            - generic [ref=e55]:
+              - img [ref=e56]
+              - generic [ref=e59]: Open Group
+            - generic [ref=e60]: Матчи
+        - listitem [ref=e61]:
+          - button "Open Group Лиги" [ref=e63] [cursor=pointer]:
+            - generic [ref=e65]:
+              - img [ref=e66]
+              - generic [ref=e69]: Open Group
+            - generic [ref=e70]: Лиги
+        - listitem [ref=e71]:
+          - button "Open Group Flashscore" [ref=e73] [cursor=pointer]:
+            - generic [ref=e75]:
+              - img [ref=e76]
+              - generic [ref=e79]: Open Group
+            - generic [ref=e80]: Flashscore
+        - listitem [ref=e81]:
+          - button "Open Group Коэффициенты" [ref=e83] [cursor=pointer]:
+            - generic [ref=e85]:
+              - img [ref=e86]
+              - generic [ref=e89]: Open Group
+            - generic [ref=e90]: Коэффициенты
+        - listitem [ref=e91]:
+          - button "Open Group Игроки" [ref=e93] [cursor=pointer]:
+            - generic [ref=e95]:
+              - img [ref=e96]
+              - generic [ref=e99]: Open Group
+            - generic [ref=e100]: Игроки
+        - listitem [ref=e101]:
+          - button "Open Group Сезоны" [ref=e103] [cursor=pointer]:
+            - generic [ref=e105]:
+              - img [ref=e106]
+              - generic [ref=e109]: Open Group
+            - generic [ref=e110]: Сезоны
+        - listitem [ref=e111]:
+          - button "Open Group Команды" [ref=e113] [cursor=pointer]:
+            - generic [ref=e115]:
+              - img [ref=e116]
+              - generic [ref=e119]: Open Group
+            - generic [ref=e120]: Команды
+        - listitem [ref=e121]:
+          - button "Open Group Models" [ref=e123] [cursor=pointer]:
+            - generic [ref=e125]:
+              - img [ref=e126]
+              - generic [ref=e129]: Open Group
+            - generic [ref=e130]: Models
+      - generic [ref=e132]:
+        - link "Open API Client" [ref=e133] [cursor=pointer]:
+          - /url: https://client.scalar.com/?url=https%3A%2F%2Fapi.sstats.net%2Fopenapi%2Fv1.json&integration=dotnet&utm_source=api-reference&utm_medium=button&utm_campaign=sidebar
+          - img [ref=e134]
+          - text: Open API Client
+        - generic [ref=e136]:
+          - link "Powered by Scalar" [ref=e138] [cursor=pointer]:
+            - /url: https://www.scalar.com
+          - button "Set dark mode" [ref=e139] [cursor=pointer]:
+            - generic "Set dark mode" [ref=e142]
+    - main "Open API Documentation for SStats.net - Football API" [ref=e149]:
+      - generic [ref=e150]:
+        - region "Introduction" [ref=e152]:
+          - generic [ref=e153]:
+            - generic [ref=e154]:
+              - generic [ref=e155]: v0.9.14.0
+              - generic [ref=e156]: OAS 3.1.1
+            - generic [ref=e157]:
+              - heading "SStats.net - Football API" [level=1] [ref=e159]
+              - generic [ref=e162]: Поддержка
+            - generic [ref=e163]:
+              - generic [ref=e164]:
+                - generic [ref=e165]:
+                  - button "Download OpenAPI Document" [ref=e166] [cursor=pointer]:
+                    - generic [ref=e167]: Download OpenAPI Document
+                  - button "Download OpenAPI Document" [ref=e168] [cursor=pointer]:
+                    - generic [ref=e169]: Download OpenAPI Document
+                - generic [ref=e172]:
+                  - paragraph [ref=e173]: API футбольных матчей, доматчевые и live коэффициенты, статистика, профиты, Glicko 2
+                  - paragraph [ref=e174]: Весь функционал API бесплатен, с ограничением по количеству запросов. Без api ключа ограничение 300 в минуту запросов на всех пользователей, или 30 запросов в минуту на 1 IP адрес.
+                  - paragraph [ref=e175]:
+                    - link "Введение в API" [ref=e176] [cursor=pointer]:
+                      - /url: https://sstats.net/api
+              - generic [ref=e179]:
+                - generic [ref=e180]:
+                  - generic [ref=e181]: Server
+                  - generic [ref=e183]:
+                    - generic [ref=e184]: "Server:"
+                    - generic [ref=e185]: https://api.sstats.net
+                  - paragraph [ref=e187]: SStats.net API
+                - region "Authentication" [ref=e190]:
+                  - generic [ref=e191]:
+                    - button "Authentication" [disabled] [expanded] [ref=e192]:
+                      - heading "Authentication" [level=2] [ref=e193]:
+                        - generic [ref=e196]: Authentication
+                    - button "Select Auth Type" [ref=e199] [cursor=pointer]:
+                      - generic [ref=e200]: Select
+                      - text: Auth Type
+                      - img [ref=e201]
+                  - generic [ref=e206]: No authentication selected
+                - generic [ref=e208]:
+                  - generic [ref=e209]: Client Libraries
+                  - tablist "Client Libraries" [ref=e210]:
+                    - generic [ref=e211]:
+                      - tab "Shell" [selected] [ref=e212] [cursor=pointer]:
+                        - img [ref=e214]
+                        - generic [ref=e216]: Shell
+                      - tab "Ruby" [ref=e217] [cursor=pointer]:
+                        - img [ref=e219]
+                        - generic [ref=e221]: Ruby
+                      - tab "Node.js" [ref=e222] [cursor=pointer]:
+                        - img [ref=e224]
+                        - generic [ref=e227]: Node.js
+                      - tab "PHP" [ref=e228] [cursor=pointer]:
+                        - img [ref=e230]
+                        - generic [ref=e232]: PHP
+                      - tab "Python" [ref=e233] [cursor=pointer]:
+                        - img [ref=e235]
+                        - generic [ref=e237]: Python
+                      - button [ref=e239] [cursor=pointer]
+                  - tabpanel "Shell" [ref=e244]: Shell Curl
+        - region "Аккаунт" [ref=e245]:
+          - generic [ref=e248]:
+            - heading "Аккаунт" [level=2] [ref=e250]
+            - button "Copy link" [ref=e251] [cursor=pointer]:
+              - img [ref=e252]
+              - generic [ref=e255]: Copy link
+          - generic [ref=e257]:
+            - generic [ref=e259]:
+              - paragraph [ref=e260]: Аккаунт
+              - paragraph [ref=e261]: Данные об аккаунте и API токена
+              - paragraph [ref=e262]:
+                - strong [ref=e263]: Требуется авторизация по API ключу
+              - paragraph [ref=e264]:
+                - link "Инструкция по авторизации" [ref=e265] [cursor=pointer]:
+                  - /url: https://sstats.net/posts/api-auth
+            - group "Аккаунт Operations" [ref=e267]:
+              - generic [ref=e269]:
+                - generic [ref=e270]: Аккаунт
+                - text: Operations
+              - list "Аккаунт endpoints" [ref=e272]:
+                - listitem [ref=e273]:
+                  - generic [ref=e274] [cursor=pointer]:
+                    - generic [ref=e275]: get
+                    - generic [ref=e276]: /Account/Info
+          - region "Аккаунт" [ref=e278]:
+            - generic [ref=e279]:
+              - generic [ref=e283]:
+                - heading "Аккаунт" [level=3] [ref=e285]
+                - button "Copy link" [ref=e286] [cursor=pointer]:
+                  - img [ref=e287]
+                  - generic [ref=e290]: Copy link
+              - generic [ref=e291]:
+                - generic [ref=e293]:
+                  - group "Operation Description" [ref=e294]:
+                    - paragraph [ref=e295]: Получение данных о текущем авторизированном пользователе
+                  - generic [ref=e296]:
+                    - generic [ref=e297]: Responses
+                    - list "Responses" [ref=e298]:
+                      - listitem [ref=e299]:
+                        - button "200 application/json" [ref=e300] [cursor=pointer]:
+                          - generic [ref=e301]:
+                            - img [ref=e302]
+                            - generic [ref=e305]: "200"
+                          - generic [ref=e309]: application/json
+                - generic [ref=e311]:
+                  - group "Request Example for get/Account/Info" [ref=e312]:
+                    - generic [ref=e313]:
+                      - generic [ref=e314]:
+                        - generic [ref=e315]: Request Example for
+                        - generic [ref=e316]: get
+                        - generic [ref=e317]: /Account/Info
+                      - button "Shell Curl" [ref=e320] [cursor=pointer]:
+                        - text: Shell Curl
+                        - img [ref=e321]
+                    - generic [ref=e326]:
+                      - code [ref=e329]:
+                        - generic [ref=e330]: curl 'https://api.sstats.net/Account/Info?apikey=YOUR_SECRET_TOKEN'
+                      - button [ref=e331] [cursor=pointer]:
+                        - img [ref=e332]
+                    - button "Test Request (get /Account/Info)" [ref=e341] [cursor=pointer]:
+                      - img [ref=e342]
+                      - generic [ref=e345]: Test Request
+                      - generic [ref=e346]: (get /Account/Info)
+                  - 'region "Status: 200" [ref=e347]':
+                    - generic [ref=e348]:
+                      - tablist [ref=e350]:
+                        - 'tab "Status: 200" [selected] [ref=e351] [cursor=pointer]':
+                          - generic [ref=e352]:
+                            - generic [ref=e353]: "Status:"
+                            - text: "200"
+                      - generic [ref=e355] [cursor=pointer]:
+                        - text: Show Schema
+                        - checkbox "Show Schema"
+                    - generic [ref=e358]:
+                      - code [ref=e361]:
+                        - text: "{ \"status\": \"string\", \"count\":"
+                        - generic [ref=e362]: "null"
+                        - text: ", \"data\": { \"userName\": \"string\", \"apiKey\": \"string\" }, \"requestQuery\":"
+                        - generic [ref=e363]: "null"
+                        - text: ", \"message\":"
+                        - generic [ref=e364]: "null"
+                        - text: ", \"offset\":"
+                        - generic [ref=e365]: "null"
+                        - text: ", \"TotalCount\":"
+                        - generic [ref=e366]: "null"
+                        - text: ", \"traceId\":"
+                        - generic [ref=e367]: "null"
+                        - text: "}"
+                      - button [ref=e368] [cursor=pointer]:
+                        - img [ref=e369]
+        - region "Excel таблицы (Collapsed)" [ref=e377]:
+          - generic [ref=e380]:
+            - heading "Excel таблицы (Collapsed)" [level=2] [ref=e382]:
+              - text: Excel таблицы
+              - generic [ref=e383]: (Collapsed)
+            - button "Copy link" [ref=e384] [cursor=pointer]:
+              - img [ref=e385]
+              - generic [ref=e388]: Copy link
+          - generic [ref=e390]:
+            - generic [ref=e392]:
+              - paragraph [ref=e393]: Excel таблицы
+              - paragraph [ref=e394]: Данные запросы используются в таблицах Excel, получивших популярность в народе, предназначенных для анализа предсказания футбольных матчей. Оригинальные таблицы были модифицированы, заменив парсер сайта Flashscore.com на API sstats.net
+              - paragraph [ref=e395]: Это API так же может быть полезно для использования в других таблицах
+            - group "Excel таблицы Operations" [ref=e397]:
+              - generic [ref=e399]:
+                - generic [ref=e400]: Excel таблицы
+                - text: Operations
+              - list "Excel таблицы endpoints" [ref=e402]:
+                - listitem [ref=e403]:
+                  - generic [ref=e404] [cursor=pointer]:
+                    - generic [ref=e405]: get
+                    - generic [ref=e406]: /Excel/Delux
+                - listitem [ref=e407]:
+                  - generic [ref=e408] [cursor=pointer]:
+                    - generic [ref=e409]: get
+                    - generic [ref=e410]: /Excel/FootballCalc
+                - listitem [ref=e411]:
+                  - generic [ref=e412] [cursor=pointer]:
+                    - generic [ref=e413]: get
+                    - generic [ref=e414]: /Excel/Results
+          - button "Show all Excel таблицы endpoints" [ref=e415] [cursor=pointer]:
+            - text: Show More
+            - img [ref=e416]
+        - region "Матчи (Collapsed)" [ref=e419]:
+          - generic [ref=e422]:
+            - heading "Матчи (Collapsed)" [level=2] [ref=e424]:
+              - text: Матчи
+              - generic [ref=e425]: (Collapsed)
+            - button "Copy link" [ref=e426] [cursor=pointer]:
+              - img [ref=e427]
+              - generic [ref=e430]: Copy link
+          - generic [ref=e432]:
+            - generic [ref=e434]:
+              - paragraph [ref=e435]: Матчи
+              - paragraph [ref=e436]: Новые матчи добавляются несколько раз в день. Обновление доматчевой информации по конкретному матчу происходит раз в 3 часа
+            - group "Матчи Operations" [ref=e438]:
+              - generic [ref=e440]:
+                - generic [ref=e441]: Матчи
+                - text: Operations
+              - list "Матчи endpoints" [ref=e443]:
+                - listitem [ref=e444]:
+                  - generic [ref=e445] [cursor=pointer]:
+                    - generic [ref=e446]: get
+                    - generic [ref=e447]: /Games/list
+                - listitem [ref=e448]:
+                  - generic [ref=e449] [cursor=pointer]:
+                    - generic [ref=e450]: get
+                    - generic [ref=e451]: "/Games/{id}"
+                - listitem [ref=e452]:
+                  - generic [ref=e453] [cursor=pointer]:
+                    - generic [ref=e454]: get
+                    - generic [ref=e455]: "/Games/glicko/{id}"
+                - listitem [ref=e456]:
+                  - generic [ref=e457] [cursor=pointer]:
+                    - generic [ref=e458]: post
+                    - generic [ref=e459]: /Games/query-games
+                - listitem [ref=e460]:
+                  - generic [ref=e461] [cursor=pointer]:
+                    - generic [ref=e462]: post
+                    - generic [ref=e463]: /Games/query
+                - listitem [ref=e464]:
+                  - generic [ref=e465] [cursor=pointer]:
+                    - generic [ref=e466]: get
+                    - generic [ref=e467]: /Games/season-table
+                - listitem [ref=e468]:
+                  - generic [ref=e469] [cursor=pointer]:
+                    - generic [ref=e470]: get
+                    - generic [ref=e471]: /Games/last-games-stats
+                - listitem [ref=e472]:
+                  - generic [ref=e473] [cursor=pointer]:
+                    - generic [ref=e474]: get
+                    - generic [ref=e475]: /Games/text-summary
+                - listitem [ref=e476]:
+                  - generic [ref=e477] [cursor=pointer]:
+                    - generic [ref=e478]: get
+                    - generic [ref=e479]: /Games/profits
+                - listitem [ref=e480]:
+                  - generic [ref=e481] [cursor=pointer]:
+                    - generic [ref=e482]: get
+                    - generic [ref=e483]: /Games/injuries
+          - button "Show all Матчи endpoints" [ref=e484] [cursor=pointer]:
+            - text: Show More
+            - img [ref=e485]
+        - region "Лиги (Collapsed)" [ref=e488]:
+          - generic [ref=e491]:
+            - heading "Лиги (Collapsed)" [level=2] [ref=e493]:
+              - text: Лиги
+              - generic [ref=e494]: (Collapsed)
+            - button "Copy link" [ref=e495] [cursor=pointer]:
+              - img [ref=e496]
+              - generic [ref=e499]: Copy link
+          - generic [ref=e501]:
+            - generic [ref=e503]:
+              - paragraph [ref=e504]: Лиги
+              - paragraph [ref=e505]: Лиги и турниры
+            - group "Лиги Operations" [ref=e507]:
+              - generic [ref=e509]:
+                - generic [ref=e510]: Лиги
+                - text: Operations
+              - list "Лиги endpoints" [ref=e512]:
+                - listitem [ref=e513]:
+                  - generic [ref=e514] [cursor=pointer]:
+                    - generic [ref=e515]: get
+                    - generic [ref=e516]: /Leagues
+          - button "Show all Лиги endpoints" [ref=e517] [cursor=pointer]:
+            - text: Show More
+            - img [ref=e518]
+        - region "Flashscore (Collapsed)" [ref=e521]:
+          - generic [ref=e524]:
+            - heading "Flashscore (Collapsed)" [level=2] [ref=e526]:
+              - text: Flashscore
+              - generic [ref=e527]: (Collapsed)
+            - button "Copy link" [ref=e528] [cursor=pointer]:
+              - img [ref=e529]
+              - generic [ref=e532]: Copy link
+          - generic [ref=e534]:
+            - generic [ref=e536]:
+              - paragraph [ref=e537]: Flashscore
+              - paragraph [ref=e538]: Данные с сайта Flashscore
+            - group "Flashscore Operations" [ref=e540]:
+              - generic [ref=e542]:
+                - generic [ref=e543]: Flashscore
+                - text: Operations
+              - list "Flashscore endpoints" [ref=e545]:
+                - listitem [ref=e546]:
+                  - generic [ref=e547] [cursor=pointer]:
+                    - generic [ref=e548]: get
+                    - generic [ref=e549]: /Ls/List
+                - listitem [ref=e550]:
+                  - generic [ref=e551] [cursor=pointer]:
+                    - generic [ref=e552]: get
+                    - generic [ref=e553]: /Ls/Teams
+                - listitem [ref=e554]:
+                  - generic [ref=e555] [cursor=pointer]:
+                    - generic [ref=e556]: get
+                    - generic [ref=e557]: /Ls/Leagues
+                - listitem [ref=e558]:
+                  - generic [ref=e559] [cursor=pointer]:
+                    - generic [ref=e560]: get
+                    - generic [ref=e561]: /Ls/Seasons
+                - listitem [ref=e562]:
+                  - generic [ref=e563] [cursor=pointer]:
+                    - generic [ref=e564]: get
+                    - generic [ref=e565]: /Ls/GameInfo
+          - button "Show all Flashscore endpoints" [ref=e566] [cursor=pointer]:
+            - text: Show More
+            - img [ref=e567]
+        - region "Коэффициенты (Collapsed)" [ref=e570]:
+          - generic [ref=e573]:
+            - heading "Коэффициенты (Collapsed)" [level=2] [ref=e575]:
+              - text: Коэффициенты
+              - generic [ref=e576]: (Collapsed)
+            - button "Copy link" [ref=e577] [cursor=pointer]:
+              - img [ref=e578]
+              - generic [ref=e581]: Copy link
+          - generic [ref=e583]:
+            - paragraph [ref=e586]: Коэффициенты
+            - group "Коэффициенты Operations" [ref=e588]:
+              - generic [ref=e590]:
+                - generic [ref=e591]: Коэффициенты
+                - text: Operations
+              - list "Коэффициенты endpoints" [ref=e593]:
+                - listitem [ref=e594]:
+                  - generic [ref=e595] [cursor=pointer]:
+                    - generic [ref=e596]: get
+                    - generic [ref=e597]: /Odds/bookmakers
+                - listitem [ref=e598]:
+                  - generic [ref=e599] [cursor=pointer]:
+                    - generic [ref=e600]: get
+                    - generic [ref=e601]: "/Odds/{gameId}"
+                - listitem [ref=e602]:
+                  - generic [ref=e603] [cursor=pointer]:
+                    - generic [ref=e604]: get
+                    - generic [ref=e605]: "/Odds/live/{gameId}"
+                - listitem [ref=e606]:
+                  - generic [ref=e607] [cursor=pointer]:
+                    - generic [ref=e608]: get
+                    - generic [ref=e609]: /Odds/live-changes/updates-only
+                - listitem [ref=e610]:
+                  - generic [ref=e611] [cursor=pointer]:
+                    - generic [ref=e612]: get
+                    - generic [ref=e613]: "/Odds/live-changes/{gameId}"
+                - listitem [ref=e614]:
+                  - generic [ref=e615] [cursor=pointer]:
+                    - generic [ref=e616]: get
+                    - generic [ref=e617]: /Odds/prematch-markets
+                - listitem [ref=e618]:
+                  - generic [ref=e619] [cursor=pointer]:
+                    - generic [ref=e620]: get
+                    - generic [ref=e621]: /Odds/live-markets
+          - button "Show all Коэффициенты endpoints" [ref=e622] [cursor=pointer]:
+            - text: Show More
+            - img [ref=e623]
+        - region "Игроки (Collapsed)" [ref=e626]:
+          - generic [ref=e629]:
+            - heading "Игроки (Collapsed)" [level=2] [ref=e631]:
+              - text: Игроки
+              - generic [ref=e632]: (Collapsed)
+            - button "Copy link" [ref=e633] [cursor=pointer]:
+              - img [ref=e634]
+              - generic [ref=e637]: Copy link
+          - generic [ref=e639]:
+            - paragraph [ref=e642]: Игроки
+            - group "Игроки Operations" [ref=e644]:
+              - generic [ref=e646]:
+                - generic [ref=e647]: Игроки
+                - text: Operations
+              - list "Игроки endpoints" [ref=e649]:
+                - listitem [ref=e650]:
+                  - generic [ref=e651] [cursor=pointer]:
+                    - generic [ref=e652]: get
+                    - generic [ref=e653]: /Players/find
+                - listitem [ref=e654]:
+                  - generic [ref=e655] [cursor=pointer]:
+                    - generic [ref=e656]: get
+                    - generic [ref=e657]: "/Players/{id}"
+                - listitem [ref=e658]:
+                  - generic [ref=e659] [cursor=pointer]:
+                    - generic [ref=e660]: get
+                    - generic [ref=e661]: "/Players/{id}/events"
+          - button "Show all Игроки endpoints" [ref=e662] [cursor=pointer]:
+            - text: Show More
+            - img [ref=e663]
+        - region "Сезоны (Collapsed)" [ref=e666]:
+          - generic [ref=e669]:
+            - heading "Сезоны (Collapsed)" [level=2] [ref=e671]:
+              - text: Сезоны
+              - generic [ref=e672]: (Collapsed)
+            - button "Copy link" [ref=e673] [cursor=pointer]:
+              - img [ref=e674]
+              - generic [ref=e677]: Copy link
+          - generic [ref=e679]:
+            - generic [ref=e681]:
+              - paragraph [ref=e682]: Сезоны
+              - paragraph [ref=e683]: Сезоны турниров
+            - group "Сезоны Operations" [ref=e685]:
+              - generic [ref=e687]:
+                - generic [ref=e688]: Сезоны
+                - text: Operations
+              - list "Сезоны endpoints" [ref=e690]:
+                - listitem [ref=e691]:
+                  - generic [ref=e692] [cursor=pointer]:
+                    - generic [ref=e693]: get
+                    - generic [ref=e694]: /Seasons/standings
+          - button "Show all Сезоны endpoints" [ref=e695] [cursor=pointer]:
+            - text: Show More
+            - img [ref=e696]
+        - region "Команды (Collapsed)" [ref=e699]:
+          - generic [ref=e702]:
+            - heading "Команды (Collapsed)" [level=2] [ref=e704]:
+              - text: Команды
+              - generic [ref=e705]: (Collapsed)
+            - button "Copy link" [ref=e706] [cursor=pointer]:
+              - img [ref=e707]
+              - generic [ref=e710]: Copy link
+          - generic [ref=e712]:
+            - paragraph [ref=e715]: Команды
+            - group "Команды Operations" [ref=e717]:
+              - generic [ref=e719]:
+                - generic [ref=e720]: Команды
+                - text: Operations
+              - list "Команды endpoints" [ref=e722]:
+                - listitem [ref=e723]:
+                  - generic [ref=e724] [cursor=pointer]:
+                    - generic [ref=e725]: get
+                    - generic [ref=e726]: /Teams/list
+                - listitem [ref=e727]:
+                  - generic [ref=e728] [cursor=pointer]:
+                    - generic [ref=e729]: get
+                    - generic [ref=e730]: "/Teams/{id}"
+          - button "Show all Команды endpoints" [ref=e731] [cursor=pointer]:
+            - text: Show More
+            - img [ref=e732]
+        - region "Models" [ref=e736]:
+          - heading "Models" [level=2] [ref=e739]
+          - button "Show More" [ref=e740] [cursor=pointer]:
+            - text: Show More
+            - img [ref=e741]
+  - region "Notifications alt+T":
+    - list

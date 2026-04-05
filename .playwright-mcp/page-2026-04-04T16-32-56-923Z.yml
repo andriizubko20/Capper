@@ -1,0 +1,467 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - text:  
+    - link [ref=e5] [cursor=pointer]:
+      - /url: /main
+    - list [ref=e6]:
+      - listitem [ref=e7]:
+        - link " " [ref=e8] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e9]: 
+          - text: 
+  - generic [ref=e10]:
+    - generic [ref=e12]:
+      - generic [ref=e14]:
+        - heading "Турниры" [level=5] [ref=e15]
+        - generic [ref=e16]:
+          - button "" [ref=e17] [cursor=pointer]:
+            - generic [ref=e18]: 
+          - text: 
+      - generic [ref=e20]:
+        - list [ref=e21]:
+          - listitem [ref=e22]:
+            - generic [ref=e23] [cursor=pointer]:
+              - generic [ref=e24]: 
+              - generic [ref=e25]: Популярные турниры
+              - text: 
+          - listitem [ref=e26]:
+            - generic [ref=e27] [cursor=pointer]:
+              - generic [ref=e28]: 
+              - generic [ref=e29]: Избранные турниры
+              - text: 
+        - generic [ref=e30]:
+          - generic [ref=e32]:
+            - searchbox "Поиск по стране" [ref=e33]
+            - generic [ref=e35]: 
+          - list [ref=e36]:
+            - listitem [ref=e37]:
+              - generic [ref=e38] [cursor=pointer]: Albania 
+            - listitem [ref=e40]:
+              - generic [ref=e41] [cursor=pointer]: Algeria 
+            - listitem [ref=e43]:
+              - generic [ref=e44] [cursor=pointer]: Andorra 
+            - listitem [ref=e46]:
+              - generic [ref=e47] [cursor=pointer]: Angola 
+            - listitem [ref=e49]:
+              - generic [ref=e50] [cursor=pointer]: Antigua-And-Barbuda 
+            - listitem [ref=e52]:
+              - generic [ref=e53] [cursor=pointer]: Argentina 
+            - listitem [ref=e55]:
+              - generic [ref=e56] [cursor=pointer]: Armenia 
+            - listitem [ref=e58]:
+              - generic [ref=e59] [cursor=pointer]: Aruba 
+            - listitem [ref=e61]:
+              - generic [ref=e62] [cursor=pointer]: Australia 
+            - listitem [ref=e64]:
+              - generic [ref=e65] [cursor=pointer]: Austria 
+            - listitem [ref=e67]:
+              - generic [ref=e68] [cursor=pointer]: Azerbaidjan 
+            - listitem [ref=e70]:
+              - generic [ref=e71] [cursor=pointer]: Bahrain 
+            - listitem [ref=e73]:
+              - generic [ref=e74] [cursor=pointer]: Bangladesh 
+            - listitem [ref=e76]:
+              - generic [ref=e77] [cursor=pointer]: Barbados 
+            - listitem [ref=e79]:
+              - generic [ref=e80] [cursor=pointer]: Belarus 
+            - listitem [ref=e82]:
+              - generic [ref=e83] [cursor=pointer]: Belgium 
+            - listitem [ref=e85]:
+              - generic [ref=e86] [cursor=pointer]: Belize 
+            - listitem [ref=e88]:
+              - generic [ref=e89] [cursor=pointer]: Benin 
+            - listitem [ref=e91]:
+              - generic [ref=e92] [cursor=pointer]: Bermuda 
+            - listitem [ref=e94]:
+              - generic [ref=e95] [cursor=pointer]: Bhutan 
+            - listitem [ref=e97]:
+              - generic [ref=e98] [cursor=pointer]: Bolivia 
+            - listitem [ref=e100]:
+              - generic [ref=e101] [cursor=pointer]: Bosnia 
+            - listitem [ref=e103]:
+              - generic [ref=e104] [cursor=pointer]: Botswana 
+            - listitem [ref=e106]:
+              - generic [ref=e107] [cursor=pointer]: Brazil 
+            - listitem [ref=e109]:
+              - generic [ref=e110] [cursor=pointer]: Bulgaria 
+            - listitem [ref=e112]:
+              - generic [ref=e113] [cursor=pointer]: Burkina-Faso 
+            - listitem [ref=e115]:
+              - generic [ref=e116] [cursor=pointer]: Burundi 
+            - listitem [ref=e118]:
+              - generic [ref=e119] [cursor=pointer]: Cambodia 
+            - listitem [ref=e121]:
+              - generic [ref=e122] [cursor=pointer]: Cameroon 
+            - listitem [ref=e124]:
+              - generic [ref=e125] [cursor=pointer]: Canada 
+            - listitem [ref=e127]:
+              - generic [ref=e128] [cursor=pointer]: Chile 
+            - listitem [ref=e130]:
+              - generic [ref=e131] [cursor=pointer]: China 
+            - listitem [ref=e133]:
+              - generic [ref=e134] [cursor=pointer]: Chinese-Taipei 
+            - listitem [ref=e136]:
+              - generic [ref=e137] [cursor=pointer]: Colombia 
+            - listitem [ref=e139]:
+              - generic [ref=e140] [cursor=pointer]: Congo 
+            - listitem [ref=e142]:
+              - generic [ref=e143] [cursor=pointer]: Congo-DR 
+            - listitem [ref=e145]:
+              - generic [ref=e146] [cursor=pointer]: Costa-Rica 
+            - listitem [ref=e148]:
+              - generic [ref=e149] [cursor=pointer]: Croatia 
+            - listitem [ref=e151]:
+              - generic [ref=e152] [cursor=pointer]: Cuba 
+            - listitem [ref=e154]:
+              - generic [ref=e155] [cursor=pointer]: Curacao 
+            - listitem [ref=e157]:
+              - generic [ref=e158] [cursor=pointer]: Cyprus 
+            - listitem [ref=e160]:
+              - generic [ref=e161] [cursor=pointer]: Czech-Republic 
+            - listitem [ref=e163]:
+              - generic [ref=e164] [cursor=pointer]: Denmark 
+            - listitem [ref=e166]:
+              - generic [ref=e167] [cursor=pointer]: Dominican-Republic 
+            - listitem [ref=e169]:
+              - generic [ref=e170] [cursor=pointer]: Ecuador 
+            - listitem [ref=e172]:
+              - generic [ref=e173] [cursor=pointer]: Egypt 
+            - listitem [ref=e175]:
+              - generic [ref=e176] [cursor=pointer]: El-Salvador 
+            - listitem [ref=e178]:
+              - generic [ref=e179] [cursor=pointer]: England 
+            - listitem [ref=e181]:
+              - generic [ref=e182] [cursor=pointer]: Estonia 
+            - listitem [ref=e184]:
+              - generic [ref=e185] [cursor=pointer]: Eswatini 
+            - listitem [ref=e187]:
+              - generic [ref=e188] [cursor=pointer]: Ethiopia 
+            - listitem [ref=e190]:
+              - generic [ref=e191] [cursor=pointer]: Faroe-Islands 
+            - listitem [ref=e193]:
+              - generic [ref=e194] [cursor=pointer]: Fiji 
+            - listitem [ref=e196]:
+              - generic [ref=e197] [cursor=pointer]: Finland 
+            - listitem [ref=e199]:
+              - generic [ref=e200] [cursor=pointer]: France 
+            - listitem [ref=e202]:
+              - generic [ref=e203] [cursor=pointer]: Gabon 
+            - listitem [ref=e205]:
+              - generic [ref=e206] [cursor=pointer]: Gambia 
+            - listitem [ref=e208]:
+              - generic [ref=e209] [cursor=pointer]: Georgia 
+            - listitem [ref=e211]:
+              - generic [ref=e212] [cursor=pointer]: Germany 
+            - listitem [ref=e214]:
+              - generic [ref=e215] [cursor=pointer]: Ghana 
+            - listitem [ref=e217]:
+              - generic [ref=e218] [cursor=pointer]: Gibraltar 
+            - listitem [ref=e220]:
+              - generic [ref=e221] [cursor=pointer]: Greece 
+            - listitem [ref=e223]:
+              - generic [ref=e224] [cursor=pointer]: Grenada 
+            - listitem [ref=e226]:
+              - generic [ref=e227] [cursor=pointer]: Guadeloupe 
+            - listitem [ref=e229]:
+              - generic [ref=e230] [cursor=pointer]: Guatemala 
+            - listitem [ref=e232]:
+              - generic [ref=e233] [cursor=pointer]: Guinea 
+            - listitem [ref=e235]:
+              - generic [ref=e236] [cursor=pointer]: Haiti 
+            - listitem [ref=e238]:
+              - generic [ref=e239] [cursor=pointer]: Honduras 
+            - listitem [ref=e241]:
+              - generic [ref=e242] [cursor=pointer]: Hong-Kong 
+            - listitem [ref=e244]:
+              - generic [ref=e245] [cursor=pointer]: Hungary 
+            - listitem [ref=e247]:
+              - generic [ref=e248] [cursor=pointer]: Iceland 
+            - listitem [ref=e250]:
+              - generic [ref=e251] [cursor=pointer]: India 
+            - listitem [ref=e253]:
+              - generic [ref=e254] [cursor=pointer]: Indonesia 
+            - listitem [ref=e256]:
+              - generic [ref=e257] [cursor=pointer]: Iran 
+            - listitem [ref=e259]:
+              - generic [ref=e260] [cursor=pointer]: Iraq 
+            - listitem [ref=e262]:
+              - generic [ref=e263] [cursor=pointer]: Ireland 
+            - listitem [ref=e265]:
+              - generic [ref=e266] [cursor=pointer]: Israel 
+            - listitem [ref=e268]:
+              - generic [ref=e269] [cursor=pointer]: Italy 
+            - listitem [ref=e271]:
+              - generic [ref=e272] [cursor=pointer]: Ivory-Coast 
+            - listitem [ref=e274]:
+              - generic [ref=e275] [cursor=pointer]: Jamaica 
+            - listitem [ref=e277]:
+              - generic [ref=e278] [cursor=pointer]: Japan 
+            - listitem [ref=e280]:
+              - generic [ref=e281] [cursor=pointer]: Jordan 
+            - listitem [ref=e283]:
+              - generic [ref=e284] [cursor=pointer]: Kazakhstan 
+            - listitem [ref=e286]:
+              - generic [ref=e287] [cursor=pointer]: Kenya 
+            - listitem [ref=e289]:
+              - generic [ref=e290] [cursor=pointer]: Kosovo 
+            - listitem [ref=e292]:
+              - generic [ref=e293] [cursor=pointer]: Kuwait 
+            - listitem [ref=e295]:
+              - generic [ref=e296] [cursor=pointer]: Kyrgyzstan 
+            - listitem [ref=e298]:
+              - generic [ref=e299] [cursor=pointer]: Laos 
+            - listitem [ref=e301]:
+              - generic [ref=e302] [cursor=pointer]: Latvia 
+            - listitem [ref=e304]:
+              - generic [ref=e305] [cursor=pointer]: Lebanon 
+            - listitem [ref=e307]:
+              - generic [ref=e308] [cursor=pointer]: Lesotho 
+            - listitem [ref=e310]:
+              - generic [ref=e311] [cursor=pointer]: Liberia 
+            - listitem [ref=e313]:
+              - generic [ref=e314] [cursor=pointer]: Libya 
+            - listitem [ref=e316]:
+              - generic [ref=e317] [cursor=pointer]: Liechtenstein 
+            - listitem [ref=e319]:
+              - generic [ref=e320] [cursor=pointer]: Lithuania 
+            - listitem [ref=e322]:
+              - generic [ref=e323] [cursor=pointer]: Luxembourg 
+            - listitem [ref=e325]:
+              - generic [ref=e326] [cursor=pointer]: Macao 
+            - listitem [ref=e328]:
+              - generic [ref=e329] [cursor=pointer]: Macedonia 
+            - listitem [ref=e331]:
+              - generic [ref=e332] [cursor=pointer]: Malawi 
+            - listitem [ref=e334]:
+              - generic [ref=e335] [cursor=pointer]: Malaysia 
+            - listitem [ref=e337]:
+              - generic [ref=e338] [cursor=pointer]: Maldives 
+            - listitem [ref=e340]:
+              - generic [ref=e341] [cursor=pointer]: Mali 
+            - listitem [ref=e343]:
+              - generic [ref=e344] [cursor=pointer]: Malta 
+            - listitem [ref=e346]:
+              - generic [ref=e347] [cursor=pointer]: Mauritania 
+            - listitem [ref=e349]:
+              - generic [ref=e350] [cursor=pointer]: Mauritius 
+            - listitem [ref=e352]:
+              - generic [ref=e353] [cursor=pointer]: Mexico 
+            - listitem [ref=e355]:
+              - generic [ref=e356] [cursor=pointer]: Moldova 
+            - listitem [ref=e358]:
+              - generic [ref=e359] [cursor=pointer]: Mongolia 
+            - listitem [ref=e361]:
+              - generic [ref=e362] [cursor=pointer]: Montenegro 
+            - listitem [ref=e364]:
+              - generic [ref=e365] [cursor=pointer]: Morocco 
+            - listitem [ref=e367]:
+              - generic [ref=e368] [cursor=pointer]: Myanmar 
+            - listitem [ref=e370]:
+              - generic [ref=e371] [cursor=pointer]: Namibia 
+            - listitem [ref=e373]:
+              - generic [ref=e374] [cursor=pointer]: Nepal 
+            - listitem [ref=e376]:
+              - generic [ref=e377] [cursor=pointer]: Netherlands 
+            - listitem [ref=e379]:
+              - generic [ref=e380] [cursor=pointer]: New-Zealand 
+            - listitem [ref=e382]:
+              - generic [ref=e383] [cursor=pointer]: Nicaragua 
+            - listitem [ref=e385]:
+              - generic [ref=e386] [cursor=pointer]: Nigeria 
+            - listitem [ref=e388]:
+              - generic [ref=e389] [cursor=pointer]: Northern-Ireland 
+            - listitem [ref=e391]:
+              - generic [ref=e392] [cursor=pointer]: Norway 
+            - listitem [ref=e394]:
+              - generic [ref=e395] [cursor=pointer]: Oman 
+            - listitem [ref=e397]:
+              - generic [ref=e398] [cursor=pointer]: Pakistan 
+            - listitem [ref=e400]:
+              - generic [ref=e401] [cursor=pointer]: Palestine 
+            - listitem [ref=e403]:
+              - generic [ref=e404] [cursor=pointer]: Panama 
+            - listitem [ref=e406]:
+              - generic [ref=e407] [cursor=pointer]: Paraguay 
+            - listitem [ref=e409]:
+              - generic [ref=e410] [cursor=pointer]: Peru 
+            - listitem [ref=e412]:
+              - generic [ref=e413] [cursor=pointer]: Philippines 
+            - listitem [ref=e415]:
+              - generic [ref=e416] [cursor=pointer]: Poland 
+            - listitem [ref=e418]:
+              - generic [ref=e419] [cursor=pointer]: Portugal 
+            - listitem [ref=e421]:
+              - generic [ref=e422] [cursor=pointer]: Qatar 
+            - listitem [ref=e424]:
+              - generic [ref=e425] [cursor=pointer]: Romania 
+            - listitem [ref=e427]:
+              - generic [ref=e428] [cursor=pointer]: Russia 
+            - listitem [ref=e430]:
+              - generic [ref=e431] [cursor=pointer]: Rwanda 
+            - listitem [ref=e433]:
+              - generic [ref=e434] [cursor=pointer]: San-Marino 
+            - listitem [ref=e436]:
+              - generic [ref=e437] [cursor=pointer]: Saudi-Arabia 
+            - listitem [ref=e439]:
+              - generic [ref=e440] [cursor=pointer]: Scotland 
+            - listitem [ref=e442]:
+              - generic [ref=e443] [cursor=pointer]: Senegal 
+            - listitem [ref=e445]:
+              - generic [ref=e446] [cursor=pointer]: Serbia 
+            - listitem [ref=e448]:
+              - generic [ref=e449] [cursor=pointer]: Singapore 
+            - listitem [ref=e451]:
+              - generic [ref=e452] [cursor=pointer]: Slovakia 
+            - listitem [ref=e454]:
+              - generic [ref=e455] [cursor=pointer]: Slovenia 
+            - listitem [ref=e457]:
+              - generic [ref=e458] [cursor=pointer]: Somalia 
+            - listitem [ref=e460]:
+              - generic [ref=e461] [cursor=pointer]: South-Africa 
+            - listitem [ref=e463]:
+              - generic [ref=e464] [cursor=pointer]: South-Korea 
+            - listitem [ref=e466]:
+              - generic [ref=e467] [cursor=pointer]: Spain 
+            - listitem [ref=e469]:
+              - generic [ref=e470] [cursor=pointer]: Sudan 
+            - listitem [ref=e472]:
+              - generic [ref=e473] [cursor=pointer]: Surinam 
+            - listitem [ref=e475]:
+              - generic [ref=e476] [cursor=pointer]: Sweden 
+            - listitem [ref=e478]:
+              - generic [ref=e479] [cursor=pointer]: Switzerland 
+            - listitem [ref=e481]:
+              - generic [ref=e482] [cursor=pointer]: Syria 
+            - listitem [ref=e484]:
+              - generic [ref=e485] [cursor=pointer]: Tajikistan 
+            - listitem [ref=e487]:
+              - generic [ref=e488] [cursor=pointer]: Tanzania 
+            - listitem [ref=e490]:
+              - generic [ref=e491] [cursor=pointer]: Thailand 
+            - listitem [ref=e493]:
+              - generic [ref=e494] [cursor=pointer]: Togo 
+            - listitem [ref=e496]:
+              - generic [ref=e497] [cursor=pointer]: Trinidad-And-Tobago 
+            - listitem [ref=e499]:
+              - generic [ref=e500] [cursor=pointer]: Tunisia 
+            - listitem [ref=e502]:
+              - generic [ref=e503] [cursor=pointer]: Turkey 
+            - listitem [ref=e505]:
+              - generic [ref=e506] [cursor=pointer]: Turkmenistan 
+            - listitem [ref=e508]:
+              - generic [ref=e509] [cursor=pointer]: Uganda 
+            - listitem [ref=e511]:
+              - generic [ref=e512] [cursor=pointer]: Ukraine 
+            - listitem [ref=e514]:
+              - generic [ref=e515] [cursor=pointer]: United-Arab-Emirates 
+            - listitem [ref=e517]:
+              - generic [ref=e518] [cursor=pointer]: Uruguay 
+            - listitem [ref=e520]:
+              - generic [ref=e521] [cursor=pointer]: USA 
+            - listitem [ref=e523]:
+              - generic [ref=e524] [cursor=pointer]: Uzbekistan 
+            - listitem [ref=e526]:
+              - generic [ref=e527] [cursor=pointer]: Venezuela 
+            - listitem [ref=e529]:
+              - generic [ref=e530] [cursor=pointer]: Vietnam 
+            - listitem [ref=e532]:
+              - generic [ref=e533] [cursor=pointer]: Wales 
+            - listitem [ref=e535]:
+              - generic [ref=e536] [cursor=pointer]: World 
+            - listitem [ref=e538]:
+              - generic [ref=e539] [cursor=pointer]: Yemen 
+            - listitem [ref=e541]:
+              - generic [ref=e542] [cursor=pointer]: Zambia 
+            - listitem [ref=e544]:
+              - generic [ref=e545] [cursor=pointer]: Zimbabwe 
+    - generic [ref=e548]:
+      - generic [ref=e550]:
+        - generic [ref=e552]: API Documentation
+        - generic [ref=e553]:
+          - generic [ref=e556]:
+            - generic [ref=e558]: 
+            - heading "Быстрый старт" [level=5] [ref=e559]
+            - paragraph [ref=e560]: Краткое введение. Познакомьтесь с API и примерами работы. Начните отсюда, если вы новичок
+            - link "Начать" [ref=e561] [cursor=pointer]:
+              - /url: /posts/api-introduction
+          - generic [ref=e564]:
+            - generic [ref=e566]: 
+            - heading "Документация. OpenAPI" [level=5] [ref=e567]
+            - paragraph [ref=e568]: Основная документация по стандарту OpenAPI 3.0. Именно здесь ищите самую актуальную и полную информацию по API
+            - link "Перейти " [ref=e569] [cursor=pointer]:
+              - /url: https://api.sstats.net/docs
+              - text: Перейти
+              - generic [ref=e570]: 
+          - generic [ref=e573]:
+            - img "SStats.net Postman API" [ref=e574]
+            - heading "Postman Workspace" [level=5] [ref=e575]
+            - paragraph [ref=e576]: Готовая коллекция запросов для Postman с примерами и тестами. Импортируйте и начинайте работу с API мгновенно.
+            - link "Перейти в Postman" [ref=e577] [cursor=pointer]:
+              - /url: https://www.postman.com/whispryte/workspace/sstats-net/collection/352734-f2164615-a618-49f2-8b83-375f0d27f1a3
+          - generic [ref=e580]:
+            - generic [ref=e582]: 
+            - heading "Интеграция с AI" [level=5] [ref=e583]
+            - paragraph [ref=e584]: Наше API уже адаптировано для использования в чат ботах. Узнайте как заставить AI делать за вас всю работу
+            - button "Читать" [ref=e585] [cursor=pointer]
+          - generic [ref=e588]:
+            - generic [ref=e590]: 
+            - heading "Основные возможности" [level=5] [ref=e591]
+            - paragraph [ref=e592]: Обзор предоставляемых данных и возможностей. Советы по применению.
+            - button "Читать" [disabled]
+          - generic [ref=e595]:
+            - generic [ref=e597]: 
+            - heading "FAQ" [level=5] [ref=e598]
+            - paragraph [ref=e599]: Собрали ваши самые часто задаваемые вопросы и ответили на них
+            - link "Перейти" [ref=e600] [cursor=pointer]:
+              - /url: /faq
+        - generic [ref=e602]:
+          - text: API SStats.net предоставляет данные о футбольных матчах (статистика, коэффициенты, составы, события и т.д) в формате JSON, csv.
+          - text: "Основной адрес:"
+          - code [ref=e603]: https://api.sstats.net
+          - text: "Доступ к нашим API остаётся бесплатным — вы можете начинать работу сразу же. Однако, чтобы защитить сервис от DDoS-атак и чрезмерных анонимных запросов, для неавторизованных пользователей введено общее ограничение на количество обращений. Быстрое (буквально минутное) оформление личного аккаунта снимает это лимитирование: вы получаете персональный, тоже бесплатный, API-ключ и можете свободно отправлять запросы в необходимом объёме."
+          - text: Получить индивидуальный API ключ можно после
+          - link "регистрации" [ref=e604] [cursor=pointer]:
+            - /url: /login
+          - text: ", на странице"
+          - link "профиля" [ref=e605] [cursor=pointer]:
+            - /url: /profile
+          - text: "Пример:"
+          - text: Список лиг
+          - link "https://api.sstats.net/leagues" [ref=e606] [cursor=pointer]:
+            - /url: https://api.sstats.net/leagues
+          - text: "Список матчей сезона:"
+          - link "https://api.sstats.net/games/list?LeagueId=41&Year=2023" [ref=e607] [cursor=pointer]:
+            - /url: https://api.sstats.net/games/list?LeagueId=41&Year=2023
+          - text: "Данные матча:"
+          - link "https://api.sstats.net/games/1183255" [ref=e608] [cursor=pointer]:
+            - /url: https://api.sstats.net/games/1183255
+          - text: "Данные прогноза Glicko 2 и xG:"
+          - link "https://api.sstats.net/games/glicko/1183255" [ref=e609] [cursor=pointer]:
+            - /url: https://api.sstats.net/games/glicko/1183255
+          - heading "Есть вопросы по API?" [level=6] [ref=e610]
+          - text: Смотрие
+          - link "FAQ" [ref=e611] [cursor=pointer]:
+            - /url: /faq
+          - text: или
+          - link "пишите нам" [ref=e612] [cursor=pointer]:
+            - /url: /feedback
+          - text: напрямую. Всегда готовы выслушать ваши пожелания.
+      - generic [ref=e614]:
+        - generic [ref=e615]: © 2018 - 2026 SStats.net v0.9.9
+        - list [ref=e616]:
+          - listitem [ref=e617]:
+            - link " Обратная связь" [ref=e618] [cursor=pointer]:
+              - /url: /feedback
+              - generic [ref=e619]:
+                - generic [ref=e620]: 
+                - generic [ref=e621]: Обратная связь
+    - generic [ref=e622]:
+      - text: 
+      - generic [ref=e624]:
+        - heading " Избранное" [level=5] [ref=e625]:
+          - generic [ref=e626]: 
+          - text: Избранное
+        - generic [ref=e627]:
+          - button "" [ref=e628] [cursor=pointer]:
+            - generic [ref=e629]: 
+          - text: 
