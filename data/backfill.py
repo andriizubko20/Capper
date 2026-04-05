@@ -103,12 +103,64 @@ def backfill_injuries(db, client):
     logger.info("Injuries backfill done.")
 
 
+def backfill_dc_odds(db, client):
+    """Збирає Double Chance odds для матчів без DC odds."""
+    from data.collectors.odds import fetch_odds
+    from db.models import Odds
+
+    matches_with_dc = db.query(Odds.match_id).filter(Odds.market == "double_chance").distinct().subquery()
+    missing = db.query(Match).filter(
+        Match.status == "Finished",
+        ~Match.id.in_(matches_with_dc)
+    ).all()
+
+    logger.info(f"Backfilling DC odds for {len(missing)} matches...")
+
+    for i, match in enumerate(missing):
+        try:
+            odds_list = fetch_odds(match.api_id, client)
+            time.sleep(DELAY)
+            for o in odds_list:
+                if o["market"] != "double_chance":
+                    continue
+                exists = db.query(Odds).filter_by(
+                    match_id=match.id,
+                    market="double_chance",
+                    bookmaker=o["bookmaker"],
+                    outcome=o["outcome"],
+                ).first()
+                if not exists:
+                    db.add(Odds(
+                        match_id=match.id,
+                        market="double_chance",
+                        bookmaker=o["bookmaker"],
+                        outcome=o["outcome"],
+                        value=o["odds"],
+                        opening_value=o.get("opening_odds"),
+                        is_closing=False,
+                    ))
+        except Exception as e:
+            if "429" in str(e):
+                logger.warning(f"Rate limit, waiting {RETRY_DELAY}s...")
+                time.sleep(RETRY_DELAY)
+            else:
+                logger.warning(f"DC odds failed for {match.api_id}: {e}")
+
+        if (i + 1) % 50 == 0:
+            db.commit()
+            logger.info(f"  DC odds progress: {i+1}/{len(missing)}")
+
+    db.commit()
+    logger.info("DC odds backfill done.")
+
+
 def run():
     with SStatsClient() as client:
         db = SessionLocal()
         try:
             backfill_glicko(db, client)
             backfill_injuries(db, client)
+            backfill_dc_odds(db, client)
         finally:
             db.close()
 

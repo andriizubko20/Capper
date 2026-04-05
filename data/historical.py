@@ -14,7 +14,7 @@ from data.collectors.odds import fetch_odds
 from db.models import League, Team, Match, MatchStats, Odds, InjuryReport
 from db.session import SessionLocal
 
-SEASONS = [2024, 2025]
+SEASONS = [2021, 2022, 2023, 2024, 2025]
 DELAY = 1.5  # секунд між запитами
 RETRY_DELAY = 30  # секунд при 429
 MAX_RETRIES = 3

@@ -121,6 +121,12 @@ def build_dataset(
     for mid, grp in odds_1x2.groupby("match_id"):
         odds_by_match[int(mid)] = grp
 
+    # Pre-index DC odds (1X, 2X)
+    odds_dc = odds_df[odds_df["market"] == "double_chance"]
+    dc_by_match: dict[int, pd.DataFrame] = {}
+    for mid, grp in odds_dc.groupby("match_id"):
+        dc_by_match[int(mid)] = grp
+
     rows = []
     for _, match in finished.iterrows():
         match_id = int(match["id"])
@@ -161,6 +167,14 @@ def build_dataset(
             feats["target"] = "draw"
         else:
             feats["target"] = "away"
+
+        # DC odds (1X, 2X) з реального ринку
+        dc_grp = dc_by_match.get(match_id)
+        if dc_grp is not None and not dc_grp.empty:
+            for outcome in ("1X", "2X"):
+                best = dc_grp[dc_grp["outcome"] == outcome]["value"].max()
+                if best and not pd.isna(best):
+                    feats[f"dc_{outcome.lower()}_odds"] = best
 
         feats["match_id"] = match_id
         feats["date"] = match["date"]
