@@ -1,0 +1,59 @@
+services:
+
+  # ─── База даних ───────────────────────────────────────────
+  db:
+    image: postgres:16
+    container_name: capper_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-capper}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-capper}
+      POSTGRES_DB: ${POSTGRES_DB:-capper}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U capper"]
+      interval: 5s
+      retries: 5
+
+  # ─── pgAdmin (UI для БД) ──────────────────────────────────
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: capper_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@capper.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  # ─── Scheduler ────────────────────────────────────────────
+  scheduler:
+    build: .
+    container_name: capper_scheduler
+    command: python -m scheduler.main
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - ./model/saved:/app/model/saved  # збережені моделі
+
+  # ─── Telegram бот ─────────────────────────────────────────
+  bot:
+    build: .
+    container_name: capper_bot
+    command: python -m bot.main
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
