@@ -1,24 +1,26 @@
-from datetime import date, timedelta
+from datetime import datetime, timedelta, timezone
 
 import pandas as pd
 from loguru import logger
 
+from config.settings import settings
 from db.models import Match, Odds, Prediction, Team
 from db.session import SessionLocal
 from model.features.builder import build_match_features
+from model.features.elo import compute_dynamic_elo
 from model.predict import predict_match
 
+MODEL_VERSION = "v1"
 
-MODEL_VERSION = "v1-test"
 
-
-def _load_teams_elo(db) -> dict:
-    teams = db.query(Team).all()
-    return {t.id: {"elo": t.elo} for t in teams}
+def _load_teams_elo(matches_df: pd.DataFrame) -> dict:
+    """Рахує актуальний Elo з матчів (Team.elo в БД не оновлюється)."""
+    elos = compute_dynamic_elo(matches_df)
+    return {team_id: {"elo": elo} for team_id, elo in elos.items()}
 
 
 def _load_matches_df(db) -> pd.DataFrame:
-    matches = db.query(Match).filter(Match.status == "FT").all()
+    matches = db.query(Match).filter(Match.status == "Finished").all()
     return pd.DataFrame([{
         "id": m.id,
         "date": pd.Timestamp(m.date),
@@ -38,6 +40,8 @@ def _load_stats_df(db) -> pd.DataFrame:
         "date": pd.Timestamp(s.match.date),
         "home_team_id": s.match.home_team_id,
         "away_team_id": s.match.away_team_id,
+        "home_score": s.match.home_score,
+        "away_score": s.match.away_score,
         "home_xg": s.home_xg,
         "away_xg": s.away_xg,
     } for s in stats])
@@ -51,26 +55,56 @@ def _get_odds_for_match(match_id: int, db) -> dict | None:
 
 
 def run_generate_picks() -> None:
-    logger.info("Starting picks generation")
-    tomorrow = date.today() + timedelta(days=1)
+    """
+    Генерує picks для матчів що починаються через ~PICKS_HOURS_BEFORE годин.
+    Запускається щогодини. Уникає дублікатів через перевірку існуючих predictions.
+    """
+    now = datetime.now(timezone.utc)
+    window_start = now + timedelta(hours=settings.picks_hours_before - 0.5)
+    window_end = now + timedelta(hours=settings.picks_hours_before + 0.5)
+
+    logger.info(
+        f"Generating picks for matches {settings.picks_hours_before}h before start "
+        f"(window: {window_start.strftime('%H:%M')} – {window_end.strftime('%H:%M')} UTC)"
+    )
 
     db = SessionLocal()
     try:
         matches = db.query(Match).filter(
-            Match.date >= str(tomorrow),
-            Match.date < str(tomorrow + timedelta(days=1)),
-            Match.status == "NS",
+            Match.date >= window_start.replace(tzinfo=None),
+            Match.date <= window_end.replace(tzinfo=None),
+            Match.status == "Not Started",
         ).all()
 
         if not matches:
-            logger.info("No matches tomorrow, skipping")
+            logger.info("No matches in window, skipping")
             return
+
+        logger.info(f"Found {len(matches)} matches in window")
 
         matches_df = _load_matches_df(db)
         stats_df = _load_stats_df(db)
-        teams = _load_teams_elo(db)
+        teams = _load_teams_elo(matches_df)
+
+        from db.models import InjuryReport
+        inj_rows = db.query(InjuryReport).all()
+        injuries_df = pd.DataFrame([{
+            "match_id": i.match_id,
+            "team_id": i.team_id,
+            "player_api_id": i.player_api_id,
+        } for i in inj_rows]) if inj_rows else pd.DataFrame(columns=["match_id", "team_id", "player_api_id"])
+
+        new_picks = []
 
         for match in matches:
+            # Уникаємо дублікатів
+            existing = db.query(Prediction).filter_by(
+                match_id=match.id, model_version=MODEL_VERSION
+            ).first()
+            if existing:
+                logger.debug(f"Match {match.id} already has prediction, skipping")
+                continue
+
             odds = _get_odds_for_match(match.id, db)
             if not odds:
                 logger.warning(f"No odds for match {match.id}, skipping")
@@ -78,6 +112,7 @@ def run_generate_picks() -> None:
 
             features = build_match_features(
                 match={
+                    "id": match.id,
                     "home_team_id": match.home_team_id,
                     "away_team_id": match.away_team_id,
                     "date": match.date,
@@ -87,28 +122,90 @@ def run_generate_picks() -> None:
                 stats_df=stats_df,
                 teams=teams,
                 odds=odds,
+                injuries_df=injuries_df,
             )
 
             picks = predict_match(
                 features=features,
                 odds=odds,
-                bankroll=0,  # bankroll per user — розраховується в боті
+                bankroll=settings.bankroll,
                 version=MODEL_VERSION,
             )
 
             for pick in picks:
-                db.add(Prediction(
+                pred = Prediction(
                     match_id=match.id,
                     market="1x2",
                     outcome=pick["outcome"],
-                    probability=pick["probability"],
-                    odds_used=pick["odds"],
-                    ev=pick["ev"],
-                    kelly_fraction=pick["kelly_fraction"],
+                    probability=float(pick["probability"]),
+                    odds_used=float(pick["odds"]),
+                    ev=float(pick["ev"]),
+                    kelly_fraction=float(pick["kelly_fraction"]),
+                    stake=float(pick["stake"]),
+                    weighted_score=int(pick["weighted_score"]),
                     model_version=MODEL_VERSION,
-                ))
+                )
+                db.add(pred)
+                new_picks.append((match, pick))
 
         db.commit()
-        logger.info(f"Picks generated for {len(matches)} matches")
+
+        if new_picks:
+            logger.info(f"Generated {len(new_picks)} picks")
+            _send_picks_to_telegram(new_picks)
+        else:
+            logger.info("No new picks generated")
+
     finally:
         db.close()
+
+
+def _send_picks_to_telegram(picks: list) -> None:
+    """Надсилає нові піки в Telegram одразу після генерації."""
+    import asyncio
+    from aiogram import Bot
+    from db.models import User
+    from db.session import SessionLocal
+
+    async def _send():
+        if not settings.telegram_bot_token:
+            logger.warning("No Telegram token configured, skipping send")
+            return
+
+        bot = Bot(token=settings.telegram_bot_token)
+        db = SessionLocal()
+        try:
+            users = db.query(User).filter_by(is_active=True).all()
+            if not users:
+                logger.info("No active users to send picks to")
+                return
+
+            lines = []
+            for match, pick in picks:
+                home = match.home_team.name if match.home_team else "?"
+                away = match.away_team.name if match.away_team else "?"
+                outcome_label = {"home": f"П1 ({home})", "away": f"П2 ({away})"}.get(pick["outcome"], pick["outcome"])
+                time_str = match.date.strftime("%d.%m %H:%M")
+                lines.append(
+                    f"⚽ {home} — {away} [{time_str}]\n"
+                    f"  ➤ {outcome_label}\n"
+                    f"  Коеф: {pick['odds']:.2f} | EV: {pick['ev']*100:.1f}% | WS: {pick['weighted_score']}\n"
+                    f"  Стейк: ${pick['stake']:.0f} з ${settings.bankroll:.0f}"
+                )
+
+            message = f"🎯 {len(picks)} нових пік{'и' if len(picks) > 1 else 'а'}:\n\n" + "\n\n".join(lines)
+
+            sent = 0
+            for user in users:
+                try:
+                    await bot.send_message(user.telegram_id, message)
+                    sent += 1
+                except Exception as e:
+                    logger.warning(f"Failed to send to {user.telegram_id}: {e}")
+
+            logger.info(f"Picks sent to {sent}/{len(users)} users")
+        finally:
+            db.close()
+            await bot.session.close()
+
+    asyncio.run(_send())

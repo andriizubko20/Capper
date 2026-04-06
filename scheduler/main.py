@@ -4,7 +4,10 @@ from loguru import logger
 
 from scheduler.tasks.collect_data import run_daily_collection
 from scheduler.tasks.generate_picks import run_generate_picks
+from scheduler.tasks.generate_picks_ws_gap import run_generate_picks_ws_gap
 from scheduler.tasks.update_clv import run_clv_update
+from scheduler.tasks.update_results import run_update_results
+from scheduler.tasks.load_historical import run_load_historical
 from scheduler.tasks.retrain import run_retrain
 
 
@@ -20,12 +23,24 @@ def start() -> None:
         misfire_grace_time=300,
     )
 
-    # 09:00 UTC = 12:00 Київ — генерація пиків
+    # ML v1 — вимкнено, активна тільки WS Gap модель
+    # scheduler.add_job(run_generate_picks, ...)
+
+    # Щогодини — WS Gap модель
     scheduler.add_job(
-        run_generate_picks,
-        CronTrigger(hour=9, minute=0),
-        id="generate_picks",
-        name="Generate daily picks",
+        run_generate_picks_ws_gap,
+        CronTrigger(minute=5),  # зміщено на :05 щоб не конфліктувати з основним
+        id="generate_picks_ws_gap",
+        name="Generate picks WS Gap (hourly)",
+        misfire_grace_time=300,
+    )
+
+    # Щогодини в :30 — оновлення результатів завершених матчів
+    scheduler.add_job(
+        run_update_results,
+        CronTrigger(minute=30),
+        id="update_results",
+        name="Update match results (hourly)",
         misfire_grace_time=300,
     )
 
@@ -36,6 +51,15 @@ def start() -> None:
         id="update_clv",
         name="Update CLV for finished matches",
         misfire_grace_time=300,
+    )
+
+    # 02:00 UTC = 05:00 Київ — нічне завантаження нових ліг
+    scheduler.add_job(
+        run_load_historical,
+        CronTrigger(hour=2, minute=0),
+        id="load_historical",
+        name="Nightly historical data load",
+        misfire_grace_time=3600,
     )
 
     # Понеділок 04:00 UTC = 07:00 Київ — ретрейнінг
