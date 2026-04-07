@@ -50,19 +50,21 @@ def _ws_gap_preds(db, from_date=None, to_date=None, version: str | None = None):
     return q.order_by(Match.date.asc()).all()
 
 
-def _compound_ladder(preds: list, initial: float) -> list[dict]:
+def _compound_ladder(preds: list, initial: float, cap: float | None = KELLY_CAP) -> list[dict]:
     """
     Симулює compound зростання банкролу.
-    Для кожної ставки stake = min(bankroll * kelly_fraction, bankroll * KELLY_CAP).
-    Повертає список dict з {pred, res, stake, profit, bankroll}.
+    cap=KELLY_CAP → 4% кеп (ws_gap_v1)
+    cap=None      → pure Kelly 25% (ws_gap_kelly_v1)
     """
     bankroll = initial
     ladder = []
     for pred in preds:
         res = _result(pred.match, pred)
-        # Перераховуємо стейк з поточного банкролу
         kf = pred.kelly_fraction or 0
-        stake = round(min(bankroll * kf, bankroll * KELLY_CAP), 2) if bankroll > 0 else 0.0
+        if cap is not None:
+            stake = round(min(bankroll * kf, bankroll * cap), 2) if bankroll > 0 else 0.0
+        else:
+            stake = round(bankroll * kf, 2) if bankroll > 0 else 0.0
 
         if res == "win":
             profit = round(stake * (pred.odds_used - 1), 2)
@@ -456,7 +458,7 @@ async def cmd_kelly(message: Message):
             await message.answer("Статистика Kelly ще недоступна — ставок немає.")
             return
 
-        ladder   = _compound_ladder(all_preds, initial)
+        ladder   = _compound_ladder(all_preds, initial, cap=None)
         finished = [i for i in ladder if i["res"] != "pending"]
         pending  = [i for i in ladder if i["res"] == "pending"]
 
