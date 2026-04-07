@@ -18,7 +18,8 @@ from model.features.builder import build_match_features
 from model.features.elo import compute_dynamic_elo
 from model.weighted_score import compute_weighted_score
 
-MODEL_VERSION = "ws_gap_v1"
+MODEL_VERSION       = "ws_gap_v1"       # 4% cap
+MODEL_VERSION_KELLY = "ws_gap_kelly_v1"  # pure Kelly 25%, no cap
 WS_GAP_MIN    = 80
 WS_DOM_MIN    = 80
 ODDS_MIN      = 1.7
@@ -116,7 +117,7 @@ def _ws_gap_pick(features: dict, odds: dict, bankroll: float) -> dict | None:
     b = odds_val - 1
     q = 1 - p_elo
     kelly = max(0.0, (p_elo * b - q) / b) * FRACTIONAL
-    stake = round(min(bankroll * kelly, bankroll * KELLY_CAP), 2) if bankroll > 0 else 0.0
+    stake = round(bankroll * kelly, 2) if bankroll > 0 else 0.0
 
     # EV через Elo prob (не ринок)
     ev = round(p_elo * odds_val - 1, 4)
@@ -136,6 +137,40 @@ def _ws_gap_pick(features: dict, odds: dict, bankroll: float) -> dict | None:
         "weighted_score": int(ws_dom),
         "ws_gap":        int(ws_gap),
     }
+
+
+def _compute_current_bankroll(db, initial: float, model_ver: str) -> float:
+    """
+    Рахує поточний банкрол з урахуванням усіх завершених ставок моделі.
+    """
+    from db.models import Match as MatchModel
+    FINISHED = {"Finished", "FT", "finished", "ft", "Match Finished"}
+
+    preds = (
+        db.query(Prediction)
+        .join(MatchModel)
+        .filter(
+            Prediction.model_version == model_ver,
+            MatchModel.status.in_(FINISHED),
+            MatchModel.home_score.isnot(None),
+        )
+        .order_by(MatchModel.date.asc())
+        .all()
+    )
+
+    bankroll = initial
+    for pred in preds:
+        m = pred.match
+        kf = pred.kelly_fraction or 0
+        stake = min(bankroll * kf, bankroll * KELLY_CAP)
+        hs, as_ = m.home_score, m.away_score
+        won = (pred.outcome == "home" and hs > as_) or (pred.outcome == "away" and as_ > hs)
+        if won:
+            bankroll += stake * (pred.odds_used - 1)
+        else:
+            bankroll -= stake
+
+    return round(bankroll, 2)
 
 
 def run_generate_picks_ws_gap(
@@ -194,13 +229,21 @@ def run_generate_picks_ws_gap(
             columns=["match_id", "team_id", "player_api_id"]
         )
 
+        # Поточний банкрол для кожної версії (compound)
+        bankroll_cap   = _compute_current_bankroll(db, settings.bankroll, MODEL_VERSION)
+        bankroll_kelly = _compute_current_bankroll(db, settings.bankroll, MODEL_VERSION_KELLY)
+        logger.info(
+            f"[WS Gap] Bankroll cap=${bankroll_cap:.0f} kelly=${bankroll_kelly:.0f} "
+            f"(initial=${settings.bankroll:.0f})"
+        )
+
         new_picks = []
 
         for match in matches:
-            existing = db.query(Prediction).filter_by(
-                match_id=match.id, model_version=MODEL_VERSION
-            ).first()
-            if existing:
+            # Пропускаємо якщо обидві версії вже є
+            has_cap   = db.query(Prediction).filter_by(match_id=match.id, model_version=MODEL_VERSION).first()
+            has_kelly = db.query(Prediction).filter_by(match_id=match.id, model_version=MODEL_VERSION_KELLY).first()
+            if has_cap and has_kelly:
                 logger.debug(f"[WS Gap] Match {match.id} already predicted, skip")
                 continue
 
@@ -224,29 +267,47 @@ def run_generate_picks_ws_gap(
                 injuries_df=injuries_df,
             )
 
-            pick = _ws_gap_pick(features, odds, settings.bankroll)
+            # Генеруємо пік (stake = pure Kelly)
+            pick = _ws_gap_pick(features, odds, max(bankroll_cap, bankroll_kelly))
             if pick is None:
                 continue
 
-            pred = Prediction(
-                match_id=match.id,
-                market="1x2",
-                outcome=pick["outcome"],
-                probability=float(pick["probability"]),
-                odds_used=float(pick["odds"]),
-                ev=float(pick["ev"]),
-                kelly_fraction=float(pick["kelly_fraction"]),
-                stake=float(pick["stake"]),
-                weighted_score=int(pick["weighted_score"]),
-                model_version=MODEL_VERSION,
-            )
-            db.add(pred)
+            # Версія 1: 4% cap
+            if not has_cap:
+                stake_cap = round(min(bankroll_cap * pick["kelly_fraction"], bankroll_cap * KELLY_CAP), 2)
+                db.add(Prediction(
+                    match_id=match.id, market="1x2",
+                    outcome=pick["outcome"],
+                    probability=float(pick["probability"]),
+                    odds_used=float(pick["odds"]),
+                    ev=float(pick["ev"]),
+                    kelly_fraction=float(pick["kelly_fraction"]),
+                    stake=stake_cap,
+                    weighted_score=int(pick["weighted_score"]),
+                    model_version=MODEL_VERSION,
+                ))
+
+            # Версія 2: pure Kelly 25%
+            if not has_kelly:
+                stake_kelly = round(bankroll_kelly * pick["kelly_fraction"], 2)
+                db.add(Prediction(
+                    match_id=match.id, market="1x2",
+                    outcome=pick["outcome"],
+                    probability=float(pick["probability"]),
+                    odds_used=float(pick["odds"]),
+                    ev=float(pick["ev"]),
+                    kelly_fraction=float(pick["kelly_fraction"]),
+                    stake=stake_kelly,
+                    weighted_score=int(pick["weighted_score"]),
+                    model_version=MODEL_VERSION_KELLY,
+                ))
+
             new_picks.append((match, pick))
 
         db.commit()
 
         if new_picks:
-            logger.info(f"[WS Gap] Generated {len(new_picks)} picks")
+            logger.info(f"[WS Gap] Generated {len(new_picks)} picks (both versions)")
             _send_picks_to_telegram(new_picks)
         else:
             logger.info("[WS Gap] No new picks")

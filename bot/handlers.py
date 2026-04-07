@@ -9,6 +9,7 @@ from db.models import Match, Prediction, Odds as OddsModel
 from db.session import SessionLocal
 
 WS_GAP_VERSION    = "ws_gap_v1"
+KELLY_VERSION     = "ws_gap_kelly_v1"
 SCHEDULE_DAYS     = 5
 HISTORY_PAGE_SIZE = 7
 KELLY_CAP         = 0.04
@@ -35,12 +36,12 @@ def _team_label(match: Match, outcome: str) -> str:
     return home if outcome == "home" else away
 
 
-def _ws_gap_preds(db, from_date=None, to_date=None):
+def _ws_gap_preds(db, from_date=None, to_date=None, version: str | None = None):
     """Повертає WS Gap пики від найстарішого до найновішого."""
     q = (
         db.query(Prediction)
         .join(Match)
-        .filter(Prediction.model_version == WS_GAP_VERSION)
+        .filter(Prediction.model_version == (version or WS_GAP_VERSION))
     )
     if from_date:
         q = q.filter(Match.date >= str(from_date))
@@ -94,7 +95,8 @@ async def cmd_start(message: Message):
         "📌 <b>Команди:</b>\n"
         "/picks — активні ставки\n"
         "/history — минулі ставки\n"
-        "/stats — статистика\n"
+        "/stats — статистика (Kelly 4%)\n"
+        "/kelly — статистика (Pure Kelly 25%)\n"
         "/schedule — розклад матчів",
         parse_mode="HTML",
     )
@@ -165,108 +167,112 @@ async def cmd_picks(message: Message):
 
 # ── /history ──────────────────────────────────────────────────────────────────
 
-def _build_history_text(page: int) -> str:
+def _history_days() -> list[str]:
+    """Повертає список дат (YYYY-MM-DD) де є ставки, від старих до нових."""
     db = SessionLocal()
     try:
-        # Всі пики від найстаріших до найновіших
+        preds = _ws_gap_preds(db, to_date=date.today() + timedelta(days=1))
+        seen = {}
+        for p in preds:
+            d = p.match.date.strftime("%Y-%m-%d")
+            seen[d] = True
+        return list(seen.keys())  # вже відсортовано asc бо _ws_gap_preds сортує asc
+    finally:
+        db.close()
+
+
+def _build_history_day(day_str: str) -> str:
+    """Формує текст для одного дня."""
+    db = SessionLocal()
+    try:
         all_preds = _ws_gap_preds(db)
         if not all_preds:
             return "Ставок ще немає."
 
         ladder = _compound_ladder(all_preds, settings.bankroll)
 
-        # Тільки ті що вже відбулися або сьогодні — без майбутніх
-        today = date.today()
-        ladder = [i for i in ladder if i["pred"].match.date.date() <= today]
+        # Фільтруємо по потрібному дню
+        items = [i for i in ladder if i["pred"].match.date.strftime("%Y-%m-%d") == day_str]
+        if not items:
+            return f"На {day_str} ставок немає."
 
-        # Групуємо по даті (від найстаріших — вже відсортовано asc)
-        by_day: dict[str, list] = {}
-        for item in ladder:
-            day = item["pred"].match.date.strftime("%d.%m.%Y")
-            by_day.setdefault(day, []).append(item)
+        day_label = items[0]["pred"].match.date.strftime("%d.%m.%Y")
+        lines = [f"📋 <b>{day_label}</b>\n"]
+        day_p = 0.0
 
-        days = list(by_day.keys())
-        total_pages = max(1, (len(days) + HISTORY_PAGE_SIZE - 1) // HISTORY_PAGE_SIZE)
-        page = max(0, min(page, total_pages - 1))
-        page_days = days[page * HISTORY_PAGE_SIZE: (page + 1) * HISTORY_PAGE_SIZE]
+        for item in items:
+            pred = item["pred"]
+            m    = pred.match
+            home = m.home_team.name if m.home_team else "?"
+            away = m.away_team.name if m.away_team else "?"
+            bet_team = _team_label(m, pred.outcome)
+            side = "П1" if pred.outcome == "home" else "П2"
+            score_str = f" {m.home_score}:{m.away_score}" if m.home_score is not None else ""
 
-        lines = [f"📋 <b>Історія WS Gap</b> · стор. {page + 1}/{total_pages}\n"]
-        page_profit = 0.0
+            if item["res"] == "win":
+                icon, profit_str = "✅", f"+${item['profit']:.0f}"
+                day_p += item["profit"]
+            elif item["res"] == "loss":
+                icon, profit_str = "❌", f"−${abs(item['profit']):.0f}"
+                day_p += item["profit"]
+            else:
+                icon, profit_str = "⏳", "очікується"
 
-        for day in page_days:
-            items = by_day[day]
-            lines.append(f"📅 <b>{day}</b>")
-            day_p = 0.0
+            lines.append(
+                f"{icon} {home} — {away}{score_str}\n"
+                f"   {side} {bet_team} · {pred.odds_used:.2f}\n"
+                f"   ${item['stake']:.0f} → <b>{profit_str}</b>"
+            )
 
-            for item in items:
-                pred = item["pred"]
-                m    = pred.match
-                home = m.home_team.name if m.home_team else "?"
-                away = m.away_team.name if m.away_team else "?"
-                bet_team = _team_label(m, pred.outcome)
-                side = "П1" if pred.outcome == "home" else "П2"
-                score_str = f" {m.home_score}:{m.away_score}" if m.home_score is not None else ""
-
-                if item["res"] == "win":
-                    icon, profit_str = "✅", f"+${item['profit']:.0f}"
-                    day_p += item["profit"]
-                elif item["res"] == "loss":
-                    icon, profit_str = "❌", f"−${abs(item['profit']):.0f}"
-                    day_p += item["profit"]
-                else:
-                    icon, profit_str = "⏳", "очікується"
-
-                lines.append(
-                    f"  {icon} {home} — {away}{score_str}\n"
-                    f"     {side} {bet_team} · {pred.odds_used:.2f}\n"
-                    f"     ${item['stake']:.0f} → <b>{profit_str}</b>"
-                )
-
-            # Підсумок дня + поточний банкрол
-            end_bankroll = items[-1]["bankroll"]
-            sign = "+" if day_p >= 0 else ""
-            lines.append(f"  <i>День: {sign}${day_p:.0f} · Банкрол: ${end_bankroll:.0f}</i>\n")
-            page_profit += day_p
-
-        sign = "+" if page_profit >= 0 else ""
-        lines.append("━━━━━━━━━━━━━━━")
-        lines.append(f"Сторінка: <b>{sign}${page_profit:.0f}</b>")
+        end_bankroll = items[-1]["bankroll"]
+        sign = "+" if day_p >= 0 else ""
+        lines.append(f"\n<i>День: {sign}${day_p:.0f} · Банкрол: ${end_bankroll:.0f}</i>")
 
         return "\n".join(lines)
     finally:
         db.close()
 
 
-def _history_keyboard(page: int) -> InlineKeyboardMarkup:
-    db = SessionLocal()
+def _history_keyboard(day_str: str) -> InlineKeyboardMarkup:
+    days = _history_days()
+    if not days:
+        return InlineKeyboardMarkup(inline_keyboard=[])
+
     try:
-        preds = _ws_gap_preds(db, to_date=date.today() + timedelta(days=1))
-        by_day = {}
-        for p in preds:
-            by_day[p.match.date.strftime("%d.%m.%Y")] = 1
-        total_pages = max(1, (len(by_day) + HISTORY_PAGE_SIZE - 1) // HISTORY_PAGE_SIZE)
-    finally:
-        db.close()
+        idx = days.index(day_str)
+    except ValueError:
+        idx = len(days) - 1
 
     row = []
-    if page > 0:
-        row.append(InlineKeyboardButton(text="◀ Новіші", callback_data=f"history:{page - 1}"))
-    if page < total_pages - 1:
-        row.append(InlineKeyboardButton(text="Старіші ▶", callback_data=f"history:{page + 1}"))
-    return InlineKeyboardMarkup(inline_keyboard=[row]) if row else InlineKeyboardMarkup(inline_keyboard=[])
+    if idx > 0:
+        row.append(InlineKeyboardButton(text="◀", callback_data=f"history_day:{days[idx - 1]}"))
+    row.append(InlineKeyboardButton(
+        text=f"{idx + 1}/{len(days)}",
+        callback_data=f"history_day:{day_str}",
+    ))
+    if idx < len(days) - 1:
+        row.append(InlineKeyboardButton(text="▶", callback_data=f"history_day:{days[idx + 1]}"))
+
+    return InlineKeyboardMarkup(inline_keyboard=[row])
 
 
 @router.message(Command("history"))
 async def cmd_history(message: Message):
-    text = _build_history_text(0)
-    await message.answer(text, reply_markup=_history_keyboard(0), parse_mode="HTML")
+    days = _history_days()
+    if not days:
+        await message.answer("Ставок ще немає.")
+        return
+    # Починаємо з першого дня (найстарішого)
+    day_str = days[0]
+    text = _build_history_day(day_str)
+    await message.answer(text, reply_markup=_history_keyboard(day_str), parse_mode="HTML")
 
 
-@router.callback_query(F.data.startswith("history:"))
-async def cb_history(callback: CallbackQuery):
-    page = int(callback.data.split(":")[1])
-    text = _build_history_text(page)
-    await callback.message.edit_text(text, reply_markup=_history_keyboard(page), parse_mode="HTML")
+@router.callback_query(F.data.startswith("history_day:"))
+async def cb_history_day(callback: CallbackQuery):
+    day_str = callback.data.split(":", 1)[1]
+    text = _build_history_day(day_str)
+    await callback.message.edit_text(text, reply_markup=_history_keyboard(day_str), parse_mode="HTML")
     await callback.answer()
 
 
@@ -283,31 +289,28 @@ async def cmd_stats(message: Message):
             await message.answer("Статистика ще недоступна — ставок немає.")
             return
 
-        ladder    = _compound_ladder(all_preds, initial)
-        finished  = [i for i in ladder if i["res"] != "pending"]
-        pending_n = len(ladder) - len(finished)
+        ladder   = _compound_ladder(all_preds, initial)
+        finished = [i for i in ladder if i["res"] != "pending"]
+        pending  = [i for i in ladder if i["res"] == "pending"]
 
         wins   = sum(1 for i in finished if i["res"] == "win")
         losses = sum(1 for i in finished if i["res"] == "loss")
 
-        # Поточний банкрол — останній запис в ladder
-        balance  = ladder[-1]["bankroll"]
-        profit   = balance - initial
-        roi      = (profit / initial) * 100
+        balance = ladder[-1]["bankroll"]
+        profit  = balance - initial
+        roi     = (profit / initial) * 100
 
-        win_rate = f"{wins}/{len(finished)} ({wins/len(finished)*100:.0f}%)" if finished else "—"
+        win_pct  = wins / len(finished) * 100 if finished else 0
         avg_odds = sum(i["pred"].odds_used for i in ladder) / len(ladder)
 
-        # Серія виграшів/програшів поспіль
+        # Серія
         streak_wins = streak_losses = 0
         for item in reversed(finished):
             if item["res"] == "win":
-                if streak_losses > 0:
-                    break
+                if streak_losses > 0: break
                 streak_wins += 1
             else:
-                if streak_wins > 0:
-                    break
+                if streak_wins > 0: break
                 streak_losses += 1
 
         if streak_wins >= 2:
@@ -319,21 +322,48 @@ async def cmd_stats(message: Message):
         else:
             streak_str = "—"
 
-        since_str = all_preds[0].match.date.strftime("%d.%m.%Y")
+        since_str = all_preds[0].match.date.strftime("%d.%m")
+        to_str    = date.today().strftime("%d.%m.%Y")
+
+        # Динаміка банкролу — мін/макс
+        bankrolls = [i["bankroll"] for i in ladder if i["res"] != "pending"]
+        peak = max(bankrolls) if bankrolls else balance
+        drawdown = (peak - balance) / peak * 100 if peak > 0 else 0
+
         profit_sign = "+" if profit >= 0 else ""
         roi_sign    = "+" if roi >= 0 else ""
 
-        await message.answer(
-            f"📊 <b>WS Gap · {since_str} → сьогодні</b>\n\n"
-            f"💰 <b>${initial:.0f} → ${balance:.2f}</b>\n"
-            f"   {profit_sign}${profit:.2f}  ({roi_sign}{roi:.1f}% ROI)\n\n"
-            f"🏆 Win rate: <b>{win_rate}</b>\n"
-            f"   Очікується: {pending_n} ставок\n\n"
-            f"📈 Avg коеф: {avg_odds:.2f}\n"
-            f"   {streak_str}\n\n"
-            f"<i>Фільтр: WS Gap ≥ 80 · Odds ≥ 1.7 · Kelly 4%</i>",
-            parse_mode="HTML",
+        filled = min(int(win_pct / 10), 10)
+        if win_pct >= 60:
+            bars = "🟩" * filled + "⬜" * (10 - filled)
+        else:
+            bars = "🟥" * filled + "⬜" * (10 - filled)
+
+        text = (
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            f"📐 <b>Capper · WS Gap</b>\n"
+            f"📅 {since_str} → {to_str}\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"💰 <b>${initial:.0f} → ${balance:.0f}</b>\n"
+            f"   {profit_sign}${profit:.0f}  ·  ROI {roi_sign}{roi:.1f}%\n\n"
+            f"🎯 <b>{wins}W / {losses}L</b>  ({win_pct:.0f}%)\n"
+            f"   {bars}\n"
         )
+
+        if pending:
+            text += f"   ⏳ {len(pending)} в очікуванні\n"
+
+        text += (
+            f"\n📈 Avg коеф: {avg_odds:.2f}\n"
+            f"   {streak_str}\n"
+        )
+
+        if drawdown > 5:
+            text += f"   📉 Drawdown від піку: {drawdown:.1f}%\n"
+
+        text += "\n━━━━━━━━━━━━━━━━━━━━"
+
+        await message.answer(text, parse_mode="HTML")
     finally:
         db.close()
 
@@ -411,6 +441,86 @@ def _build_schedule_text(day_offset: int) -> str:
             lines.append("")
 
         return "\n".join(lines)
+    finally:
+        db.close()
+
+
+@router.message(Command("kelly"))
+async def cmd_kelly(message: Message):
+    db = SessionLocal()
+    try:
+        initial   = settings.bankroll
+        all_preds = _ws_gap_preds(db, version=KELLY_VERSION)
+
+        if not all_preds:
+            await message.answer("Статистика Kelly ще недоступна — ставок немає.")
+            return
+
+        ladder   = _compound_ladder(all_preds, initial)
+        finished = [i for i in ladder if i["res"] != "pending"]
+        pending  = [i for i in ladder if i["res"] == "pending"]
+
+        wins   = sum(1 for i in finished if i["res"] == "win")
+        losses = sum(1 for i in finished if i["res"] == "loss")
+
+        balance = ladder[-1]["bankroll"]
+        profit  = balance - initial
+        roi     = (profit / initial) * 100
+
+        win_pct  = wins / len(finished) * 100 if finished else 0
+        avg_odds = sum(i["pred"].odds_used for i in ladder) / len(ladder)
+
+        streak_wins = streak_losses = 0
+        for item in reversed(finished):
+            if item["res"] == "win":
+                if streak_losses > 0: break
+                streak_wins += 1
+            else:
+                if streak_wins > 0: break
+                streak_losses += 1
+
+        if streak_wins >= 2:
+            streak_str = f"🔥 {streak_wins} виграші поспіль"
+        elif streak_wins == 1:
+            streak_str = "🔥 1 виграш"
+        elif streak_losses >= 2:
+            streak_str = f"🔴 {streak_losses} програші поспіль"
+        else:
+            streak_str = "—"
+
+        since_str = all_preds[0].match.date.strftime("%d.%m")
+        to_str    = date.today().strftime("%d.%m.%Y")
+
+        bankrolls = [i["bankroll"] for i in ladder if i["res"] != "pending"]
+        peak      = max(bankrolls) if bankrolls else balance
+        drawdown  = (peak - balance) / peak * 100 if peak > 0 else 0
+
+        profit_sign = "+" if profit >= 0 else ""
+        roi_sign    = "+" if roi >= 0 else ""
+        filled = min(int(win_pct / 10), 10)
+        bars = ("🟩" if win_pct >= 60 else "🟥") * filled + "⬜" * (10 - filled)
+
+        text = (
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            f"📐 <b>Capper · Pure Kelly 25%</b>\n"
+            f"📅 {since_str} → {to_str}\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"💰 <b>${initial:.0f} → ${balance:.0f}</b>\n"
+            f"   {profit_sign}${profit:.0f}  ·  ROI {roi_sign}{roi:.1f}%\n\n"
+            f"🎯 <b>{wins}W / {losses}L</b>  ({win_pct:.0f}%)\n"
+            f"   {bars}\n"
+        )
+        if pending:
+            text += f"   ⏳ {len(pending)} в очікуванні\n"
+
+        text += f"\n📈 Avg коеф: {avg_odds:.2f}\n   {streak_str}\n"
+
+        if drawdown > 5:
+            text += f"   📉 Drawdown від піку: {drawdown:.1f}%\n"
+
+        text += "\n━━━━━━━━━━━━━━━━━━━━"
+
+        await message.answer(text, parse_mode="HTML")
     finally:
         db.close()
 
