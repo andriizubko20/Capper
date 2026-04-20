@@ -8,14 +8,8 @@ from loguru import logger
 from config.settings import settings
 from bot.handlers import router
 from bot.middleware import WhitelistMiddleware
-from db.models import Base
-from db.session import engine
-
-
 async def main():
     logger.info("Starting Capper bot...")
-
-    Base.metadata.create_all(bind=engine)
 
     bot = Bot(
         token=settings.telegram_bot_token,
