@@ -1,0 +1,670 @@
+id,api_id,date,league,country,home_team,away_team,home_score,away_score,status
+4274,1387944,2026-04-04 19:05:00,Ligue 1,France,Lille,Lens,3,0,Finished
+3257,1391110,2026-04-04 19:00:00,La Liga,Spain,Atletico Madrid,Barcelona,1,2,Finished
+3951,1378167,2026-04-04 18:45:00,Serie A,Italy,Lazio,Parma,1,1,Finished
+4273,1387942,2026-04-04 17:00:00,Ligue 1,France,Stade Brestois 29,Rennes,3,4,Finished
+3256,1391111,2026-04-04 16:30:00,La Liga,Spain,Real Betis,Espanyol,0,0,Finished
+3592,1388557,2026-04-04 16:30:00,Bundesliga,Germany,VfB Stuttgart,Borussia Dortmund,0,2,Finished
+3950,1378173,2026-04-04 16:00:00,Serie A,Italy,Hellas Verona,Fiorentina,0,1,Finished
+4272,1387949,2026-04-04 15:00:00,Ligue 1,France,Strasbourg,Nice,3,1,Finished
+3255,1391114,2026-04-04 14:15:00,La Liga,Spain,Mallorca,Real Madrid,2,1,Finished
+3588,1388554,2026-04-04 13:30:00,Bundesliga,Germany,SC Freiburg,Bayern München,2,3,Finished
+3591,1388559,2026-04-04 13:30:00,Bundesliga,Germany,Werder Bremen,RB Leipzig,1,2,Finished
+3590,1388556,2026-04-04 13:30:00,Bundesliga,Germany,1899 Hoffenheim,FSV Mainz 05,1,2,Finished
+3589,1388555,2026-04-04 13:30:00,Bundesliga,Germany,Hamburger SV,FC Augsburg,1,1,Finished
+3586,1388551,2026-04-04 13:30:00,Bundesliga,Germany,Bayer Leverkusen,VfL Wolfsburg,6,3,Finished
+3587,1388552,2026-04-04 13:30:00,Bundesliga,Germany,Borussia Mönchengladbach,1. FC Heidenheim,2,2,Finished
+3949,1378171,2026-04-04 13:00:00,Serie A,Italy,Sassuolo,Cagliari,2,1,Finished
+3254,1391116,2026-04-04 12:00:00,La Liga,Spain,Real Sociedad,Levante,2,0,Finished
+3253,1391115,2026-04-03 19:00:00,La Liga,Spain,Rayo Vallecano,Elche,1,0,Finished
+4271,1387948,2026-04-03 18:45:00,Ligue 1,France,Paris Saint Germain,Toulouse,3,1,Finished
+3252,1391106,2026-03-22 20:00:00,La Liga,Spain,Real Madrid,Atletico Madrid,3,2,Finished
+4270,1387936,2026-03-22 19:45:00,Ligue 1,France,Nantes,Strasbourg,2,3,Finished
+3948,1378158,2026-03-22 19:45:00,Serie A,Italy,Fiorentina,Inter,1,1,Finished
+3585,1388542,2026-03-22 18:30:00,Bundesliga,Germany,FC Augsburg,VfB Stuttgart,2,5,Finished
+3251,1391099,2026-03-22 17:30:00,La Liga,Spain,Athletic Club,Real Betis,2,1,Finished
+3947,1378163,2026-03-22 17:00:00,Serie A,Italy,AS Roma,Lecce,1,0,Finished
+3584,1388549,2026-03-22 16:30:00,Bundesliga,Germany,FC St. Pauli,SC Freiburg,1,2,Finished
+4269,1387939,2026-03-22 16:15:00,Ligue 1,France,Rennes,Metz,0,0,Finished
+4268,1387938,2026-03-22 16:15:00,Ligue 1,France,Paris FC,Le Havre,3,2,Finished
+4267,1387935,2026-03-22 16:15:00,Ligue 1,France,Marseille,Lille,1,2,Finished
+3250,1391101,2026-03-22 15:15:00,La Liga,Spain,Celta Vigo,Alaves,3,4,Finished
+3583,1388547,2026-03-22 14:30:00,Bundesliga,Germany,FSV Mainz 05,Eintracht Frankfurt,2,1,Finished
+2891,1379277,2026-03-22 14:15:00,Premier League,England,Tottenham,Nottingham Forest,0,3,Finished
+2892,1379269,2026-03-22 14:15:00,Premier League,England,Aston Villa,West Ham,2,0,Finished
+3945,1378154,2026-03-22 14:00:00,Serie A,Italy,Atalanta,Hellas Verona,1,0,Finished
+3946,1378155,2026-03-22 14:00:00,Serie A,Italy,Bologna,Lazio,0,2,Finished
+4266,1387934,2026-03-22 14:00:00,Ligue 1,France,Lyon,Monaco,1,2,Finished
+3249,1391100,2026-03-22 13:00:00,La Liga,Spain,Barcelona,Rayo Vallecano,1,0,Finished
+2890,1379276,2026-03-22 12:00:00,Premier League,England,Newcastle,Sunderland,1,2,Finished
+3944,1378157,2026-03-22 11:30:00,Serie A,Italy,Como,Pisa,5,0,Finished
+4265,1387937,2026-03-21 20:05:00,Ligue 1,France,Nice,Paris Saint Germain,0,4,Finished
+3248,1391107,2026-03-21 20:00:00,La Liga,Spain,Sevilla,Valencia,0,2,Finished
+2889,1379274,2026-03-21 20:00:00,Premier League,England,Leeds,Brentford,0,0,Finished
+3943,1378160,2026-03-21 19:45:00,Serie A,Italy,Juventus,Sassuolo,1,1,Finished
+4264,1387932,2026-03-21 18:00:00,Ligue 1,France,Auxerre,Stade Brestois 29,3,0,Finished
+3247,1391105,2026-03-21 17:30:00,La Liga,Spain,Osasuna,Girona,1,0,Finished
+3582,1388544,2026-03-21 17:30:00,Bundesliga,Germany,Borussia Dortmund,Hamburger SV,3,2,Finished
+3246,1391104,2026-03-21 17:30:00,La Liga,Spain,Levante,Oviedo,4,2,Finished
+2888,1379272,2026-03-21 17:30:00,Premier League,England,Everton,Chelsea,3,0,Finished
+3942,1378161,2026-03-21 17:00:00,Serie A,Italy,AC Milan,Torino,3,2,Finished
+4263,1387940,2026-03-21 16:00:00,Ligue 1,France,Toulouse,Lorient,1,0,Finished
+3245,1391103,2026-03-21 15:15:00,La Liga,Spain,Espanyol,Getafe,1,2,Finished
+2886,1379273,2026-03-21 15:00:00,Premier League,England,Fulham,Burnley,3,1,Finished
+3580,1388546,2026-03-21 14:30:00,Bundesliga,Germany,1. FC Heidenheim,Bayer Leverkusen,3,3,Finished
+3581,1388550,2026-03-21 14:30:00,Bundesliga,Germany,VfL Wolfsburg,Werder Bremen,0,1,Finished
+3578,1388543,2026-03-21 14:30:00,Bundesliga,Germany,Bayern München,Union Berlin,4,0,Finished
+3579,1388545,2026-03-21 14:30:00,Bundesliga,Germany,1. FC Köln,Borussia Mönchengladbach,3,3,Finished
+3941,1378162,2026-03-21 14:00:00,Serie A,Italy,Parma,Cremonese,0,2,Finished
+3244,1391102,2026-03-21 13:00:00,La Liga,Spain,Elche,Mallorca,2,1,Finished
+2885,1379271,2026-03-21 12:30:00,Premier League,England,Brighton,Liverpool,2,1,Finished
+3243,1391108,2026-03-20 20:00:00,La Liga,Spain,Villarreal,Real Sociedad,3,1,Finished
+2884,1379270,2026-03-20 20:00:00,Premier League,England,Bournemouth,Manchester United,2,2,Finished
+3940,1378159,2026-03-20 19:45:00,Serie A,Italy,Genoa,Udinese,0,2,Finished
+4262,1387933,2026-03-20 19:45:00,Ligue 1,France,Lens,Angers,5,1,Finished
+3577,1388548,2026-03-20 19:30:00,Bundesliga,Germany,RB Leipzig,1899 Hoffenheim,5,0,Finished
+3939,1378156,2026-03-20 17:30:00,Serie A,Italy,Cagliari,Napoli,0,1,Finished
+4601,1528332,2026-03-18 20:00:00,Champions League,Europe,Bayern München,Atalanta,4,1,Finished
+4600,1528331,2026-03-18 20:00:00,Champions League,Europe,Tottenham,Atletico Madrid,3,2,Finished
+4602,1528329,2026-03-18 20:00:00,Champions League,Europe,Liverpool,Galatasaray,4,0,Finished
+4599,1528327,2026-03-18 17:45:00,Champions League,Europe,Barcelona,Newcastle,7,2,Finished
+4598,1528326,2026-03-17 20:00:00,Champions League,Europe,Manchester City,Real Madrid,1,2,Finished
+4596,1528328,2026-03-17 20:00:00,Champions League,Europe,Chelsea,Paris Saint Germain,0,3,Finished
+4597,1528330,2026-03-17 20:00:00,Champions League,Europe,Arsenal,Bayer Leverkusen,2,0,Finished
+4595,1528333,2026-03-17 17:45:00,Champions League,Europe,Sporting CP,Bodo/Glimt,3,0,Finished After Extra Time
+3242,1391095,2026-03-16 20:00:00,La Liga,Spain,Rayo Vallecano,Levante,1,1,Finished
+2883,1379260,2026-03-16 20:00:00,Premier League,England,Brentford,Wolves,2,2,Finished
+3938,1378145,2026-03-16 19:45:00,Serie A,Italy,Cremonese,Fiorentina,1,4,Finished
+3241,1391097,2026-03-15 20:00:00,La Liga,Spain,Real Sociedad,Osasuna,3,1,Finished
+3937,1378147,2026-03-15 19:45:00,Serie A,Italy,Lazio,AC Milan,1,0,Finished
+4261,1387930,2026-03-15 19:45:00,Ligue 1,France,Rennes,Lille,1,2,Finished
+3576,1388540,2026-03-15 18:30:00,Bundesliga,Germany,VfB Stuttgart,RB Leipzig,1,0,Finished
+3240,1391092,2026-03-15 17:30:00,La Liga,Spain,Real Betis,Celta Vigo,1,1,Finished
+3936,1378144,2026-03-15 17:00:00,Serie A,Italy,Como,AS Roma,2,1,Finished
+3575,1388537,2026-03-15 16:30:00,Bundesliga,Germany,SC Freiburg,Union Berlin,0,1,Finished
+2882,1379264,2026-03-15 16:30:00,Premier League,England,Liverpool,Tottenham,1,1,Finished
+4260,1387924,2026-03-15 16:15:00,Ligue 1,France,Le Havre,Lyon,0,0,Finished
+4259,1387927,2026-03-15 16:15:00,Ligue 1,France,Metz,Toulouse,3,4,Finished
+3239,1391091,2026-03-15 15:15:00,La Liga,Spain,Barcelona,Sevilla,5,2,Finished
+3574,1388541,2026-03-15 14:30:00,Bundesliga,Germany,Werder Bremen,FSV Mainz 05,0,2,Finished
+2879,1379265,2026-03-15 14:00:00,Premier League,England,Manchester United,Aston Villa,3,1,Finished
+3935,1378150,2026-03-15 14:00:00,Serie A,Italy,Sassuolo,Bologna,0,1,Finished
+3934,1378149,2026-03-15 14:00:00,Serie A,Italy,Pisa,Cagliari,3,1,Finished
+4258,1387931,2026-03-15 14:00:00,Ligue 1,France,Strasbourg,Paris FC,0,0,Finished
+2881,1379263,2026-03-15 14:00:00,Premier League,England,Crystal Palace,Leeds,0,0,Finished
+2880,1379266,2026-03-15 14:00:00,Premier League,England,Nottingham Forest,Fulham,0,0,Finished
+3238,1391094,2026-03-15 13:00:00,La Liga,Spain,Mallorca,Espanyol,2,1,Finished
+3933,1378153,2026-03-15 11:30:00,Serie A,Italy,Hellas Verona,Genoa,0,2,Finished
+4257,1387928,2026-03-14 20:05:00,Ligue 1,France,Monaco,Stade Brestois 29,2,0,Finished
+3237,1391096,2026-03-14 20:00:00,La Liga,Spain,Real Madrid,Elche,4,1,Finished
+2878,1379268,2026-03-14 20:00:00,Premier League,England,West Ham,Manchester City,1,1,Finished
+3932,1378152,2026-03-14 19:45:00,Serie A,Italy,Udinese,Juventus,0,1,Finished
+4256,1387923,2026-03-14 18:00:00,Ligue 1,France,Angers,Nice,0,2,Finished
+2877,1379259,2026-03-14 17:30:00,Premier League,England,Arsenal,Everton,2,0,Finished
+3573,1388538,2026-03-14 17:30:00,Bundesliga,Germany,Hamburger SV,1. FC Köln,1,1,Finished
+3236,1391098,2026-03-14 17:30:00,La Liga,Spain,Oviedo,Valencia,1,0,Finished
+2876,1379262,2026-03-14 17:30:00,Premier League,England,Chelsea,Newcastle,0,1,Finished
+3931,1378148,2026-03-14 17:00:00,Serie A,Italy,Napoli,Lecce,2,1,Finished
+4255,1387925,2026-03-14 16:00:00,Ligue 1,France,Lorient,Lens,2,1,Finished
+3235,1391090,2026-03-14 15:15:00,La Liga,Spain,Atletico Madrid,Getafe,1,0,Finished
+2874,1379261,2026-03-14 15:00:00,Premier League,England,Burnley,Bournemouth,0,0,Finished
+2875,1379267,2026-03-14 15:00:00,Premier League,England,Sunderland,Brighton,0,1,Finished
+3571,1388533,2026-03-14 14:30:00,Bundesliga,Germany,Bayer Leverkusen,Bayern München,1,1,Finished
+3570,1388536,2026-03-14 14:30:00,Bundesliga,Germany,Eintracht Frankfurt,1. FC Heidenheim,1,0,Finished
+3572,1388539,2026-03-14 14:30:00,Bundesliga,Germany,1899 Hoffenheim,VfL Wolfsburg,1,1,Finished
+3569,1388535,2026-03-14 14:30:00,Bundesliga,Germany,Borussia Dortmund,FC Augsburg,2,0,Finished
+3930,1378146,2026-03-14 14:00:00,Serie A,Italy,Inter,Atalanta,1,1,Finished
+3234,1391093,2026-03-14 13:00:00,La Liga,Spain,Girona,Athletic Club,3,0,Finished
+3233,1391089,2026-03-13 20:00:00,La Liga,Spain,Alaves,Villarreal,1,1,Finished
+4254,1387926,2026-03-13 19:45:00,Ligue 1,France,Marseille,Auxerre,1,0,Finished
+3929,1378151,2026-03-13 19:45:00,Serie A,Italy,Torino,Parma,4,1,Finished
+3568,1388534,2026-03-13 19:30:00,Bundesliga,Germany,Borussia Mönchengladbach,FC St. Pauli,2,0,Finished
+4594,1528318,2026-03-11 20:00:00,Champions League,Europe,Real Madrid,Manchester City,3,0,Finished
+4593,1528325,2026-03-11 20:00:00,Champions League,Europe,Bodo/Glimt,Sporting CP,3,0,Finished
+4592,1528320,2026-03-11 20:00:00,Champions League,Europe,Paris Saint Germain,Chelsea,5,2,Finished
+4591,1528322,2026-03-11 17:45:00,Champions League,Europe,Bayer Leverkusen,Arsenal,1,1,Finished
+4590,1528324,2026-03-10 20:00:00,Champions League,Europe,Atalanta,Bayern München,1,6,Finished
+4588,1528319,2026-03-10 20:00:00,Champions League,Europe,Newcastle,Barcelona,1,1,Finished
+4589,1528323,2026-03-10 20:00:00,Champions League,Europe,Atletico Madrid,Tottenham,5,2,Finished
+4587,1528321,2026-03-10 17:45:00,Champions League,Europe,Galatasaray,Liverpool,1,0,Finished
+3232,1391082,2026-03-09 20:00:00,La Liga,Spain,Espanyol,Oviedo,1,1,Finished
+3928,1378140,2026-03-09 19:45:00,Serie A,Italy,Lazio,Sassuolo,2,1,Finished
+3231,1391087,2026-03-08 20:00:00,La Liga,Spain,Valencia,Alaves,3,2,Finished
+4253,1387918,2026-03-08 19:45:00,Ligue 1,France,Lyon,Paris FC,1,1,Finished
+3927,1378142,2026-03-08 19:45:00,Serie A,Italy,AC Milan,Inter,1,0,Finished
+3230,1391086,2026-03-08 17:30:00,La Liga,Spain,Sevilla,Rayo Vallecano,1,1,Finished
+3926,1378138,2026-03-08 17:00:00,Serie A,Italy,Genoa,AS Roma,2,1,Finished
+3567,1388531,2026-03-08 16:30:00,Bundesliga,Germany,Union Berlin,Werder Bremen,1,4,Finished
+4251,1387915,2026-03-08 16:15:00,Ligue 1,France,Stade Brestois 29,Le Havre,2,0,Finished
+4252,1387920,2026-03-08 16:15:00,Ligue 1,France,Nice,Rennes,0,4,Finished
+4250,1387917,2026-03-08 16:15:00,Ligue 1,France,Lille,Lorient,1,1,Finished
+3229,1391083,2026-03-08 15:15:00,La Liga,Spain,Getafe,Real Betis,2,0,Finished
+3566,1388530,2026-03-08 14:30:00,Bundesliga,Germany,FC St. Pauli,Eintracht Frankfurt,0,0,Finished
+3924,1378137,2026-03-08 14:00:00,Serie A,Italy,Fiorentina,Parma,0,0,Finished
+4249,1387916,2026-03-08 14:00:00,Ligue 1,France,Lens,Metz,3,0,Finished
+3925,1378135,2026-03-08 14:00:00,Serie A,Italy,Bologna,Hellas Verona,1,2,Finished
+3228,1391088,2026-03-08 13:00:00,La Liga,Spain,Villarreal,Elche,2,1,Finished
+3923,1378141,2026-03-08 11:30:00,Serie A,Italy,Lecce,Cremonese,2,1,Finished
+4248,1387922,2026-03-07 20:05:00,Ligue 1,France,Toulouse,Marseille,0,1,Finished
+3227,1391079,2026-03-07 20:00:00,La Liga,Spain,Athletic Club,Barcelona,0,1,Finished
+3922,1378139,2026-03-07 19:45:00,Serie A,Italy,Juventus,Pisa,4,0,Finished
+4247,1387914,2026-03-07 18:00:00,Ligue 1,France,Auxerre,Strasbourg,0,0,Finished
+3565,1388525,2026-03-07 17:30:00,Bundesliga,Germany,1. FC Köln,Borussia Dortmund,1,2,Finished
+3226,1391080,2026-03-07 17:30:00,La Liga,Spain,Atletico Madrid,Real Sociedad,3,2,Finished
+3921,1378134,2026-03-07 17:00:00,Serie A,Italy,Atalanta,Udinese,2,2,Finished
+4246,1387919,2026-03-07 16:00:00,Ligue 1,France,Nantes,Angers,0,1,Finished
+3225,1391084,2026-03-07 15:15:00,La Liga,Spain,Levante,Girona,1,1,Finished
+3563,1388528,2026-03-07 14:30:00,Bundesliga,Germany,FSV Mainz 05,VfB Stuttgart,2,2,Finished
+3560,1388532,2026-03-07 14:30:00,Bundesliga,Germany,VfL Wolfsburg,Hamburger SV,1,2,Finished
+3561,1388526,2026-03-07 14:30:00,Bundesliga,Germany,SC Freiburg,Bayer Leverkusen,3,3,Finished
+3562,1388527,2026-03-07 14:30:00,Bundesliga,Germany,1. FC Heidenheim,1899 Hoffenheim,2,4,Finished
+3564,1388529,2026-03-07 14:30:00,Bundesliga,Germany,RB Leipzig,FC Augsburg,2,1,Finished
+3920,1378136,2026-03-07 14:00:00,Serie A,Italy,Cagliari,Como,1,2,Finished
+3224,1391085,2026-03-07 13:00:00,La Liga,Spain,Osasuna,Mallorca,2,2,Finished
+3223,1391081,2026-03-06 20:00:00,La Liga,Spain,Celta Vigo,Real Madrid,1,2,Finished
+3919,1378143,2026-03-06 19:45:00,Serie A,Italy,Napoli,Torino,2,1,Finished
+4245,1387921,2026-03-06 19:45:00,Ligue 1,France,Paris Saint Germain,Monaco,1,3,Finished
+3559,1388524,2026-03-06 19:30:00,Bundesliga,Germany,Bayern München,Borussia Mönchengladbach,4,1,Finished
+2873,1379257,2026-03-05 20:00:00,Premier League,England,Tottenham,Crystal Palace,1,3,Finished
+2872,1379256,2026-03-04 20:15:00,Premier League,England,Newcastle,Manchester United,2,1,Finished
+3558,1388455,2026-03-04 19:30:00,Bundesliga,Germany,Hamburger SV,Bayer Leverkusen,0,1,Finished
+2868,1379255,2026-03-04 19:30:00,Premier League,England,Manchester City,Nottingham Forest,2,2,Finished
+2869,1379253,2026-03-04 19:30:00,Premier League,England,Fulham,West Ham,0,1,Finished
+2870,1379251,2026-03-04 19:30:00,Premier League,England,Brighton,Arsenal,0,1,Finished
+2871,1379249,2026-03-04 19:30:00,Premier League,England,Aston Villa,Chelsea,1,4,Finished
+3222,1391044,2026-03-04 18:00:00,La Liga,Spain,Rayo Vallecano,Oviedo,3,0,Finished
+2867,1379258,2026-03-03 20:15:00,Premier League,England,Wolves,Liverpool,2,1,Finished
+2864,1379250,2026-03-03 19:30:00,Premier League,England,Bournemouth,Brentford,0,0,Finished
+2865,1379252,2026-03-03 19:30:00,Premier League,England,Everton,Burnley,2,0,Finished
+2866,1379254,2026-03-03 19:30:00,Premier League,England,Leeds,Sunderland,0,1,Finished
+3221,1391076,2026-03-02 20:00:00,La Liga,Spain,Real Madrid,Getafe,0,1,Finished
+3918,1378132,2026-03-02 19:45:00,Serie A,Italy,Udinese,Fiorentina,3,0,Finished
+3917,1378128,2026-03-02 17:30:00,Serie A,Italy,Pisa,Bologna,0,1,Finished
+3220,1391072,2026-03-01 20:00:00,La Liga,Spain,Girona,Celta Vigo,1,2,Finished
+3916,1378129,2026-03-01 19:45:00,Serie A,Italy,AS Roma,Juventus,3,3,Finished
+4244,1387908,2026-03-01 19:45:00,Ligue 1,France,Marseille,Lyon,3,2,Finished
+3557,1388520,2026-03-01 18:30:00,Bundesliga,Germany,Hamburger SV,RB Leipzig,1,2,Finished
+3219,1391070,2026-03-01 17:30:00,La Liga,Spain,Real Betis,Sevilla,2,2,Finished
+3915,1378131,2026-03-01 17:00:00,Serie A,Italy,Torino,Lazio,2,0,Finished
+3556,1388519,2026-03-01 16:30:00,Bundesliga,Germany,Eintracht Frankfurt,SC Freiburg,2,0,Finished
+2863,1379239,2026-03-01 16:30:00,Premier League,England,Arsenal,Chelsea,2,1,Finished
+4241,1387909,2026-03-01 16:15:00,Ligue 1,France,Metz,Stade Brestois 29,0,1,Finished
+4242,1387906,2026-03-01 16:15:00,Ligue 1,France,Lille,Nantes,1,0,Finished
+4243,1387907,2026-03-01 16:15:00,Ligue 1,France,Lorient,Auxerre,2,2,Finished
+3218,1391078,2026-03-01 15:15:00,La Liga,Spain,Valencia,Osasuna,1,0,Finished
+3555,1388522,2026-03-01 14:30:00,Bundesliga,Germany,VfB Stuttgart,VfL Wolfsburg,4,0,Finished
+2860,1379246,2026-03-01 14:00:00,Premier League,England,Manchester United,Crystal Palace,2,1,Finished
+4240,1387911,2026-03-01 14:00:00,Ligue 1,France,Paris FC,Nice,1,0,Finished
+2861,1379243,2026-03-01 14:00:00,Premier League,England,Fulham,Tottenham,2,1,Finished
+2862,1379241,2026-03-01 14:00:00,Premier League,England,Brighton,Nottingham Forest,2,1,Finished
+3914,1378130,2026-03-01 14:00:00,Serie A,Italy,Sassuolo,Atalanta,2,1,Finished
+3217,1391071,2026-03-01 13:00:00,La Liga,Spain,Elche,Espanyol,2,2,Finished
+3913,1378125,2026-03-01 11:30:00,Serie A,Italy,Cremonese,AC Milan,0,2,Finished
+4239,1387905,2026-02-28 20:05:00,Ligue 1,France,Le Havre,Paris Saint Germain,0,1,Finished
+3216,1391077,2026-02-28 20:00:00,La Liga,Spain,Oviedo,Atletico Madrid,0,1,Finished
+3912,1378126,2026-02-28 19:45:00,Serie A,Italy,Inter,Genoa,2,0,Finished
+4238,1387910,2026-02-28 18:00:00,Ligue 1,France,Monaco,Angers,2,0,Finished
+3554,1388518,2026-02-28 17:30:00,Bundesliga,Germany,Borussia Dortmund,Bayern München,2,3,Finished
+3215,1391074,2026-02-28 17:30:00,La Liga,Spain,Mallorca,Real Sociedad,0,1,Finished
+2859,1379244,2026-02-28 17:30:00,Premier League,England,Leeds,Manchester City,0,1,Finished
+3911,1378133,2026-02-28 17:00:00,Serie A,Italy,Hellas Verona,Napoli,1,2,Finished
+4237,1387912,2026-02-28 16:00:00,Ligue 1,France,Rennes,Toulouse,1,0,Finished
+3214,1391069,2026-02-28 15:15:00,La Liga,Spain,Barcelona,Villarreal,4,1,Finished
+2857,1379242,2026-02-28 15:00:00,Premier League,England,Burnley,Brentford,3,4,Finished
+2856,1379247,2026-02-28 15:00:00,Premier League,England,Newcastle,Everton,2,3,Finished
+2858,1379245,2026-02-28 15:00:00,Premier League,England,Liverpool,West Ham,5,2,Finished
+3553,1388523,2026-02-28 14:30:00,Bundesliga,Germany,Werder Bremen,1. FC Heidenheim,2,0,Finished
+3550,1388516,2026-02-28 14:30:00,Bundesliga,Germany,Bayer Leverkusen,FSV Mainz 05,1,1,Finished
+3551,1388517,2026-02-28 14:30:00,Bundesliga,Germany,Borussia Mönchengladbach,Union Berlin,1,0,Finished
+3552,1388521,2026-02-28 14:30:00,Bundesliga,Germany,1899 Hoffenheim,FC St. Pauli,0,1,Finished
+3910,1378124,2026-02-28 14:00:00,Serie A,Italy,Como,Lecce,3,1,Finished
+3213,1391075,2026-02-28 13:00:00,La Liga,Spain,Rayo Vallecano,Athletic Club,1,1,Finished
+2855,1379240,2026-02-28 12:30:00,Premier League,England,Bournemouth,Sunderland,1,1,Finished
+3212,1391073,2026-02-27 20:00:00,La Liga,Spain,Levante,Alaves,2,0,Finished
+2854,1379248,2026-02-27 20:00:00,Premier League,England,Wolves,Aston Villa,2,0,Finished
+3909,1378127,2026-02-27 19:45:00,Serie A,Italy,Parma,Cagliari,1,1,Finished
+4236,1387913,2026-02-27 19:45:00,Ligue 1,France,Strasbourg,Lens,1,1,Finished
+3549,1388515,2026-02-27 19:30:00,Bundesliga,Germany,FC Augsburg,1. FC Köln,2,0,Finished
+4584,1515527,2026-02-25 20:00:00,Champions League,Europe,Juventus,Galatasaray,3,0,Finished After Extra Time
+4586,1515529,2026-02-25 20:00:00,Champions League,Europe,Real Madrid,Benfica,2,1,Finished
+4585,1515528,2026-02-25 20:00:00,Champions League,Europe,Paris Saint Germain,Monaco,2,2,Finished
+4583,1515526,2026-02-25 17:45:00,Champions League,Europe,Atalanta,Borussia Dortmund,4,1,Finished
+4582,1515525,2026-02-24 20:00:00,Champions League,Europe,Newcastle,Qarabag,3,2,Finished
+4581,1515524,2026-02-24 20:00:00,Champions League,Europe,Inter,Bodo/Glimt,1,2,Finished
+4580,1515523,2026-02-24 20:00:00,Champions League,Europe,Bayer Leverkusen,Olympiakos Piraeus,0,0,Finished
+4579,1515522,2026-02-24 17:45:00,Champions League,Europe,Atletico Madrid,Club Brugge KV,4,1,Finished
+2853,1379233,2026-02-23 20:00:00,Premier League,England,Everton,Manchester United,0,1,Finished
+3211,1391059,2026-02-23 20:00:00,La Liga,Spain,Alaves,Girona,2,2,Finished
+3908,1378115,2026-02-23 19:45:00,Serie A,Italy,Bologna,Udinese,1,0,Finished
+3907,1378117,2026-02-23 17:30:00,Serie A,Italy,Fiorentina,Pisa,1,0,Finished
+3210,1391068,2026-02-22 20:00:00,La Liga,Spain,Villarreal,Valencia,2,1,Finished
+3906,1378122,2026-02-22 19:45:00,Serie A,Italy,AS Roma,Cremonese,3,0,Finished
+4235,1387903,2026-02-22 19:45:00,Ligue 1,France,Strasbourg,Lyon,3,1,Finished
+3548,1388509,2026-02-22 18:30:00,Bundesliga,Germany,1. FC Heidenheim,VfB Stuttgart,3,3,Finished
+3209,1391064,2026-02-22 17:30:00,La Liga,Spain,Celta Vigo,Mallorca,2,0,Finished
+3905,1378121,2026-02-22 17:00:00,Serie A,Italy,AC Milan,Parma,0,1,Finished
+2852,1379237,2026-02-22 16:30:00,Premier League,England,Tottenham,Arsenal,1,4,Finished
+3547,1388512,2026-02-22 16:30:00,Bundesliga,Germany,FC St. Pauli,Werder Bremen,2,1,Finished
+4233,1387901,2026-02-22 16:15:00,Ligue 1,France,Nice,Lorient,3,3,Finished
+4234,1387896,2026-02-22 16:15:00,Ligue 1,France,Angers,Lille,0,1,Finished
+4232,1387900,2026-02-22 16:15:00,Ligue 1,France,Nantes,Le Havre,2,0,Finished
+3208,1391062,2026-02-22 15:15:00,La Liga,Spain,Barcelona,Levante,3,0,Finished
+3546,1388508,2026-02-22 14:30:00,Bundesliga,Germany,SC Freiburg,Borussia Mönchengladbach,2,1,Finished
+2849,1379235,2026-02-22 14:00:00,Premier League,England,Nottingham Forest,Liverpool,0,1,Finished
+4231,1387897,2026-02-22 14:00:00,Ligue 1,France,Auxerre,Rennes,0,3,Finished
+2850,1379236,2026-02-22 14:00:00,Premier League,England,Sunderland,Fulham,1,3,Finished
+3904,1378114,2026-02-22 14:00:00,Serie A,Italy,Atalanta,Napoli,2,1,Finished
+2851,1379232,2026-02-22 14:00:00,Premier League,England,Crystal Palace,Wolves,1,0,Finished
+3207,1391065,2026-02-22 13:00:00,La Liga,Spain,Getafe,Sevilla,0,1,Finished
+3903,1378118,2026-02-22 11:30:00,Serie A,Italy,Genoa,Torino,3,0,Finished
+4230,1387902,2026-02-21 20:05:00,Ligue 1,France,Paris Saint Germain,Metz,3,0,Finished
+2848,1379234,2026-02-21 20:00:00,Premier League,England,Manchester City,Newcastle,2,1,Finished
+3206,1391061,2026-02-21 20:00:00,La Liga,Spain,Atletico Madrid,Espanyol,4,2,Finished
+3902,1378116,2026-02-21 19:45:00,Serie A,Italy,Cagliari,Lazio,0,0,Finished
+4229,1387904,2026-02-21 18:00:00,Ligue 1,France,Toulouse,Paris FC,1,1,Finished
+2847,1379238,2026-02-21 17:30:00,Premier League,England,West Ham,Bournemouth,0,0,Finished
+3545,1388511,2026-02-21 17:30:00,Bundesliga,Germany,RB Leipzig,Borussia Dortmund,2,2,Finished
+3205,1391066,2026-02-21 17:30:00,La Liga,Spain,Osasuna,Real Madrid,2,1,Finished
+3901,1378120,2026-02-21 17:00:00,Serie A,Italy,Lecce,Inter,0,2,Finished
+4228,1387899,2026-02-21 16:00:00,Ligue 1,France,Lens,Monaco,2,3,Finished
+3204,1391063,2026-02-21 15:15:00,La Liga,Spain,Real Betis,Rayo Vallecano,1,1,Finished
+2846,1379231,2026-02-21 15:00:00,Premier League,England,Chelsea,Burnley,1,1,Finished
+2845,1379230,2026-02-21 15:00:00,Premier League,England,Brentford,Brighton,0,2,Finished
+2844,1379229,2026-02-21 15:00:00,Premier League,England,Aston Villa,Leeds,1,1,Finished
+3542,1388514,2026-02-21 14:30:00,Bundesliga,Germany,VfL Wolfsburg,FC Augsburg,2,3,Finished
+3541,1388513,2026-02-21 14:30:00,Bundesliga,Germany,Union Berlin,Bayer Leverkusen,1,0,Finished
+3543,1388506,2026-02-21 14:30:00,Bundesliga,Germany,Bayern München,Eintracht Frankfurt,3,2,Finished
+3544,1388507,2026-02-21 14:30:00,Bundesliga,Germany,1. FC Köln,1899 Hoffenheim,2,2,Finished
+3900,1378119,2026-02-21 14:00:00,Serie A,Italy,Juventus,Como,0,2,Finished
+3203,1391067,2026-02-21 13:00:00,La Liga,Spain,Real Sociedad,Oviedo,3,3,Finished
+3202,1391060,2026-02-20 20:00:00,La Liga,Spain,Athletic Club,Elche,2,1,Finished
+4227,1387898,2026-02-20 19:45:00,Ligue 1,France,Stade Brestois 29,Marseille,2,0,Finished
+3899,1378123,2026-02-20 19:45:00,Serie A,Italy,Sassuolo,Hellas Verona,3,0,Finished
+3540,1388510,2026-02-20 19:30:00,Bundesliga,Germany,FSV Mainz 05,Hamburger SV,1,1,Finished
+4576,1515519,2026-02-18 20:00:00,Champions League,Europe,Bodo/Glimt,Inter,3,1,Finished
+2843,1379278,2026-02-18 20:00:00,Premier League,England,Wolves,Arsenal,2,2,Finished
+4577,1515520,2026-02-18 20:00:00,Champions League,Europe,Club Brugge KV,Atletico Madrid,3,3,Finished
+4578,1515521,2026-02-18 20:00:00,Champions League,Europe,Olympiakos Piraeus,Bayer Leverkusen,0,2,Finished
+3898,1378100,2026-02-18 19:45:00,Serie A,Italy,AC Milan,Como,1,1,Finished
+3201,1390974,2026-02-18 19:00:00,La Liga,Spain,Levante,Villarreal,0,1,Finished
+4575,1515518,2026-02-18 17:45:00,Champions League,Europe,Qarabag,Newcastle,1,6,Finished
+4572,1515515,2026-02-17 20:00:00,Champions League,Europe,Benfica,Real Madrid,0,1,Finished
+4573,1515516,2026-02-17 20:00:00,Champions League,Europe,Borussia Dortmund,Atalanta,2,0,Finished
+4574,1515517,2026-02-17 20:00:00,Champions League,Europe,Monaco,Paris Saint Germain,2,3,Finished
+4571,1515514,2026-02-17 17:45:00,Champions League,Europe,Galatasaray,Juventus,5,2,Finished
+3200,1391052,2026-02-16 20:00:00,La Liga,Spain,Girona,Barcelona,2,1,Finished
+3897,1378104,2026-02-16 19:45:00,Serie A,Italy,Cagliari,Lecce,0,2,Finished
+3199,1391054,2026-02-15 20:00:00,La Liga,Spain,Mallorca,Real Betis,1,2,Finished
+4226,1387890,2026-02-15 19:45:00,Ligue 1,France,Lyon,Nice,2,0,Finished
+3896,1378109,2026-02-15 19:45:00,Serie A,Italy,Napoli,AS Roma,2,2,Finished
+3198,1391053,2026-02-15 17:30:00,La Liga,Spain,Levante,Valencia,0,2,Finished
+3895,1378112,2026-02-15 17:00:00,Serie A,Italy,Torino,Bologna,1,2,Finished
+3539,1388503,2026-02-15 16:30:00,Bundesliga,Germany,RB Leipzig,VfL Wolfsburg,2,2,Finished
+4224,1387889,2026-02-15 16:15:00,Ligue 1,France,Lorient,Angers,2,0,Finished
+4225,1387892,2026-02-15 16:15:00,Ligue 1,France,Metz,Auxerre,1,3,Finished
+3197,1391055,2026-02-15 15:15:00,La Liga,Spain,Rayo Vallecano,Atletico Madrid,3,0,Finished
+3538,1388497,2026-02-15 14:30:00,Bundesliga,Germany,FC Augsburg,1. FC Heidenheim,1,0,Finished
+3893,1378110,2026-02-15 14:00:00,Serie A,Italy,Parma,Hellas Verona,2,1,Finished
+3894,1378106,2026-02-15 14:00:00,Serie A,Italy,Cremonese,Genoa,0,0,Finished
+4223,1387887,2026-02-15 14:00:00,Ligue 1,France,Le Havre,Toulouse,2,1,Finished
+3196,1391057,2026-02-15 13:00:00,La Liga,Spain,Oviedo,Athletic Club,1,2,Finished
+3892,1378113,2026-02-15 11:30:00,Serie A,Italy,Udinese,Sassuolo,1,2,Finished
+4222,1387894,2026-02-14 20:05:00,Ligue 1,France,Paris FC,Lens,0,5,Finished
+3195,1391056,2026-02-14 20:00:00,La Liga,Spain,Real Madrid,Real Sociedad,4,1,Finished
+3891,1378107,2026-02-14 19:45:00,Serie A,Italy,Inter,Juventus,3,2,Finished
+4221,1387888,2026-02-14 18:00:00,Ligue 1,France,Lille,Stade Brestois 29,1,1,Finished
+3537,1388504,2026-02-14 17:30:00,Bundesliga,Germany,VfB Stuttgart,1. FC Köln,3,1,Finished
+3194,1391058,2026-02-14 17:30:00,La Liga,Spain,Sevilla,Alaves,1,1,Finished
+3890,1378108,2026-02-14 17:00:00,Serie A,Italy,Lazio,Atalanta,0,2,Finished
+4220,1387891,2026-02-14 16:00:00,Ligue 1,France,Marseille,Strasbourg,2,2,Finished
+3193,1391051,2026-02-14 15:15:00,La Liga,Spain,Getafe,Villarreal,2,1,Finished
+3532,1388500,2026-02-14 14:30:00,Bundesliga,Germany,Eintracht Frankfurt,Borussia Mönchengladbach,3,0,Finished
+3535,1388505,2026-02-14 14:30:00,Bundesliga,Germany,Werder Bremen,Bayern München,0,3,Finished
+3536,1388498,2026-02-14 14:30:00,Bundesliga,Germany,Bayer Leverkusen,FC St. Pauli,4,0,Finished
+3534,1388502,2026-02-14 14:30:00,Bundesliga,Germany,1899 Hoffenheim,SC Freiburg,3,0,Finished
+3533,1388501,2026-02-14 14:30:00,Bundesliga,Germany,Hamburger SV,Union Berlin,3,2,Finished
+3889,1378105,2026-02-14 14:00:00,Serie A,Italy,Como,Fiorentina,1,2,Finished
+3192,1391050,2026-02-14 13:00:00,La Liga,Spain,Espanyol,Celta Vigo,2,2,Finished
+4219,1387893,2026-02-13 20:05:00,Ligue 1,France,Monaco,Nantes,3,1,Finished
+3191,1391049,2026-02-13 20:00:00,La Liga,Spain,Elche,Osasuna,0,0,Finished
+3888,1378111,2026-02-13 19:45:00,Serie A,Italy,Pisa,AC Milan,1,2,Finished
+3531,1388499,2026-02-13 19:30:00,Bundesliga,Germany,Borussia Dortmund,FSV Mainz 05,4,0,Finished
+4218,1387895,2026-02-13 18:00:00,Ligue 1,France,Rennes,Paris Saint Germain,3,1,Finished
+2842,1379220,2026-02-12 20:00:00,Premier League,England,Brentford,Arsenal,1,1,Finished
+2841,1379226,2026-02-11 20:15:00,Premier League,England,Sunderland,Liverpool,0,1,Finished
+2840,1379219,2026-02-11 19:30:00,Premier League,England,Aston Villa,Brighton,1,0,Finished
+2837,1379224,2026-02-11 19:30:00,Premier League,England,Manchester City,Fulham,3,0,Finished
+2838,1379225,2026-02-11 19:30:00,Premier League,England,Nottingham Forest,Wolves,0,0,Finished
+2839,1379222,2026-02-11 19:30:00,Premier League,England,Crystal Palace,Burnley,2,3,Finished
+2836,1379228,2026-02-10 20:15:00,Premier League,England,West Ham,Manchester United,1,1,Finished
+2835,1379227,2026-02-10 19:30:00,Premier League,England,Tottenham,Newcastle,1,2,Finished
+2833,1379221,2026-02-10 19:30:00,Premier League,England,Chelsea,Leeds,2,2,Finished
+2834,1379223,2026-02-10 19:30:00,Premier League,England,Everton,Bournemouth,1,2,Finished
+3190,1391048,2026-02-09 20:00:00,La Liga,Spain,Villarreal,Espanyol,4,1,Finished
+3887,1378101,2026-02-09 19:45:00,Serie A,Italy,AS Roma,Cagliari,2,0,Finished
+3886,1378094,2026-02-09 17:30:00,Serie A,Italy,Atalanta,Cremonese,2,1,Finished
+3189,1391047,2026-02-08 20:00:00,La Liga,Spain,Valencia,Real Madrid,0,2,Finished
+3885,1378098,2026-02-08 19:45:00,Serie A,Italy,Juventus,Lazio,2,2,Finished
+4217,1387886,2026-02-08 19:45:00,Ligue 1,France,Paris Saint Germain,Marseille,5,0,Finished
+3188,1391041,2026-02-08 17:30:00,La Liga,Spain,Atletico Madrid,Real Betis,0,1,Finished
+3884,1378102,2026-02-08 17:00:00,Serie A,Italy,Sassuolo,Inter,0,5,Finished
+2832,1379215,2026-02-08 16:30:00,Premier League,England,Liverpool,Manchester City,1,2,Finished
+3530,1388488,2026-02-08 16:30:00,Bundesliga,Germany,Bayern München,1899 Hoffenheim,5,1,Finished
+4214,1387881,2026-02-08 16:15:00,Ligue 1,France,Le Havre,Strasbourg,2,1,Finished
+4216,1387879,2026-02-08 16:15:00,Ligue 1,France,Auxerre,Paris FC,0,0,Finished
+4215,1387878,2026-02-08 16:15:00,Ligue 1,France,Angers,Toulouse,1,0,Finished
+3187,1391046,2026-02-08 15:15:00,La Liga,Spain,Sevilla,Girona,1,1,Finished
+3186,1391040,2026-02-08 15:15:00,La Liga,Spain,Athletic Club,Levante,4,2,Finished
+3529,1388490,2026-02-08 14:30:00,Bundesliga,Germany,1. FC Köln,RB Leipzig,1,2,Finished
+2831,1379211,2026-02-08 14:00:00,Premier League,England,Brighton,Crystal Palace,0,1,Finished
+3883,1378099,2026-02-08 14:00:00,Serie A,Italy,Lecce,Udinese,2,1,Finished
+4213,1387885,2026-02-08 14:00:00,Ligue 1,France,Nice,Monaco,0,0,Finished
+3185,1391039,2026-02-08 13:00:00,La Liga,Spain,Alaves,Getafe,0,2,Finished
+3882,1378095,2026-02-08 11:30:00,Serie A,Italy,Bologna,Parma,0,1,Finished
+4212,1387884,2026-02-07 20:05:00,Ligue 1,France,Nantes,Lyon,0,1,Finished
+3184,1391045,2026-02-07 20:00:00,La Liga,Spain,Real Sociedad,Elche,3,1,Finished
+3881,1378096,2026-02-07 19:45:00,Serie A,Italy,Fiorentina,Torino,2,2,Finished
+4211,1387880,2026-02-07 18:00:00,Ligue 1,France,Stade Brestois 29,Lorient,2,0,Finished
+2830,1379217,2026-02-07 17:30:00,Premier League,England,Newcastle,Brentford,2,3,Finished
+3528,1388489,2026-02-07 17:30:00,Bundesliga,Germany,Borussia Mönchengladbach,Bayer Leverkusen,1,1,Finished
+3880,1378097,2026-02-07 17:00:00,Serie A,Italy,Genoa,Napoli,2,3,Finished
+4210,1387882,2026-02-07 16:00:00,Ligue 1,France,Lens,Rennes,3,1,Finished
+3183,1391042,2026-02-07 15:15:00,La Liga,Spain,Barcelona,Mallorca,3,0,Finished
+2827,1379213,2026-02-07 15:00:00,Premier League,England,Fulham,Everton,1,2,Finished
+2828,1379209,2026-02-07 15:00:00,Premier League,England,Arsenal,Sunderland,3,0,Finished
+2829,1379210,2026-02-07 15:00:00,Premier League,England,Bournemouth,Aston Villa,1,1,Finished
+2826,1379212,2026-02-07 15:00:00,Premier League,England,Burnley,West Ham,0,2,Finished
+2825,1379218,2026-02-07 15:00:00,Premier League,England,Wolves,Chelsea,1,3,Finished
+3526,1388493,2026-02-07 14:30:00,Bundesliga,Germany,FSV Mainz 05,FC Augsburg,2,0,Finished
+3527,1388494,2026-02-07 14:30:00,Bundesliga,Germany,FC St. Pauli,VfB Stuttgart,2,1,Finished
+3525,1388492,2026-02-07 14:30:00,Bundesliga,Germany,1. FC Heidenheim,Hamburger SV,0,2,Finished
+3524,1388491,2026-02-07 14:30:00,Bundesliga,Germany,SC Freiburg,Werder Bremen,1,0,Finished
+3523,1388496,2026-02-07 14:30:00,Bundesliga,Germany,VfL Wolfsburg,Borussia Dortmund,1,2,Finished
+2824,1379216,2026-02-07 12:30:00,Premier League,England,Manchester United,Tottenham,2,0,Finished
+2823,1379214,2026-02-06 20:00:00,Premier League,England,Leeds,Nottingham Forest,3,1,Finished
+3182,1391043,2026-02-06 20:00:00,La Liga,Spain,Celta Vigo,Osasuna,1,2,Finished
+4209,1387883,2026-02-06 19:45:00,Ligue 1,France,Metz,Lille,0,0,Finished
+3879,1378103,2026-02-06 19:45:00,Serie A,Italy,Hellas Verona,Pisa,0,0,Finished
+3522,1388495,2026-02-06 19:30:00,Bundesliga,Germany,Union Berlin,Eintracht Frankfurt,1,1,Finished
+3878,1378084,2026-02-03 19:45:00,Serie A,Italy,Bologna,AC Milan,0,3,Finished
+2822,1379206,2026-02-02 20:00:00,Premier League,England,Sunderland,Burnley,3,0,Finished
+3181,1391035,2026-02-02 20:00:00,La Liga,Spain,Mallorca,Sevilla,4,1,Finished
+3877,1378093,2026-02-02 19:45:00,Serie A,Italy,Udinese,AS Roma,1,0,Finished
+3180,1391029,2026-02-01 20:00:00,La Liga,Spain,Athletic Club,Real Sociedad,1,1,Finished
+4208,1387876,2026-02-01 19:45:00,Ligue 1,France,Strasbourg,Paris Saint Germain,1,2,Finished
+3876,1378090,2026-02-01 19:45:00,Serie A,Italy,Parma,Juventus,1,4,Finished
+3179,1391033,2026-02-01 17:30:00,La Liga,Spain,Getafe,Celta Vigo,0,0,Finished
+3875,1378087,2026-02-01 17:00:00,Serie A,Italy,Cremonese,Inter,0,2,Finished
+3521,1388480,2026-02-01 16:30:00,Bundesliga,Germany,Borussia Dortmund,1. FC Heidenheim,3,2,Finished
+2821,1379207,2026-02-01 16:30:00,Premier League,England,Tottenham,Manchester City,2,2,Finished
+4207,1387877,2026-02-01 16:15:00,Ligue 1,France,Toulouse,Auxerre,0,0,Finished
+4205,1387869,2026-02-01 16:15:00,Ligue 1,France,Angers,Metz,1,0,Finished
+4206,1387874,2026-02-01 16:15:00,Ligue 1,France,Nice,Stade Brestois 29,2,2,Finished
+3178,1391030,2026-02-01 15:15:00,La Liga,Spain,Real Betis,Valencia,2,1,Finished
+3520,1388486,2026-02-01 14:30:00,Bundesliga,Germany,VfB Stuttgart,SC Freiburg,1,0,Finished
+4204,1387872,2026-02-01 14:00:00,Ligue 1,France,Lyon,Lille,1,0,Finished
+2818,1379204,2026-02-01 14:00:00,Premier League,England,Manchester United,Fulham,3,2,Finished
+2819,1379205,2026-02-01 14:00:00,Premier League,England,Nottingham Forest,Crystal Palace,1,1,Finished
+2820,1379199,2026-02-01 14:00:00,Premier League,England,Aston Villa,Brentford,0,1,Finished
+3874,1378086,2026-02-01 14:00:00,Serie A,Italy,Como,Atalanta,0,0,Finished
+3177,1391037,2026-02-01 13:00:00,La Liga,Spain,Real Madrid,Rayo Vallecano,2,1,Finished
+3873,1378092,2026-02-01 11:30:00,Serie A,Italy,Torino,Lecce,1,0,Finished
+4203,1387873,2026-01-31 20:05:00,Ligue 1,France,Monaco,Rennes,4,0,Finished
+3176,1391031,2026-01-31 20:00:00,La Liga,Spain,Elche,Barcelona,1,3,Finished
+2817,1379203,2026-01-31 20:00:00,Premier League,England,Liverpool,Newcastle,4,1,Finished
+3872,1378085,2026-01-31 19:45:00,Serie A,Italy,Cagliari,Hellas Verona,4,0,Finished
+4202,1387871,2026-01-31 18:00:00,Ligue 1,France,Lorient,Nantes,2,1,Finished
+3175,1391034,2026-01-31 17:30:00,La Liga,Spain,Levante,Atletico Madrid,0,0,Finished
+3519,1388483,2026-01-31 17:30:00,Bundesliga,Germany,Hamburger SV,Bayern München,2,2,Finished
+2816,1379201,2026-01-31 17:30:00,Premier League,England,Chelsea,West Ham,3,2,Finished
+3871,1378089,2026-01-31 17:00:00,Serie A,Italy,Napoli,Fiorentina,2,1,Finished
+4201,1387875,2026-01-31 16:00:00,Ligue 1,France,Paris FC,Marseille,2,2,Finished
+3174,1391036,2026-01-31 15:15:00,La Liga,Spain,Osasuna,Villarreal,2,2,Finished
+2813,1379200,2026-01-31 15:00:00,Premier League,England,Brighton,Everton,1,1,Finished
+2814,1379202,2026-01-31 15:00:00,Premier League,England,Leeds,Arsenal,0,4,Finished
+2815,1379208,2026-01-31 15:00:00,Premier League,England,Wolves,Bournemouth,0,2,Finished
+3518,1388481,2026-01-31 14:30:00,Bundesliga,Germany,Eintracht Frankfurt,Bayer Leverkusen,1,3,Finished
+3517,1388479,2026-01-31 14:30:00,Bundesliga,Germany,FC Augsburg,FC St. Pauli,2,1,Finished
+3516,1388487,2026-01-31 14:30:00,Bundesliga,Germany,Werder Bremen,Borussia Mönchengladbach,1,1,Finished
+3514,1388484,2026-01-31 14:30:00,Bundesliga,Germany,1899 Hoffenheim,Union Berlin,3,1,Finished
+3515,1388485,2026-01-31 14:30:00,Bundesliga,Germany,RB Leipzig,FSV Mainz 05,1,2,Finished
+3870,1378091,2026-01-31 14:00:00,Serie A,Italy,Pisa,Sassuolo,1,3,Finished
+3173,1391038,2026-01-31 13:00:00,La Liga,Spain,Oviedo,Girona,1,0,Finished
+3172,1391032,2026-01-30 20:00:00,La Liga,Spain,Espanyol,Alaves,1,2,Finished
+4200,1387870,2026-01-30 19:45:00,Ligue 1,France,Lens,Le Havre,1,0,Finished
+3869,1378088,2026-01-30 19:45:00,Serie A,Italy,Lazio,Genoa,3,2,Finished
+3513,1388482,2026-01-30 19:30:00,Bundesliga,Germany,1. FC Köln,VfL Wolfsburg,1,0,Finished
+4561,1451154,2026-01-28 20:00:00,Champions League,Europe,PSV Eindhoven,Bayern München,1,2,Finished
+4553,1451146,2026-01-28 20:00:00,Champions League,Europe,Napoli,Chelsea,2,3,Finished
+4554,1451147,2026-01-28 20:00:00,Champions League,Europe,Borussia Dortmund,Inter,0,2,Finished
+4555,1451148,2026-01-28 20:00:00,Champions League,Europe,Monaco,Juventus,0,0,Finished
+4556,1451149,2026-01-28 20:00:00,Champions League,Europe,Paris Saint Germain,Newcastle,1,1,Finished
+4557,1451150,2026-01-28 20:00:00,Champions League,Europe,Eintracht Frankfurt,Tottenham,0,2,Finished
+4558,1451151,2026-01-28 20:00:00,Champions League,Europe,Pafos,Slavia Praha,4,1,Finished
+4559,1451152,2026-01-28 20:00:00,Champions League,Europe,Atletico Madrid,Bodo/Glimt,1,2,Finished
+4560,1451153,2026-01-28 20:00:00,Champions League,Europe,Manchester City,Galatasaray,2,0,Finished
+4562,1451155,2026-01-28 20:00:00,Champions League,Europe,Bayer Leverkusen,Villarreal,3,0,Finished
+4563,1451156,2026-01-28 20:00:00,Champions League,Europe,Athletic Club,Sporting CP,2,3,Finished
+4564,1451157,2026-01-28 20:00:00,Champions League,Europe,Ajax,Olympiakos Piraeus,1,2,Finished
+4565,1451158,2026-01-28 20:00:00,Champions League,Europe,Union St. Gilloise,Atalanta,1,0,Finished
+4566,1451159,2026-01-28 20:00:00,Champions League,Europe,Arsenal,Kairat Almaty,3,2,Finished
+4567,1451160,2026-01-28 20:00:00,Champions League,Europe,Liverpool,Qarabag,6,0,Finished
+4568,1451161,2026-01-28 20:00:00,Champions League,Europe,Barcelona,FC Copenhagen,4,1,Finished
+4569,1451162,2026-01-28 20:00:00,Champions League,Europe,Benfica,Real Madrid,4,2,Finished
+4570,1451163,2026-01-28 20:00:00,Champions League,Europe,Club Brugge KV,Marseille,3,0,Finished
+3511,1388451,2026-01-27 19:30:00,Bundesliga,Germany,Werder Bremen,1899 Hoffenheim,0,2,Finished
+3512,1388449,2026-01-27 19:30:00,Bundesliga,Germany,FC St. Pauli,RB Leipzig,1,1,Finished
+2812,1379194,2026-01-26 20:00:00,Premier League,England,Everton,Leeds,1,1,Finished
+3171,1391022,2026-01-26 20:00:00,La Liga,Spain,Girona,Getafe,1,1,Finished
+3868,1378083,2026-01-26 19:45:00,Serie A,Italy,Hellas Verona,Udinese,1,3,Finished
+3170,1391019,2026-01-25 20:00:00,La Liga,Spain,Alaves,Real Betis,2,1,Finished
+4199,1387863,2026-01-25 19:45:00,Ligue 1,France,Lille,Strasbourg,1,4,Finished
+3867,1378081,2026-01-25 19:45:00,Serie A,Italy,AS Roma,AC Milan,1,1,Finished
+3169,1391025,2026-01-25 17:30:00,La Liga,Spain,Real Sociedad,Celta Vigo,3,1,Finished
+3866,1378079,2026-01-25 17:00:00,Serie A,Italy,Juventus,Napoli,3,0,Finished
+2811,1379189,2026-01-25 16:30:00,Premier League,England,Arsenal,Manchester United,2,3,Finished
+3510,1388474,2026-01-25 16:30:00,Bundesliga,Germany,SC Freiburg,1. FC Köln,2,1,Finished
+4197,1387865,2026-01-25 16:15:00,Ligue 1,France,Metz,Lyon,2,5,Finished
+4196,1387867,2026-01-25 16:15:00,Ligue 1,France,Paris FC,Angers,0,0,Finished
+4198,1387861,2026-01-25 16:15:00,Ligue 1,France,Stade Brestois 29,Toulouse,0,2,Finished
+3168,1391021,2026-01-25 15:15:00,La Liga,Spain,Barcelona,Oviedo,3,0,Finished
+3509,1388472,2026-01-25 14:30:00,Bundesliga,Germany,Borussia Mönchengladbach,VfB Stuttgart,0,3,Finished
+3865,1378074,2026-01-25 14:00:00,Serie A,Italy,Atalanta,Parma,4,0,Finished
+2809,1379197,2026-01-25 14:00:00,Premier League,England,Newcastle,Aston Villa,0,2,Finished
+4195,1387866,2026-01-25 14:00:00,Ligue 1,France,Nantes,Nice,1,4,Finished
+2808,1379191,2026-01-25 14:00:00,Premier League,England,Brentford,Nottingham Forest,0,2,Finished
+2810,1379193,2026-01-25 14:00:00,Premier League,England,Crystal Palace,Chelsea,1,3,Finished
+3864,1378077,2026-01-25 14:00:00,Serie A,Italy,Genoa,Bologna,3,2,Finished
+3167,1391020,2026-01-25 13:00:00,La Liga,Spain,Atletico Madrid,Mallorca,3,0,Finished
+3863,1378082,2026-01-25 11:30:00,Serie A,Italy,Sassuolo,Cremonese,1,0,Finished
+4194,1387864,2026-01-24 20:05:00,Ligue 1,France,Marseille,Lens,3,1,Finished
+3166,1391028,2026-01-24 20:00:00,La Liga,Spain,Villarreal,Real Madrid,0,2,Finished
+3862,1378080,2026-01-24 19:45:00,Serie A,Italy,Lecce,Lazio,0,0,Finished
+4193,1387862,2026-01-24 18:00:00,Ligue 1,France,Le Havre,Monaco,0,0,Finished
+3165,1391026,2026-01-24 17:30:00,La Liga,Spain,Sevilla,Athletic Club,2,1,Finished
+2807,1379190,2026-01-24 17:30:00,Premier League,England,Bournemouth,Liverpool,3,2,Finished
+3508,1388478,2026-01-24 17:30:00,Bundesliga,Germany,Union Berlin,Borussia Dortmund,0,3,Finished
+3861,1378076,2026-01-24 17:00:00,Serie A,Italy,Fiorentina,Cagliari,1,2,Finished
+4192,1387868,2026-01-24 16:00:00,Ligue 1,France,Rennes,Lorient,0,2,Finished
+3164,1391027,2026-01-24 15:15:00,La Liga,Spain,Valencia,Espanyol,3,2,Finished
+2804,1379192,2026-01-24 15:00:00,Premier League,England,Burnley,Tottenham,2,2,Finished
+2806,1379196,2026-01-24 15:00:00,Premier League,England,Manchester City,Wolves,2,0,Finished
+2805,1379195,2026-01-24 15:00:00,Premier League,England,Fulham,Brighton,2,1,Finished
+3505,1388476,2026-01-24 14:30:00,Bundesliga,Germany,FSV Mainz 05,VfL Wolfsburg,3,1,Finished
+3503,1388473,2026-01-24 14:30:00,Bundesliga,Germany,Eintracht Frankfurt,1899 Hoffenheim,1,3,Finished
+3507,1388471,2026-01-24 14:30:00,Bundesliga,Germany,Bayern München,FC Augsburg,1,2,Finished
+3504,1388475,2026-01-24 14:30:00,Bundesliga,Germany,1. FC Heidenheim,RB Leipzig,0,3,Finished
+3506,1388470,2026-01-24 14:30:00,Bundesliga,Germany,Bayer Leverkusen,Werder Bremen,1,0,Finished
+3860,1378075,2026-01-24 14:00:00,Serie A,Italy,Como,Torino,6,0,Finished
+3163,1391024,2026-01-24 13:00:00,La Liga,Spain,Rayo Vallecano,Osasuna,1,3,Finished
+2803,1379198,2026-01-24 12:30:00,Premier League,England,West Ham,Sunderland,3,1,Finished
+3162,1391023,2026-01-23 20:00:00,La Liga,Spain,Levante,Elche,3,2,Finished
+3859,1378078,2026-01-23 19:45:00,Serie A,Italy,Inter,Pisa,6,2,Finished
+3502,1388477,2026-01-23 19:30:00,Bundesliga,Germany,FC St. Pauli,Hamburger SV,0,0,Finished
+4191,1387860,2026-01-23 19:00:00,Ligue 1,France,Auxerre,Paris Saint Germain,0,1,Finished
+4549,1451142,2026-01-21 20:00:00,Champions League,Europe,Chelsea,Pafos,1,0,Finished
+4552,1451145,2026-01-21 20:00:00,Champions League,Europe,Marseille,Liverpool,0,3,Finished
+4551,1451144,2026-01-21 20:00:00,Champions League,Europe,Bayern München,Union St. Gilloise,2,0,Finished
+4550,1451143,2026-01-21 20:00:00,Champions League,Europe,Newcastle,PSV Eindhoven,3,0,Finished
+4548,1451141,2026-01-21 20:00:00,Champions League,Europe,Juventus,Benfica,2,0,Finished
+4547,1451140,2026-01-21 20:00:00,Champions League,Europe,Atalanta,Athletic Club,2,3,Finished
+4546,1451139,2026-01-21 20:00:00,Champions League,Europe,Slavia Praha,Barcelona,2,4,Finished
+4545,1451138,2026-01-21 17:45:00,Champions League,Europe,Qarabag,Eintracht Frankfurt,3,2,Finished
+4544,1451137,2026-01-21 17:45:00,Champions League,Europe,Galatasaray,Atletico Madrid,1,1,Finished
+4538,1451131,2026-01-20 20:00:00,Champions League,Europe,Sporting CP,Paris Saint Germain,2,1,Finished
+4543,1451136,2026-01-20 20:00:00,Champions League,Europe,Inter,Arsenal,1,3,Finished
+4542,1451135,2026-01-20 20:00:00,Champions League,Europe,Tottenham,Borussia Dortmund,2,0,Finished
+4541,1451134,2026-01-20 20:00:00,Champions League,Europe,Olympiakos Piraeus,Bayer Leverkusen,2,0,Finished
+4537,1451130,2026-01-20 20:00:00,Champions League,Europe,Real Madrid,Monaco,6,1,Finished
+4540,1451133,2026-01-20 20:00:00,Champions League,Europe,Villarreal,Ajax,1,2,Finished
+4539,1451132,2026-01-20 20:00:00,Champions League,Europe,FC Copenhagen,Napoli,1,1,Finished
+4536,1451129,2026-01-20 17:45:00,Champions League,Europe,Bodo/Glimt,Manchester City,3,1,Finished
+4535,1451128,2026-01-20 15:30:00,Champions League,Europe,Kairat Almaty,Club Brugge KV,1,4,Finished
+3161,1391012,2026-01-19 20:00:00,La Liga,Spain,Elche,Sevilla,2,2,Finished
+2802,1379180,2026-01-19 20:00:00,Premier League,England,Brighton,Bournemouth,1,1,Finished
+3858,1378067,2026-01-19 19:45:00,Serie A,Italy,Lazio,Como,0,3,Finished
+3857,1378066,2026-01-19 17:30:00,Serie A,Italy,Cremonese,Hellas Verona,0,0,Finished
+3160,1391018,2026-01-18 20:00:00,La Liga,Spain,Real Sociedad,Barcelona,2,1,Finished
+3856,1378068,2026-01-18 19:45:00,Serie A,Italy,AC Milan,Lecce,1,0,Finished
+4190,1387853,2026-01-18 19:45:00,Ligue 1,France,Lyon,Stade Brestois 29,2,1,Finished
+3159,1391011,2026-01-18 17:30:00,La Liga,Spain,Celta Vigo,Rayo Vallecano,3,0,Finished
+3855,1378072,2026-01-18 17:00:00,Serie A,Italy,Torino,AS Roma,0,2,Finished
+3501,1388461,2026-01-18 16:30:00,Bundesliga,Germany,FC Augsburg,SC Freiburg,2,2,Finished
+2801,1379179,2026-01-18 16:30:00,Premier League,England,Aston Villa,Everton,0,1,Finished
+4188,1387857,2026-01-18 16:15:00,Ligue 1,France,Rennes,Le Havre,1,1,Finished
+4189,1387855,2026-01-18 16:15:00,Ligue 1,France,Nantes,Paris FC,1,2,Finished
+3158,1391009,2026-01-18 15:15:00,La Liga,Spain,Atletico Madrid,Alaves,1,0,Finished
+3500,1388467,2026-01-18 14:30:00,Bundesliga,Germany,VfB Stuttgart,Union Berlin,1,1,Finished
+4187,1387858,2026-01-18 14:00:00,Ligue 1,France,Strasbourg,Metz,2,1,Finished
+2800,1379188,2026-01-18 14:00:00,Premier League,England,Wolves,Newcastle,0,0,Finished
+3854,1378064,2026-01-18 14:00:00,Serie A,Italy,Bologna,Fiorentina,1,2,Finished
+3157,1391014,2026-01-18 13:00:00,La Liga,Spain,Getafe,Valencia,0,1,Finished
+3853,1378070,2026-01-18 11:30:00,Serie A,Italy,Parma,Genoa,0,0,Finished
+4186,1387851,2026-01-17 20:05:00,Ligue 1,France,Angers,Marseille,2,5,Finished
+3156,1391010,2026-01-17 20:00:00,La Liga,Spain,Real Betis,Villarreal,2,0,Finished
+3852,1378065,2026-01-17 19:45:00,Serie A,Italy,Cagliari,Juventus,1,0,Finished
+4185,1387859,2026-01-17 18:00:00,Ligue 1,France,Toulouse,Nice,5,1,Finished
+3155,1391016,2026-01-17 17:30:00,La Liga,Spain,Osasuna,Oviedo,3,2,Finished
+2799,1379185,2026-01-17 17:30:00,Premier League,England,Nottingham Forest,Arsenal,0,0,Finished
+3499,1388466,2026-01-17 17:30:00,Bundesliga,Germany,RB Leipzig,Bayern München,1,5,Finished
+3851,1378069,2026-01-17 17:00:00,Serie A,Italy,Napoli,Sassuolo,1,0,Finished
+4184,1387852,2026-01-17 16:00:00,Ligue 1,France,Lens,Auxerre,1,0,Finished
+3154,1391015,2026-01-17 15:15:00,La Liga,Spain,Mallorca,Athletic Club,3,2,Finished
+2796,1379183,2026-01-17 15:00:00,Premier League,England,Liverpool,Burnley,1,1,Finished
+2794,1379181,2026-01-17 15:00:00,Premier League,England,Chelsea,Brentford,2,0,Finished
+2795,1379182,2026-01-17 15:00:00,Premier League,England,Leeds,Fulham,1,0,Finished
+2798,1379187,2026-01-17 15:00:00,Premier League,England,Tottenham,West Ham,1,2,Finished
+2797,1379186,2026-01-17 15:00:00,Premier League,England,Sunderland,Crystal Palace,2,1,Finished
+3496,1388463,2026-01-17 14:30:00,Bundesliga,Germany,1. FC Köln,FSV Mainz 05,2,1,Finished
+3495,1388462,2026-01-17 14:30:00,Bundesliga,Germany,Borussia Dortmund,FC St. Pauli,3,2,Finished
+3497,1388464,2026-01-17 14:30:00,Bundesliga,Germany,Hamburger SV,Borussia Mönchengladbach,0,0,Finished
+3498,1388465,2026-01-17 14:30:00,Bundesliga,Germany,1899 Hoffenheim,Bayer Leverkusen,1,0,Finished
+3494,1388469,2026-01-17 14:30:00,Bundesliga,Germany,VfL Wolfsburg,1. FC Heidenheim,1,1,Finished
+3850,1378073,2026-01-17 14:00:00,Serie A,Italy,Udinese,Inter,0,1,Finished
+3153,1391017,2026-01-17 13:00:00,La Liga,Spain,Real Madrid,Levante,2,0,Finished
+2793,1379184,2026-01-17 12:30:00,Premier League,England,Manchester United,Manchester City,2,0,Finished
+4183,1387856,2026-01-16 20:00:00,Ligue 1,France,Paris Saint Germain,Lille,3,0,Finished
+3152,1391013,2026-01-16 20:00:00,La Liga,Spain,Espanyol,Girona,0,2,Finished
+3849,1378071,2026-01-16 19:45:00,Serie A,Italy,Pisa,Atalanta,1,1,Finished
+3493,1388468,2026-01-16 19:30:00,Bundesliga,Germany,Werder Bremen,Eintracht Frankfurt,3,3,Finished
+4182,1387854,2026-01-16 18:00:00,Ligue 1,France,Monaco,Lorient,1,3,Finished
+3848,1378015,2026-01-15 19:45:00,Serie A,Italy,Como,AC Milan,1,3,Finished
+3492,1388452,2026-01-15 19:30:00,Bundesliga,Germany,FC Augsburg,Union Berlin,1,1,Finished
+3847,1378023,2026-01-15 17:30:00,Serie A,Italy,Hellas Verona,Bologna,2,3,Finished
+3846,1378018,2026-01-14 19:45:00,Serie A,Italy,Inter,Lecce,1,0,Finished
+3491,1388454,2026-01-14 19:30:00,Bundesliga,Germany,1. FC Köln,Bayern München,1,3,Finished
+3490,1388456,2026-01-14 19:30:00,Bundesliga,Germany,1899 Hoffenheim,Borussia Mönchengladbach,5,1,Finished
+3489,1388458,2026-01-14 19:30:00,Bundesliga,Germany,RB Leipzig,SC Freiburg,2,0,Finished
+3845,1378021,2026-01-14 17:30:00,Serie A,Italy,Napoli,Parma,0,0,Finished
+3488,1388460,2026-01-14 17:30:00,Bundesliga,Germany,VfL Wolfsburg,FC St. Pauli,2,1,Finished
+3487,1388457,2026-01-13 19:30:00,Bundesliga,Germany,FSV Mainz 05,1. FC Heidenheim,2,1,Finished
+3486,1388453,2026-01-13 19:30:00,Bundesliga,Germany,Borussia Dortmund,Werder Bremen,3,0,Finished
+3485,1388459,2026-01-13 17:30:00,Bundesliga,Germany,VfB Stuttgart,Eintracht Frankfurt,3,2,Finished
+3151,1391006,2026-01-12 20:00:00,La Liga,Spain,Sevilla,Celta Vigo,0,1,Finished
+3844,1378059,2026-01-12 19:45:00,Serie A,Italy,Juventus,Cremonese,5,0,Finished
+3843,1378057,2026-01-12 17:30:00,Serie A,Italy,Genoa,Cagliari,3,0,Finished
+3842,1378058,2026-01-11 19:45:00,Serie A,Italy,Inter,Napoli,2,2,Finished
+3841,1378063,2026-01-11 17:00:00,Serie A,Italy,Hellas Verona,Lazio,0,1,Finished
+3484,1388444,2026-01-11 16:30:00,Bundesliga,Germany,Bayern München,VfL Wolfsburg,8,1,Finished
+3150,1391003,2026-01-11 15:15:00,La Liga,Spain,Levante,Espanyol,1,1,Finished
+3483,1388445,2026-01-11 14:30:00,Bundesliga,Germany,Borussia Mönchengladbach,FC Augsburg,4,0,Finished
+3840,1378056,2026-01-11 14:00:00,Serie A,Italy,Fiorentina,AC Milan,1,1,Finished
+3149,1391004,2026-01-11 13:00:00,La Liga,Spain,Rayo Vallecano,Mallorca,2,1,Finished
+3839,1378060,2026-01-11 11:30:00,Serie A,Italy,Lecce,Parma,1,2,Finished
+3148,1391007,2026-01-10 20:00:00,La Liga,Spain,Valencia,Elche,1,1,Finished
+3838,1378054,2026-01-10 19:45:00,Serie A,Italy,Atalanta,Torino,2,0,Finished
+3147,1391002,2026-01-10 17:30:00,La Liga,Spain,Girona,Osasuna,1,0,Finished
+3482,1388443,2026-01-10 17:30:00,Bundesliga,Germany,Bayer Leverkusen,VfB Stuttgart,1,4,Finished
+3837,1378061,2026-01-10 17:00:00,Serie A,Italy,AS Roma,Sassuolo,2,0,Finished
+3146,1391008,2026-01-10 15:15:00,La Liga,Spain,Villarreal,Alaves,3,1,Finished
+3481,1388450,2026-01-10 14:30:00,Bundesliga,Germany,Union Berlin,FSV Mainz 05,2,2,Finished
+3480,1388448,2026-01-10 14:30:00,Bundesliga,Germany,1. FC Heidenheim,1. FC Köln,2,2,Finished
+3479,1388447,2026-01-10 14:30:00,Bundesliga,Germany,SC Freiburg,Hamburger SV,2,1,Finished
+3835,1378055,2026-01-10 14:00:00,Serie A,Italy,Como,Bologna,1,1,Finished
+3836,1378062,2026-01-10 14:00:00,Serie A,Italy,Udinese,Pisa,2,2,Finished
+3145,1391005,2026-01-10 13:00:00,La Liga,Spain,Oviedo,Real Betis,1,1,Finished
+3144,1391001,2026-01-09 20:00:00,La Liga,Spain,Getafe,Real Sociedad,1,2,Finished
+3478,1388446,2026-01-09 19:30:00,Bundesliga,Germany,Eintracht Frankfurt,Borussia Dortmund,3,3,Finished
+2792,1379169,2026-01-08 20:00:00,Premier League,England,Arsenal,Liverpool,0,0,Finished
+3834,1378048,2026-01-08 19:45:00,Serie A,Italy,AC Milan,Genoa,1,1,Finished
+3833,1378045,2026-01-08 17:30:00,Serie A,Italy,Cremonese,Cagliari,2,2,Finished
+2790,1379177,2026-01-07 20:15:00,Premier League,England,Newcastle,Leeds,4,3,Finished
+2791,1379172,2026-01-07 20:15:00,Premier League,England,Burnley,Manchester United,2,2,Finished
+3831,1378053,2026-01-07 19:45:00,Serie A,Italy,Torino,Udinese,1,2,Finished
+3832,1378046,2026-01-07 19:45:00,Serie A,Italy,Lazio,Fiorentina,2,2,Finished
+3830,1378050,2026-01-07 19:45:00,Serie A,Italy,Parma,Inter,0,2,Finished
+2784,1379170,2026-01-07 19:30:00,Premier League,England,Bournemouth,Tottenham,3,2,Finished
+2786,1379173,2026-01-07 19:30:00,Premier League,England,Crystal Palace,Aston Villa,0,0,Finished
+2785,1379171,2026-01-07 19:30:00,Premier League,England,Brentford,Sunderland,3,0,Finished
+2787,1379174,2026-01-07 19:30:00,Premier League,England,Everton,Wolves,1,1,Finished
+2788,1379175,2026-01-07 19:30:00,Premier League,England,Fulham,Chelsea,2,1,Finished
+2789,1379176,2026-01-07 19:30:00,Premier League,England,Manchester City,Brighton,1,1,Finished
+3828,1378044,2026-01-07 17:30:00,Serie A,Italy,Bologna,Atalanta,0,2,Finished
+3829,1378049,2026-01-07 17:30:00,Serie A,Italy,Napoli,Hellas Verona,2,2,Finished
+2783,1379178,2026-01-06 20:00:00,Premier League,England,West Ham,Nottingham Forest,1,2,Finished
+3827,1378052,2026-01-06 19:45:00,Serie A,Italy,Sassuolo,Juventus,0,3,Finished
+3826,1378047,2026-01-06 17:00:00,Serie A,Italy,Lecce,AS Roma,0,2,Finished
+3825,1378051,2026-01-06 14:00:00,Serie A,Italy,Pisa,Como,0,3,Finished
+3143,1390997,2026-01-04 20:00:00,La Liga,Spain,Real Sociedad,Atletico Madrid,1,1,Finished
+4181,1387849,2026-01-04 19:45:00,Ligue 1,France,Paris Saint Germain,Paris FC,2,1,Finished
+3824,1378039,2026-01-04 19:45:00,Serie A,Italy,Inter,Bologna,3,1,Finished
+3142,1390993,2026-01-04 17:30:00,La Liga,Spain,Mallorca,Girona,1,2,Finished
+2782,1379165,2026-01-04 17:30:00,Premier League,England,Manchester City,Chelsea,1,1,Finished
+3141,1390989,2026-01-04 17:30:00,La Liga,Spain,Alaves,Oviedo,1,1,Finished
+3823,1378043,2026-01-04 17:00:00,Serie A,Italy,Hellas Verona,Torino,0,3,Finished
+4178,1387845,2026-01-04 16:15:00,Ligue 1,France,Lorient,Metz,1,1,Finished
+4179,1387842,2026-01-04 16:15:00,Ligue 1,France,Stade Brestois 29,Auxerre,2,0,Finished
+4180,1387843,2026-01-04 16:15:00,Ligue 1,France,Le Havre,Angers,2,1,Finished
+2781,1379163,2026-01-04 15:15:00,Premier League,England,Fulham,Liverpool,2,2,Finished
+3140,1390996,2026-01-04 15:15:00,La Liga,Spain,Real Madrid,Real Betis,5,1,Finished
+2780,1379162,2026-01-04 15:00:00,Premier League,England,Everton,Brentford,2,4,Finished
+2779,1379167,2026-01-04 15:00:00,Premier League,England,Tottenham,Sunderland,1,1,Finished
+2778,1379166,2026-01-04 15:00:00,Premier League,England,Newcastle,Crystal Palace,2,0,Finished
+3822,1378037,2026-01-04 14:00:00,Serie A,Italy,Fiorentina,Cremonese,1,0,Finished
+4177,1387846,2026-01-04 14:00:00,Ligue 1,France,Marseille,Nantes,0,2,Finished
+3139,1390998,2026-01-04 13:00:00,La Liga,Spain,Sevilla,Levante,0,3,Finished
+2777,1379164,2026-01-04 12:30:00,Premier League,England,Leeds,Manchester United,1,1,Finished
+3821,1378041,2026-01-04 11:30:00,Serie A,Italy,Lazio,Napoli,0,2,Finished
+4176,1387844,2026-01-03 20:05:00,Ligue 1,France,Lille,Rennes,0,2,Finished
+3138,1390992,2026-01-03 20:00:00,La Liga,Spain,Espanyol,Barcelona,0,2,Finished
+3820,1378034,2026-01-03 19:45:00,Serie A,Italy,Atalanta,AS Roma,1,0,Finished
+4175,1387848,2026-01-03 18:00:00,Ligue 1,France,Nice,Strasbourg,1,1,Finished
+2776,1379160,2026-01-03 17:30:00,Premier League,England,Bournemouth,Arsenal,2,3,Finished
+3137,1390991,2026-01-03 17:30:00,La Liga,Spain,Elche,Villarreal,1,3,Finished
+3819,1378040,2026-01-03 17:00:00,Serie A,Italy,Juventus,Lecce,1,1,Finished
+4174,1387847,2026-01-03 16:00:00,Ligue 1,France,Monaco,Lyon,1,3,Finished
+3136,1390994,2026-01-03 15:15:00,La Liga,Spain,Osasuna,Athletic Club,1,1,Finished
+2774,1379161,2026-01-03 15:00:00,Premier League,England,Brighton,Burnley,2,0,Finished
+2775,1379168,2026-01-03 15:00:00,Premier League,England,Wolves,West Ham,3,0,Finished
+3818,1378042,2026-01-03 14:00:00,Serie A,Italy,Sassuolo,Parma,1,1,Finished
+3817,1378038,2026-01-03 14:00:00,Serie A,Italy,Genoa,Pisa,1,1,Finished
+3135,1390990,2026-01-03 13:00:00,La Liga,Spain,Celta Vigo,Valencia,4,1,Finished
+2773,1379159,2026-01-03 12:30:00,Premier League,England,Aston Villa,Nottingham Forest,3,1,Finished
+3816,1378036,2026-01-03 11:30:00,Serie A,Italy,Como,Udinese,1,0,Finished
+3134,1390995,2026-01-02 20:00:00,La Liga,Spain,Rayo Vallecano,Getafe,1,1,Finished
+3815,1378035,2026-01-02 19:45:00,Serie A,Italy,Cagliari,AC Milan,0,1,Finished
+4173,1387850,2026-01-02 19:45:00,Ligue 1,France,Toulouse,Lens,0,3,Finished
+2771,1379150,2026-01-01 20:00:00,Premier League,England,Brentford,Tottenham,0,0,Finished
+2772,1379157,2026-01-01 20:00:00,Premier League,England,Sunderland,Manchester City,0,0,Finished
+2770,1379154,2026-01-01 17:30:00,Premier League,England,Liverpool,Leeds,0,0,Finished
+2769,1379153,2026-01-01 17:30:00,Premier League,England,Crystal Palace,Fulham,1,1,Finished

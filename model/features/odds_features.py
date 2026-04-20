@@ -47,4 +47,6 @@ def market_implied_features(home_odds: float, draw_odds: float, away_odds: float
         "market_draw_prob": draw_prob,
         "market_away_prob": away_prob,
         "market_overround": overround,
+        "market_certainty": max(home_prob, away_prob),  # наскільки ринок впевнений в фавориті
+        "market_home_edge": home_prob - away_prob,       # перевага хозяїна за ринком
     }

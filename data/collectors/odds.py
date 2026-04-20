@@ -1,7 +1,9 @@
 from loguru import logger
 from data.api_client import SStatsClient
 
-REFERENCE_BOOKMAKER = "Bet365"
+# Пріоритет букмекерів — беремо першого доступного
+BOOKMAKER_PRIORITY = ["Bet365", "Pinnacle", "William Hill", "Bwin", "1xBet", "Unibet"]
+REFERENCE_BOOKMAKER = "Bet365"  # для зворотної сумісності
 
 # Маппінг ринків SStats → наші назви
 MARKET_MAP = {
@@ -24,39 +26,64 @@ def fetch_odds(fixture_id: int, client: SStatsClient) -> list[dict]:
     logger.info(f"Fetching odds for fixture {fixture_id}")
     data = client.get(f"/Odds/{fixture_id}")
 
-    results = []
+    # Індексуємо букмекерів по імені
+    bookmakers_by_name = {}
     for bookmaker in data.get("data", []) or []:
-        bookmaker_name = bookmaker.get("bookmakerName", "")
-        if bookmaker_name != REFERENCE_BOOKMAKER:
-            continue
-        for market in bookmaker.get("odds", []):
-            market_name = market.get("marketName", "")
-            market_key = MARKET_MAP.get(market_name)
-            if not market_key:
-                continue
-            for outcome in market.get("odds", []):
-                try:
-                    raw_outcome = outcome["name"].lower()
-                    if market_key == "double_chance":
-                        mapped = DC_OUTCOME_MAP.get(raw_outcome)
-                        if not mapped:
-                            continue
-                        outcome_name = mapped
-                    else:
-                        outcome_name = raw_outcome
-                    results.append({
-                        "fixture_id": fixture_id,
-                        "market": market_key,
-                        "bookmaker": bookmaker_name,
-                        "outcome": outcome_name,
-                        "odds": float(outcome["value"]),
-                        "opening_odds": float(outcome["openingValue"]) if outcome.get("openingValue") else None,
-                        "is_closing": False,
-                    })
-                except (ValueError, TypeError, KeyError):
-                    continue
+        name = bookmaker.get("bookmakerName", "")
+        if name:
+            bookmakers_by_name[name] = bookmaker
 
-    logger.info(f"Fetched {len(results)} odds entries for fixture {fixture_id}")
+    # Вибираємо найкращого доступного букмекера
+    selected_name = None
+    for candidate in BOOKMAKER_PRIORITY:
+        if candidate in bookmakers_by_name:
+            selected_name = candidate
+            break
+    # Якщо нікого з пріоритетного списку немає — беремо першого доступного
+    if selected_name is None and bookmakers_by_name:
+        selected_name = next(iter(bookmakers_by_name))
+
+    if selected_name is None:
+        logger.info(f"Fetched 0 odds entries for fixture {fixture_id}")
+        return []
+
+    results = []
+    for market in bookmakers_by_name[selected_name].get("odds", []):
+        market_name = market.get("marketName", "")
+        market_key = MARKET_MAP.get(market_name)
+        if not market_key:
+            continue
+        for outcome in market.get("odds", []):
+            try:
+                raw_outcome = outcome["name"].lower()
+                if market_key == "double_chance":
+                    mapped = DC_OUTCOME_MAP.get(raw_outcome)
+                    if not mapped:
+                        continue
+                    outcome_name = mapped
+                else:
+                    outcome_name = raw_outcome
+                results.append({
+                    "fixture_id": fixture_id,
+                    "market": market_key,
+                    "bookmaker": selected_name,
+                    "outcome": outcome_name,
+                    "odds": float(outcome["value"]),
+                    "opening_odds": float(outcome["openingValue"]) if outcome.get("openingValue") else None,
+                    "is_closing": False,
+                })
+            except (ValueError, TypeError, KeyError):
+                continue
+
+    logger.info(f"Fetched {len(results)} odds entries for fixture {fixture_id} via {selected_name}")
+    return results
+
+
+def fetch_closing_odds(fixture_id: int, client: SStatsClient) -> list[dict]:
+    """Closing odds — фінальні коефіцієнти перед стартом матчу (для розрахунку CLV)."""
+    results = fetch_odds(fixture_id, client)
+    for r in results:
+        r["is_closing"] = True
     return results
 
 

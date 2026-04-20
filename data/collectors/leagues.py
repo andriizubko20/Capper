@@ -9,6 +9,26 @@ TRACKED_LEAGUES = {
     135: ("Serie A", "Italy"),
     61: ("Ligue 1", "France"),
     2: ("Champions League", "Europe"),
+    # Розширені ліги
+    88: ("Eredivisie", "Netherlands"),
+    144: ("Jupiler Pro League", "Belgium"),
+    136: ("Serie B", "Italy"),
+    94: ("Primeira Liga", "Portugal"),
+    # Нові ліги (пріоритет завантаження)
+    203: ("Süper Lig", "Turkey"),
+    40: ("Championship", "England"),
+    79: ("2. Bundesliga", "Germany"),
+    62: ("Ligue 2", "France"),
+    333: ("Premier League", "Ukraine"),
+    218: ("Bundesliga", "Austria"),
+    179: ("Premiership", "Scotland"),
+    106: ("Ekstraklasa", "Poland"),
+    103: ("Eliteserien", "Norway"),
+    113: ("Allsvenskan", "Sweden"),
+    283: ("Liga I", "Romania"),
+    211: ("HNL", "Croatia"),
+    3: ("UEFA Europa League", "Europe"),
+    848: ("UEFA Europa Conference League", "Europe"),
 }
 
 

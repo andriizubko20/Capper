@@ -18,13 +18,45 @@ from model.features.builder import build_match_features
 from model.features.elo import compute_dynamic_elo
 from model.weighted_score import compute_weighted_score
 
-MODEL_VERSION       = "ws_gap_v1"       # 4% cap
-MODEL_VERSION_KELLY = "ws_gap_kelly_v1"  # pure Kelly 25%, no cap
-WS_GAP_MIN    = 80
-WS_DOM_MIN    = 80
-ODDS_MIN      = 1.7
-KELLY_CAP     = 0.04
+MODEL_VERSION             = "ws_gap_v1"         # фінальний, 4% cap
+MODEL_VERSION_KELLY       = "ws_gap_kelly_v1"    # фінальний, pure Kelly 25%
+MODEL_VERSION_EARLY       = "ws_gap_v1_early"    # ранній, 4% cap
+MODEL_VERSION_KELLY_EARLY = "ws_gap_kelly_v1_early"  # ранній, pure Kelly 25%
+
+LEAGUE_FLAGS = {
+    "England":     "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "Spain":       "🇪🇸",
+    "Germany":     "🇩🇪",
+    "Italy":       "🇮🇹",
+    "France":      "🇫🇷",
+    "Europe":      "🏆",
+    "Netherlands": "🇳🇱",
+    "Portugal":    "🇵🇹",
+    "Belgium":     "🇧🇪",
+}
+
+
+def _league_flag(match) -> str:
+    if match.league and match.league.country:
+        return LEAGUE_FLAGS.get(match.league.country, "🌍")
+    return "🌍"
+WS_GAP_MIN    = 70   # оновлено з ablation (DOM видалено — не додає цінності)
+ODDS_MIN      = 2.0  # оновлено: odds 2.0-2.5 стабільно прибуткові
+KELLY_CAP     = 0.10
 FRACTIONAL    = 0.25
+
+# Whitelist ліг для генерації піків
+ALLOWED_LEAGUE_API_IDS = {
+    39,   # Premier League (England)
+    140,  # La Liga (Spain)
+    78,   # Bundesliga (Germany)
+    135,  # Serie A (Italy)
+    61,   # Ligue 1 (France)
+    2,    # Champions League
+    88,   # Eredivisie (Netherlands)
+    144,  # Jupiler Pro League (Belgium)
+    333,  # Premier League (Ukraine)
+}
 
 
 def _load_teams_elo(matches_df: pd.DataFrame) -> dict:
@@ -58,6 +90,18 @@ def _load_stats_df(db) -> pd.DataFrame:
         "away_score": s.match.away_score,
         "home_xg": s.home_xg,
         "away_xg": s.away_xg,
+        "home_shots_on_target":  s.home_shots_on_target,
+        "away_shots_on_target":  s.away_shots_on_target,
+        "home_shots_inside_box": s.home_shots_inside_box,
+        "away_shots_inside_box": s.away_shots_inside_box,
+        "home_possession":       s.home_possession,
+        "away_possession":       s.away_possession,
+        "home_corners":          s.home_corners,
+        "away_corners":          s.away_corners,
+        "home_gk_saves":         s.home_gk_saves,
+        "away_gk_saves":         s.away_gk_saves,
+        "home_passes_accurate":  s.home_passes_accurate,
+        "away_passes_accurate":  s.away_passes_accurate,
     } for s in stats])
 
 
@@ -73,7 +117,7 @@ def _ws_gap_pick(features: dict, odds: dict, bankroll: float) -> dict | None:
     Основна логіка WS Gap:
     1. Рахуємо ws_home і ws_away
     2. dominant = max(ws_home, ws_away)
-    3. Якщо gap >= WS_GAP_MIN і dominant >= WS_DOM_MIN і odds >= ODDS_MIN → pick
+    3. Якщо gap >= WS_GAP_MIN і odds в діапазоні → pick
     4. Kelly sizing через Elo probability
 
     odds dict містить decimal odds: {"home": 1.85, "draw": 3.2, "away": 4.5}
@@ -105,9 +149,6 @@ def _ws_gap_pick(features: dict, odds: dict, bankroll: float) -> dict | None:
 
     if ws_gap < WS_GAP_MIN:
         logger.debug(f"WS gap {ws_gap:.0f} < {WS_GAP_MIN}, skip")
-        return None
-    if ws_dom < WS_DOM_MIN:
-        logger.debug(f"WS dominant {ws_dom:.0f} < {WS_DOM_MIN}, skip")
         return None
     if odds_val < ODDS_MIN:
         logger.debug(f"Odds {odds_val:.2f} < {ODDS_MIN}, skip")
@@ -203,10 +244,13 @@ def run_generate_picks_ws_gap(
         if include_finished:
             status_filter += ["Finished", "Match Finished"]
 
-        matches = db.query(Match).filter(
+        from db.models import League as LeagueModel
+
+        matches = db.query(Match).join(LeagueModel).filter(
             Match.date >= match_date_from.replace(tzinfo=None),
             Match.date <= match_date_to.replace(tzinfo=None),
             Match.status.in_(status_filter),
+            LeagueModel.api_id.in_(ALLOWED_LEAGUE_API_IDS),
         ).all()
 
         if not matches:
@@ -289,7 +333,7 @@ def run_generate_picks_ws_gap(
 
             # Версія 2: pure Kelly 25%
             if not has_kelly:
-                stake_kelly = round(bankroll_kelly * pick["kelly_fraction"], 2)
+                stake_kelly = round(min(bankroll_kelly * pick["kelly_fraction"], bankroll_kelly * KELLY_CAP), 2)
                 db.add(Prediction(
                     match_id=match.id, market="1x2",
                     outcome=pick["outcome"],
@@ -308,7 +352,7 @@ def run_generate_picks_ws_gap(
 
         if new_picks:
             logger.info(f"[WS Gap] Generated {len(new_picks)} picks (both versions)")
-            _send_picks_to_telegram(new_picks)
+            _send_picks_to_telegram(new_picks, phase="final", bankroll=bankroll_cap)
         else:
             logger.info("[WS Gap] No new picks")
 
@@ -316,7 +360,11 @@ def run_generate_picks_ws_gap(
         db.close()
 
 
-def _send_picks_to_telegram(picks: list) -> None:
+def _send_picks_to_telegram(picks: list, phase: str = "final", bankroll: float | None = None) -> None:
+    """
+    phase: "final" | "early"
+    bankroll: поточний compound банкрол (для відображення в повідомленні)
+    """
     import asyncio
     from aiogram import Bot
     from db.models import User
@@ -334,23 +382,32 @@ def _send_picks_to_telegram(picks: list) -> None:
             if not users:
                 return
 
+            br = bankroll or settings.bankroll
             lines = []
             for match, pick in picks:
+                flag = _league_flag(match)
                 home = match.home_team.name if match.home_team else "?"
                 away = match.away_team.name if match.away_team else "?"
                 outcome_label = (
                     f"П1 ({home})" if pick["outcome"] == "home" else f"П2 ({away})"
                 )
                 time_str = match.date.strftime("%d.%m %H:%M")
+                stake_cap = round(min(br * pick["kelly_fraction"], br * KELLY_CAP), 2)
                 lines.append(
-                    f"⚽ {home} — {away} [{time_str}]\n"
+                    f"{flag} {home} — {away} [{time_str}]\n"
                     f"  ➤ {outcome_label}\n"
-                    f"  Коеф: {pick['odds']:.2f} | EV: {pick['ev']*100:.1f}% | "
+                    f"  Коэф: {pick['odds']:.2f} | EV: {pick['ev']*100:.1f}% | "
                     f"WS: {pick['weighted_score']} | Gap: {pick['ws_gap']}\n"
-                    f"  Стейк: ${pick['stake']:.0f} з ${settings.bankroll:.0f}"
+                    f"  Стейк: ${stake_cap:.0f} (банкрол: ${br:.0f})"
                 )
 
-            header = f"📐 WS Gap — {len(picks)} пік{'и' if len(picks) > 1 else 'а'}:\n\n"
+            n = len(picks)
+            picks_word = "пика" if n in (2, 3, 4) else ("пик" if n == 1 else "пиков")
+            if phase == "early":
+                header = f"📅 Ранние пики — {n} {picks_word} (до {settings.early_picks_days_ahead} дней):\n\n"
+            else:
+                header = f"🔔 Финальный пик — {n} {picks_word} (старт ~{settings.picks_hours_before}ч):\n\n"
+
             message = header + "\n\n".join(lines)
 
             sent = 0
@@ -361,9 +418,137 @@ def _send_picks_to_telegram(picks: list) -> None:
                 except Exception as e:
                     logger.warning(f"Failed to send to {user.telegram_id}: {e}")
 
-            logger.info(f"[WS Gap] Picks sent to {sent}/{len(users)} users")
+            logger.info(f"[WS Gap] [{phase}] Picks sent to {sent}/{len(users)} users")
         finally:
             db.close()
             await bot.session.close()
 
     asyncio.run(_send())
+
+
+def run_early_picks_scan() -> None:
+    """
+    Phase 1 — щодня о 9:05 UTC.
+    Генерує ранні піки для матчів від picks_hours_before+1h до early_picks_days_ahead днів вперед.
+    Зберігає з model_version *_early. Не перезаписує вже наявні (early або final).
+    """
+    now = datetime.now(timezone.utc)
+    scan_from = now + timedelta(hours=settings.picks_hours_before + 1)
+    scan_to   = now + timedelta(days=settings.early_picks_days_ahead)
+
+    logger.info(
+        f"[WS Gap Early] Scanning | window: "
+        f"{scan_from.strftime('%d.%m %H:%M')} – {scan_to.strftime('%d.%m %H:%M')} UTC"
+    )
+
+    db = SessionLocal()
+    try:
+        from db.models import League as LeagueModel
+
+        matches = db.query(Match).join(LeagueModel).filter(
+            Match.date >= scan_from.replace(tzinfo=None),
+            Match.date <= scan_to.replace(tzinfo=None),
+            Match.status == "Not Started",
+            LeagueModel.api_id.in_(ALLOWED_LEAGUE_API_IDS),
+        ).all()
+
+        if not matches:
+            logger.info("[WS Gap Early] No matches in window, skipping")
+            return
+
+        logger.info(f"[WS Gap Early] Found {len(matches)} matches")
+
+        matches_df  = _load_matches_df(db)
+        stats_df    = _load_stats_df(db)
+        teams       = _load_teams_elo(matches_df)
+
+        from db.models import InjuryReport
+        inj_rows = db.query(InjuryReport).all()
+        injuries_df = pd.DataFrame([{
+            "match_id": i.match_id,
+            "team_id": i.team_id,
+            "player_api_id": i.player_api_id,
+        } for i in inj_rows]) if inj_rows else pd.DataFrame(
+            columns=["match_id", "team_id", "player_api_id"]
+        )
+
+        bankroll_cap   = _compute_current_bankroll(db, settings.bankroll, MODEL_VERSION)
+        bankroll_kelly = _compute_current_bankroll(db, settings.bankroll, MODEL_VERSION_KELLY)
+
+        new_picks = []
+
+        for match in matches:
+            # Пропускаємо якщо є будь-який пік (early або final) для цього матчу
+            has_any = db.query(Prediction).filter(
+                Prediction.match_id == match.id,
+                Prediction.model_version.in_([
+                    MODEL_VERSION, MODEL_VERSION_KELLY,
+                    MODEL_VERSION_EARLY, MODEL_VERSION_KELLY_EARLY,
+                ])
+            ).first()
+            if has_any:
+                logger.debug(f"[WS Gap Early] Match {match.id} already has a pick, skip")
+                continue
+
+            odds = _get_odds_for_match(match.id, db)
+            if not odds:
+                logger.debug(f"[WS Gap Early] No odds for match {match.id}, skip")
+                continue
+
+            features = build_match_features(
+                match={
+                    "id": match.id,
+                    "home_team_id": match.home_team_id,
+                    "away_team_id": match.away_team_id,
+                    "date": match.date,
+                    "league_id": match.league_id,
+                },
+                matches_df=matches_df,
+                stats_df=stats_df,
+                teams=teams,
+                odds=odds,
+                injuries_df=injuries_df,
+            )
+
+            pick = _ws_gap_pick(features, odds, max(bankroll_cap, bankroll_kelly))
+            if pick is None:
+                continue
+
+            stake_cap   = round(min(bankroll_cap * pick["kelly_fraction"], bankroll_cap * KELLY_CAP), 2)
+            stake_kelly = round(bankroll_kelly * pick["kelly_fraction"], 2)
+
+            db.add(Prediction(
+                match_id=match.id, market="1x2",
+                outcome=pick["outcome"],
+                probability=float(pick["probability"]),
+                odds_used=float(pick["odds"]),
+                ev=float(pick["ev"]),
+                kelly_fraction=float(pick["kelly_fraction"]),
+                stake=stake_cap,
+                weighted_score=int(pick["weighted_score"]),
+                model_version=MODEL_VERSION_EARLY,
+            ))
+            db.add(Prediction(
+                match_id=match.id, market="1x2",
+                outcome=pick["outcome"],
+                probability=float(pick["probability"]),
+                odds_used=float(pick["odds"]),
+                ev=float(pick["ev"]),
+                kelly_fraction=float(pick["kelly_fraction"]),
+                stake=stake_kelly,
+                weighted_score=int(pick["weighted_score"]),
+                model_version=MODEL_VERSION_KELLY_EARLY,
+            ))
+
+            new_picks.append((match, pick))
+
+        db.commit()
+
+        if new_picks:
+            logger.info(f"[WS Gap Early] Generated {len(new_picks)} early picks")
+            _send_picks_to_telegram(new_picks, phase="early", bankroll=bankroll_cap)
+        else:
+            logger.info("[WS Gap Early] No new early picks")
+
+    finally:
+        db.close()

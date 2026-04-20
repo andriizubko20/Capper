@@ -43,6 +43,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./model/saved:/app/model/saved  # збережені моделі
+      - ./BETA:/app/BETA                # live mount для BETA досліджень
 
   # ─── Telegram бот ─────────────────────────────────────────
   bot:
@@ -50,6 +51,19 @@ services:
     container_name: capper_bot
     command: python -m bot.main
     env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ─── FastAPI (miniapp backend) ────────────────────────────
+  api:
+    build: .
+    container_name: capper_api
+    command: python -m api.run
+    env_file: .env
+    ports:
+      - "8000:8000"
     depends_on:
       db:
         condition: service_healthy

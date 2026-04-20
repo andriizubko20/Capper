@@ -1,11 +1,12 @@
 import pandas as pd
-from model.features.form import compute_form, compute_home_away_form, compute_rest_days
+from model.features.form import compute_form, compute_home_away_form, compute_rest_days, compute_form_advanced
 from model.features.xg import compute_xg_features, compute_xg_overperformance
-from model.features.elo import elo_features, build_elo_snapshots
+from model.features.elo import elo_features, build_elo_snapshots, compute_elo_momentum
 from model.features.h2h import compute_h2h
 from model.features.odds_features import market_implied_features, odds_movement_features
 from model.features.standings import build_standings_snapshots
 from model.features.injuries import compute_injury_features
+from model.features.match_stats_features import compute_match_stats_features, compute_efficiency_features
 
 
 def build_match_features(
@@ -17,6 +18,7 @@ def build_match_features(
     opening_odds: dict | None = None,
     injuries_df: pd.DataFrame | None = None,
     standings_snap: dict | None = None,
+    elo_snapshots: dict | None = None,
 ) -> dict:
     date = pd.Timestamp(match["date"])
     home_id = match["home_team_id"]
@@ -36,6 +38,15 @@ def build_match_features(
     features.update({f"home_{k}": v for k, v in home_home_form.items()})
     features.update({f"away_{k}": v for k, v in away_away_form.items()})
 
+    # Розширена форма: clean sheet, btts, streak, variability
+    home_adv_form = compute_form_advanced(matches_df, home_id, date, n=10)
+    away_adv_form = compute_form_advanced(matches_df, away_id, date, n=10)
+    features.update({f"home_{k}": v for k, v in home_adv_form.items()})
+    features.update({f"away_{k}": v for k, v in away_adv_form.items()})
+    features["delta_clean_sheet_rate"]     = home_adv_form["clean_sheet_rate"]     - away_adv_form["clean_sheet_rate"]
+    features["delta_failed_to_score_rate"] = home_adv_form["failed_to_score_rate"] - away_adv_form["failed_to_score_rate"]
+    features["delta_btts_rate"]            = home_adv_form["btts_rate"]            - away_adv_form["btts_rate"]
+
     # xG останні 5
     home_xg5 = compute_xg_features(stats_df, home_id, date, n=5)
     away_xg5 = compute_xg_features(stats_df, away_id, date, n=5)
@@ -54,10 +65,36 @@ def build_match_features(
     features["home_xg_overperformance"] = home_xg_op["xg_overperformance"]
     features["away_xg_overperformance"] = away_xg_op["xg_overperformance"]
 
+    # Match stats rolling avg (shots, possession, corners, saves, passes) — останні 5
+    home_ms5 = compute_match_stats_features(stats_df, home_id, date, n=5)
+    away_ms5 = compute_match_stats_features(stats_df, away_id, date, n=5)
+    features.update({f"home_{k}": v for k, v in home_ms5.items()})
+    features.update({f"away_{k}": v for k, v in away_ms5.items()})
+    for k in home_ms5:
+        features[f"delta_{k}"] = home_ms5[k] - away_ms5[k]
+
+    # Ефективність (conversion, accuracy, save%, pass%) — останні 10
+    home_eff = compute_efficiency_features(stats_df, home_id, date, n=10)
+    away_eff = compute_efficiency_features(stats_df, away_id, date, n=10)
+    features.update({f"home_{k}": v for k, v in home_eff.items()})
+    features.update({f"away_{k}": v for k, v in away_eff.items()})
+    for k in home_eff:
+        features[f"delta_{k}"] = home_eff[k] - away_eff[k]
+
     # Elo (динамічний, передається через teams)
     home_elo = teams.get(home_id, {}).get("elo", 1500.0)
     away_elo = teams.get(away_id, {}).get("elo", 1500.0)
     features.update(elo_features(home_elo, away_elo))
+
+    # Elo momentum (тренд за останні 10 матчів)
+    if elo_snapshots is not None:
+        features["home_elo_momentum"] = compute_elo_momentum(elo_snapshots, matches_df, home_id, date)
+        features["away_elo_momentum"] = compute_elo_momentum(elo_snapshots, matches_df, away_id, date)
+        features["delta_elo_momentum"] = features["home_elo_momentum"] - features["away_elo_momentum"]
+    else:
+        features["home_elo_momentum"] = 0.0
+        features["away_elo_momentum"] = 0.0
+        features["delta_elo_momentum"] = 0.0
 
     # H2H прибрано з фіч — нерепрезентативний (мало зустрічей, давні дані)
 
@@ -159,6 +196,7 @@ def build_dataset(
             odds=odds_dict,
             injuries_df=injuries_df,
             standings_snap=standings_snapshots.get(match_id),
+            elo_snapshots=elo_snapshots,
         )
 
         if match["home_score"] > match["away_score"]:
@@ -175,6 +213,12 @@ def build_dataset(
                 best = dc_grp[dc_grp["outcome"] == outcome]["value"].max()
                 if best and not pd.isna(best):
                     feats[f"dc_{outcome.lower()}_odds"] = best
+
+        # Зберігаємо сирі odds для бектестів (до margin adjustment)
+        if odds_dict:
+            feats["home_odds"] = odds_dict["home"]
+            feats["away_odds"] = odds_dict["away"]
+            feats["draw_odds"] = odds_dict["draw"]
 
         feats["match_id"] = match_id
         feats["date"] = match["date"]

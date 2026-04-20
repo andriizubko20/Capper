@@ -5,13 +5,8 @@ from model.train import train, FEATURE_COLS, load_data_from_db
 from model.evaluate import compute_roi, log_metrics
 from model.features.builder import build_dataset
 
-# 1X2 (Home/Away only)
 MIN_EV = 0.17
 MIN_ODDS = 1.5
-
-# Double Chance (1X / 2X) — нижчі кефи, окремі пороги
-MIN_EV_DC = 0.10
-MIN_ODDS_DC = 1.35
 
 MAX_STAKE_PCT = 0.04       # максимум 4% банкролу незалежно від Kelly
 FRACTIONAL_KELLY = 0.25
@@ -118,53 +113,39 @@ def backtest(
             p_draw = prob_map.get("draw", 0)
             p_away = prob_map.get("away", 0)
 
-            # 1X2: Home/Away
-            candidates_1x2 = [
-                ("home", p_home, h_prob, {"home"}, MIN_EV, MIN_ODDS),
-                ("away", p_away, a_prob, {"away"}, MIN_EV, MIN_ODDS),
-            ]
-
-            # Double Chance: 1X і 2X — реальні odds з ринку
-            dc_1x_odds = row.get("dc_1x_odds")
-            dc_2x_odds = row.get("dc_2x_odds")
-            candidates_dc = []
-            if dc_1x_odds and not pd.isna(dc_1x_odds) and dc_1x_odds >= MIN_ODDS_DC:
-                candidates_dc.append(("1X", p_home + p_draw, 1 / dc_1x_odds, {"home", "draw"}, MIN_EV_DC, MIN_ODDS_DC))
-            if dc_2x_odds and not pd.isna(dc_2x_odds) and dc_2x_odds >= MIN_ODDS_DC:
-                candidates_dc.append(("2X", p_away + p_draw, 1 / dc_2x_odds, {"away", "draw"}, MIN_EV_DC, MIN_ODDS_DC))
-
-            # Обираємо найкращу ставку на матч (найвищий EV серед всіх кандидатів)
+            # Обираємо найкращу ставку на матч (найвищий EV)
             best_bet = None
             best_ev = -1
 
-            for outcome, our_prob, market_prob, winning_set, min_ev, min_odds in candidates_1x2 + candidates_dc:
+            for outcome, our_prob, market_prob in (
+                ("home", p_home, h_prob),
+                ("away", p_away, a_prob),
+            ):
                 if not market_prob or market_prob <= 0:
                     continue
                 odds = 1 / market_prob
-                if odds < min_odds:
+                if odds < MIN_ODDS:
                     continue
-                # Scenario filter — тільки для 1X2, DC пропускаємо
-                if outcome in ("home", "away"):
-                    if scenario_score(row, outcome) < MIN_SCENARIO_SCORE:
-                        continue
+                if scenario_score(row, outcome) < MIN_SCENARIO_SCORE:
+                    continue
                 ev = our_prob * odds - 1
-                if ev < min_ev:
+                if ev < MIN_EV:
                     continue
                 if ev > best_ev:
                     best_ev = ev
-                    best_bet = (outcome, our_prob, odds, winning_set)
+                    best_bet = (outcome, our_prob, odds, {outcome})
 
             if best_bet is None:
                 continue
 
-            outcome, our_prob, odds, winning_set = best_bet
+            outcome, our_prob, odds, _ = best_bet
             b = odds - 1
             q = 1 - our_prob
             kelly = max(0, (our_prob * b - q) / b) * FRACTIONAL_KELLY
             stake = min(bankroll * kelly, bankroll * MAX_STAKE_PCT)
 
             actual = row["target"]
-            profit = stake * (odds - 1) if actual in winning_set else -stake
+            profit = stake * (odds - 1) if actual == outcome else -stake
             bankroll += profit
 
             all_results.append({
@@ -177,7 +158,7 @@ def backtest(
                 "stake": stake,
                 "profit": profit,
                 "bankroll": bankroll,
-                "clv": row.get(f"{outcome}_clv") if outcome in ("home", "away") else None,
+                "clv": row.get(f"{outcome}_clv"),
             })
 
         start += step
@@ -194,14 +175,10 @@ def backtest(
     logger.info(f"Scenario filter: MIN_SCORE={MIN_SCENARIO_SCORE}, MIN_EV={MIN_EV:.0%}")
 
     # Розбивка по типу ставки
-    for market in ("home", "away", "1X", "2X"):
+    for market in ("home", "away"):
         subset = results_df[results_df["outcome"] == market]
         if not subset.empty:
-            wr = subset.apply(lambda r: r["actual_outcome"] in (
-                {"home"} if market == "home" else
-                {"away"} if market == "away" else
-                {"home", "draw"} if market == "1X" else {"away", "draw"}
-            ), axis=1).mean()
+            wr = (subset["actual_outcome"] == market).mean()
             logger.info(f"  {market}: {len(subset)} bets, win_rate={wr:.1%}")
 
     log_metrics(roi_metrics)

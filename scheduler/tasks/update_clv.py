@@ -2,7 +2,7 @@ from datetime import date, timedelta
 
 from loguru import logger
 
-from data.api_client import APIFootballClient
+from data.api_client import SStatsClient
 from data.collectors.odds import fetch_closing_odds
 from db.models import Match, Odds, Prediction
 from db.session import SessionLocal
@@ -24,7 +24,7 @@ def run_clv_update() -> None:
             Match.status == "FT",
         ).all()
 
-        with APIFootballClient() as client:
+        with SStatsClient() as client:
             for match in matches:
                 closing = fetch_closing_odds(match.api_id, client)
                 closing_map = {o["outcome"]: o["odds"] for o in closing if o["market"] == "1x2"}

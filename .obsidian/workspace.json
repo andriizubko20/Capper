@@ -1,0 +1,200 @@
+{
+  "main": {
+    "id": "85ecc5ba6b3b2bac",
+    "type": "split",
+    "children": [
+      {
+        "id": "96101b2ea2424bbe",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8206b2be5c997c0f",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Граф"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "9c7cee224a7082ef",
+    "type": "split",
+    "children": [
+      {
+        "id": "029388080f6d0c60",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b4ba37f4ea47dc82",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Файловий менеджер"
+            }
+          },
+          {
+            "id": "3b7d42a01c40c2b2",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Пошук"
+            }
+          },
+          {
+            "id": "95c43d934c44f12d",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Закладки"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 239.5
+  },
+  "right": {
+    "id": "1090b726bc940fa9",
+    "type": "split",
+    "children": [
+      {
+        "id": "754cbf139199e580",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a9344347979ee6e6",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Зворотні посилання"
+            }
+          },
+          {
+            "id": "fa1ee18a7a175848",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Вихідні посилання"
+            }
+          },
+          {
+            "id": "915febd647f83a2f",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Мітки"
+            }
+          },
+          {
+            "id": "c990f4541e811aa9",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Всі властивості"
+            }
+          },
+          {
+            "id": "6d57985f4c8db552",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Вміст"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Відкрити провідник файлів": false,
+      "graph:Граф": false,
+      "canvas:Створити нове полотно": false,
+      "daily-notes:Сьогоднішня нотатка": false,
+      "templates:Вставити шаблон": false,
+      "command-palette:Відкрити меню команд": false,
+      "bases:Створити нову базу": false,
+      "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
+    }
+  },
+  "active": "8206b2be5c997c0f",
+  "lastOpenFiles": [
+    "capper-miniapp/src/screens/CompareScreen.tsx",
+    "CLAUDE.md",
+    "MEMORY.md",
+    "venv/lib/python3.14/site-packages/httpcore-1.0.9.dist-info/licenses/LICENSE.md",
+    "Design New/tokens.css",
+    "Design New/stats.jsx",
+    "Design New/picks.jsx",
+    "Design New/device-frame.jsx",
+    "Design New/debug4.png",
+    "Design New/debug3.png",
+    "Design New/debug2.png",
+    "Design New/debug.png",
+    "Design New/data.jsx",
+    "Design New/Capper.html",
+    "Design New/components.jsx",
+    "Design New/compare.jsx",
+    "Design New"
+  ]
+}

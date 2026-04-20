@@ -1,0 +1,1684 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Capper — ML Football Betting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Calistoga&display=swap" rel="stylesheet"/>
+  <style>
+/* Capper design tokens */
+:root {
+  --bg: #020203;
+  --surface: #0a0a0c;
+  --raised: #111114;
+  --indigo: #5E6AD2;
+  --indigo-2: #7C86E0;
+  --indigo-deep: #3A45A8;
+  --green: #22C55E;
+  --red: #EF4444;
+  --text: #F1F1F3;
+  --text-dim: #8A8A93;
+  --text-mute: #5A5A63;
+  --hairline: rgba(255,255,255,0.06);
+  --hairline-strong: rgba(255,255,255,0.10);
+
+  --font-sans: 'Fira Sans', -apple-system, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-display: 'Calistoga', Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text);
+  background: #1a1a1d;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- App scaffolding ---------- */
+.capper-root {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  overflow: hidden;
+}
+
+/* aurora */
+.aurora {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.aurora::before {
+  content: '';
+  position: absolute;
+  width: 520px; height: 520px;
+  top: -180px; left: -120px;
+  background: radial-gradient(circle, rgba(94,106,210,0.45) 0%, rgba(94,106,210,0) 60%);
+  filter: blur(40px);
+}
+.aurora::after {
+  content: '';
+  position: absolute;
+  width: 460px; height: 460px;
+  bottom: 80px; right: -160px;
+  background: radial-gradient(circle, rgba(124,134,224,0.32) 0%, rgba(94,106,210,0) 60%);
+  filter: blur(50px);
+}
+.aurora .blob3 {
+  position: absolute;
+  width: 380px; height: 380px;
+  top: 38%; left: 30%;
+  background: radial-gradient(circle, rgba(58,69,168,0.25) 0%, rgba(58,69,168,0) 65%);
+  filter: blur(60px);
+}
+.grain {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background-image: radial-gradient(rgba(255,255,255,0.012) 1px, transparent 1px);
+  background-size: 3px 3px;
+  opacity: 0.5;
+}
+
+/* ---------- Telegram chrome ---------- */
+.tg-bar {
+  position: absolute;
+  top: 60px; left: 0; right: 0;
+  height: 50px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 14px;
+  z-index: 30;
+  font-size: 17px;
+  color: var(--text);
+  background: rgba(10,10,12,0.55);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border-bottom: 0.5px solid var(--hairline);
+}
+.model-switch {
+  display: flex;
+  gap: 2px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 9999px;
+  padding: 3px;
+  border: 0.5px solid rgba(255,255,255,0.06);
+}
+.model-btn {
+  border: 0;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 9999px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: all 200ms ease;
+  white-space: nowrap;
+}
+.model-btn.active {
+  background: linear-gradient(180deg, rgba(94,106,210,0.32), rgba(94,106,210,0.15));
+  color: var(--text);
+  box-shadow:
+    inset 0 0.5px 0 rgba(255,255,255,0.15),
+    0 0 12px rgba(94,106,210,0.4);
+}
+.tg-bar .tg-close {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  color: var(--indigo-2);
+  font-weight: 500;
+}
+.tg-bar .tg-title {
+  display: flex; flex-direction: column; align-items: center; line-height: 1.1;
+}
+.tg-bar .tg-title strong {
+  font-size: 15px; font-weight: 600; letter-spacing: 0.1px;
+}
+.tg-bar .tg-title small {
+  font-size: 11px; color: var(--text-dim); margin-top: 2px;
+  font-family: var(--font-mono);
+}
+.tg-bar .tg-more {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+}
+
+/* ---------- Glass primitive ---------- */
+.glass {
+  background: rgba(17,17,20,0.55);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 0.5px solid var(--hairline-strong);
+  box-shadow:
+    inset 0 0.5px 0 rgba(255,255,255,0.06),
+    0 1px 0 rgba(0,0,0,0.4);
+}
+.glass-strong {
+  background: rgba(20,20,26,0.7);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 0.5px solid var(--hairline-strong);
+}
+
+/* ---------- Scroll area ---------- */
+.scroll-area {
+  position: absolute;
+  top: 110px;            /* status (60) + tg-bar (50) */
+  left: 0; right: 0;
+  height: calc(100% - 110px);
+  overflow-y: auto;
+  padding: 16px 16px 140px;
+  scroll-behavior: smooth;
+}
+.page-enter { position: absolute; inset: 0; }
+.scroll-area::-webkit-scrollbar { width: 0; display: none; }
+
+/* ---------- Bottom nav ---------- */
+.bottom-nav {
+  position: absolute;
+  bottom: 22px; left: 16px; right: 16px;
+  height: 64px;
+  border-radius: 22px;
+  display: flex;
+  z-index: 40;
+  padding: 6px;
+  gap: 4px;
+  background: rgba(10,10,14,0.65);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 0.5px solid var(--hairline-strong);
+  box-shadow:
+    inset 0 0.5px 0 rgba(255,255,255,0.08),
+    0 12px 40px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(0,0,0,0.4);
+}
+.nav-item {
+  flex: 1;
+  border-radius: 16px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  color: var(--text-dim);
+  transition: color 200ms ease, background 250ms ease, transform 200ms ease;
+  position: relative;
+  user-select: none;
+}
+.nav-item .nav-label {
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+.nav-item.active {
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(94,106,210,0.22), rgba(94,106,210,0.08));
+  box-shadow:
+    inset 0 0.5px 0 rgba(255,255,255,0.12),
+    0 0 24px rgba(94,106,210,0.35),
+    0 0 0 0.5px rgba(94,106,210,0.5);
+}
+.nav-item.active svg { color: var(--indigo-2); filter: drop-shadow(0 0 6px rgba(124,134,224,0.6)); }
+
+/* ---------- Section heading ---------- */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-mute);
+  margin-bottom: 8px;
+}
+
+/* ---------- Bankroll card ---------- */
+.bankroll {
+  position: relative;
+  border-radius: 24px;
+  padding: 18px 18px 14px;
+  overflow: hidden;
+}
+.bankroll-row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 12px;
+}
+.bankroll-amount {
+  font-family: var(--font-display);
+  font-size: 36px;
+  line-height: 1;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  display: flex; align-items: baseline; gap: 4px;
+}
+.bankroll-amount .currency {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--text-dim);
+  font-weight: 400;
+  position: relative;
+  top: -6px;
+}
+.bankroll-roi {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px 4px 6px;
+  border-radius: 8px;
+  background: rgba(34,197,94,0.12);
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  border: 0.5px solid rgba(34,197,94,0.25);
+}
+.bankroll-meta {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+}
+.bankroll-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.bankroll-spark {
+  margin-top: 12px;
+  height: 56px;
+  position: relative;
+}
+
+/* ---------- Day picker ---------- */
+.day-picker {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0 6px;
+  scrollbar-width: none;
+}
+.day-picker::-webkit-scrollbar { display: none; }
+.day-chip {
+  flex-shrink: 0;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 9999px;
+  display: flex; flex-direction: row; align-items: center; justify-content: center;
+  gap: 6px;
+  background: rgba(15,15,20,0.55);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 250ms ease;
+  position: relative;
+}
+.day-chip:hover { color: var(--text); }
+.day-chip .dp-dow {
+  font-size: 9.5px;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+.day-chip.named { padding: 0 12px; }
+.day-chip.named .dp-dow { font-size: 9px; letter-spacing: 0.12em; }
+.day-chip .dp-num {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  color: var(--text);
+}
+.day-chip.active {
+  color: var(--text);
+  border-color: rgba(124,134,224,0.6);
+  background:
+    radial-gradient(120% 120% at 50% 0%, rgba(94,106,210,0.30) 0%, rgba(0,0,0,0.6) 70%),
+    rgba(10,10,14,0.7);
+  box-shadow:
+    inset 0 0.5px 0 rgba(255,255,255,0.18),
+    0 0 22px rgba(94,106,210,0.35);
+}
+.day-chip.active .dp-dow { color: var(--indigo-2); }
+.day-chip .dp-dot {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--indigo);
+  box-shadow: 0 0 6px var(--indigo);
+}
+
+/* ---------- Match card ---------- */
+.match-card {
+  position: relative;
+  border-radius: 20px;
+  padding: 14px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+  transition: transform 200ms ease;
+}
+.match-card:active { transform: scale(0.99); }
+.match-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+}
+.match-meta {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.match-meta .league { color: var(--text-mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+.match-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-mute); }
+.match-time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.live-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 2px 8px 2px 7px;
+  border-radius: 6px;
+  background: rgba(239,68,68,0.12);
+  border: 0.5px solid rgba(239,68,68,0.3);
+  color: var(--red);
+  font-size: 9.5px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+.live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 8px var(--red);
+  animation: livePulse 1.4s ease-in-out infinite;
+}
+@keyframes livePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+
+.match-teams {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+}
+.team {
+  display: flex; align-items: center; gap: 9px;
+  min-width: 0;
+}
+.team.away { justify-content: flex-end; flex-direction: row-reverse; }
+.team-crest {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  border: 0.5px solid rgba(255,255,255,0.12);
+}
+.team-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.vs {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-mute);
+  letter-spacing: 0.1em;
+}
+.score {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  padding: 2px 10px;
+  border-radius: 8px;
+  background: rgba(239,68,68,0.10);
+  border: 0.5px solid rgba(239,68,68,0.25);
+  line-height: 1.1;
+}
+
+.pick-tag-wrap {
+  display: flex; justify-content: center;
+}
+.pick-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 11px;
+  border-radius: 9px;
+  background: rgba(94,106,210,0.13);
+  border: 0.5px solid rgba(94,106,210,0.32);
+  color: var(--indigo-2);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.pick-tag .odds {
+  color: var(--text);
+  font-weight: 600;
+  padding-left: 7px;
+  border-left: 0.5px solid rgba(94,106,210,0.32);
+  margin-left: 2px;
+}
+.money-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 12px;
+  border-top: 0.5px dashed rgba(255,255,255,0.08);
+}
+.money-side { display: flex; flex-direction: column; gap: 2px; }
+.money-side.right { align-items: flex-end; }
+.money-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-mute);
+}
+.money-value {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--text);
+  letter-spacing: -0.2px;
+  line-height: 1;
+}
+.money-value.win { color: var(--green); text-shadow: 0 0 10px rgba(34,197,94,0.3); }
+
+/* ---------- Scroll-to-top ---------- */
+.scroll-top {
+  position: absolute;
+  bottom: 100px;
+  right: 16px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(20,20,26,0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 0.5px solid rgba(124,134,224,0.4);
+  color: var(--indigo-2);
+  cursor: pointer;
+  z-index: 35;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 16px rgba(94,106,210,0.25);
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 250ms ease, transform 250ms ease;
+}
+.scroll-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+/* ---------- Stats screen ---------- */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.stat-card {
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 24px;
+  letter-spacing: -0.5px;
+}
+.stat-value.green { color: var(--green); }
+.stat-value.indigo { color: var(--indigo-2); }
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-mute);
+}
+
+.curve-card {
+  border-radius: 22px;
+  padding: 16px 14px 12px;
+}
+.curve-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 4px;
+}
+.curve-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+.curve-period {
+  display: flex; gap: 4px;
+}
+.period-chip {
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+.period-chip.active {
+  background: rgba(94,106,210,0.18);
+  color: var(--indigo-2);
+}
+
+.streak-card {
+  border-radius: 22px;
+  padding: 16px;
+}
+.streak-dots {
+  display: flex; gap: 6px; margin-top: 12px;
+  flex-wrap: nowrap;
+}
+.streak-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.streak-dot.W {
+  background: radial-gradient(circle at 30% 30%, #4ADE80, var(--green));
+  box-shadow: 0 0 8px rgba(34,197,94,0.7), inset 0 0 4px rgba(255,255,255,0.2);
+}
+.streak-dot.L {
+  background: radial-gradient(circle at 30% 30%, #F87171, var(--red));
+  box-shadow: 0 0 8px rgba(239,68,68,0.6), inset 0 0 4px rgba(255,255,255,0.15);
+}
+.streak-dot.P {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.streak-legend {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.legend-bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.06);
+  overflow: hidden;
+  position: relative;
+}
+.legend-bar-fill {
+  position: absolute; top: 0; left: 0; bottom: 0;
+  background: linear-gradient(90deg, var(--indigo), var(--indigo-2));
+  box-shadow: 0 0 8px rgba(94,106,210,0.5);
+  border-radius: 2px;
+}
+
+/* ---------- Compare cards ---------- */
+.model-card {
+  border-radius: 18px;
+  padding: 14px;
+  display: flex; flex-direction: column;
+  border-width: 0.5px;
+  border-style: solid;
+}
+.model-card-head {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.model-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.model-stats {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 0.5px dashed rgba(255,255,255,0.08);
+}
+.ms-cell {
+  display: flex; flex-direction: column; gap: 3px;
+  align-items: center;
+}
+.ms-val {
+  font-family: var(--font-display);
+  font-size: 17px;
+  color: var(--text);
+  letter-spacing: -0.2px;
+  line-height: 1;
+}
+.ms-val.best {
+  color: var(--green);
+  text-shadow: 0 0 10px rgba(34,197,94,0.4);
+}
+.ms-lbl {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.schedule-day {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.schedule-day-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 0 4px;
+}
+.schedule-date {
+  display: flex; align-items: baseline; gap: 8px;
+  white-space: nowrap;
+}
+.schedule-date .day-num {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--text);
+}
+.schedule-date .day-name {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+}
+.schedule-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ---------- Tweaks panel ---------- */
+.tweaks-panel {
+  position: absolute;
+  bottom: 100px;
+  left: 16px;
+  right: 16px;
+  z-index: 50;
+  border-radius: 18px;
+  padding: 14px;
+  background: rgba(15,15,20,0.85);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 0.5px solid rgba(124,134,224,0.35);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.6), 0 0 30px rgba(94,106,210,0.2);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.tweaks-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+.tweak-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text);
+}
+.tweak-options {
+  display: flex; gap: 4px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 10px;
+  padding: 3px;
+}
+.tweak-options button {
+  border: 0; background: transparent;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  padding: 5px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.tweak-options button.active {
+  background: rgba(94,106,210,0.25);
+  color: var(--text);
+}
+
+/* page transitions */
+.page-enter {
+  animation: pageIn 320ms ease both;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Sparkline */
+.spark-svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.spark-line {
+  fill: none;
+  stroke: var(--indigo-2);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 4px rgba(124,134,224,0.6));
+}
+.spark-area {
+  fill: url(#sparkGrad);
+  opacity: 0.6;
+}
+.spark-end {
+  fill: var(--indigo-2);
+  filter: drop-shadow(0 0 6px rgba(124,134,224,0.9));
+}
+
+/* page-floating glow blobs (more depth) */
+.glow-source {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(60px);
+}
+
+  </style>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    body {
+      background: radial-gradient(ellipse at 30% 20%, #161620 0%, #0a0a0e 50%, #050507 100%);
+      min-height: 100vh;
+    }
+    .stage {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" data-presets="react">
+// === data.jsx ===
+// Capper sample data
+const TEAMS = {
+  ARS: { name: 'Arsenal', color: '#DC0714' },
+  LIV: { name: 'Liverpool', color: '#C8102E' },
+  MCI: { name: 'Man City', color: '#6CABDD' },
+  CHE: { name: 'Chelsea', color: '#034694' },
+  TOT: { name: 'Tottenham', color: '#132257' },
+  NEW: { name: 'Newcastle', color: '#241F20' },
+  AVL: { name: 'Aston Villa', color: '#670E36' },
+  WHU: { name: 'West Ham', color: '#7A263A' },
+  BRI: { name: 'Brighton', color: '#0057B8' },
+  FUL: { name: 'Fulham', color: '#000000' },
+  RMA: { name: 'Real Madrid', color: '#FEBE10' },
+  BAR: { name: 'Barcelona', color: '#A50044' },
+  ATM: { name: 'Atlético', color: '#CB3524' },
+  BAY: { name: 'Bayern', color: '#DC052D' },
+  BVB: { name: 'Dortmund', color: '#FDE100' },
+  PSG: { name: 'PSG', color: '#004170' },
+  INT: { name: 'Inter', color: '#0068A8' },
+  JUV: { name: 'Juventus', color: '#000000' },
+  MIL: { name: 'Milan', color: '#FB090B' },
+  NAP: { name: 'Napoli', color: '#12A0D7' },
+};
+
+const TODAY_PICKS = [
+  {
+    id: 1, league: 'Premier League', time: '14:00', live: true, minute: "67'", score: '1-2',
+    home: 'ARS', away: 'LIV', pick: 'AWAY', odds: 2.45, ev: 17, stake: 47, conf: 78,
+  },
+  {
+    id: 2, league: 'La Liga', time: '17:30', live: false,
+    home: 'RMA', away: 'BAR', pick: 'OVER 2.5', odds: 1.85, ev: 9, stake: 32, conf: 64,
+  },
+  {
+    id: 3, league: 'Serie A', time: '19:45', live: false,
+    home: 'INT', away: 'JUV', pick: 'HOME', odds: 1.92, ev: 38, stake: 38, conf: 71,
+  },
+  {
+    id: 4, league: 'Bundesliga', time: '20:30', live: true, minute: "23'", score: '0-0',
+    home: 'BAY', away: 'BVB', pick: 'BTTS', odds: 1.65, ev: 6, stake: 24, conf: 58,
+  },
+  {
+    id: 5, league: 'Premier League', time: '21:15', live: false,
+    home: 'MCI', away: 'CHE', pick: 'HOME -1', odds: 2.10, ev: 14, stake: 41, conf: 73,
+  },
+  {
+    id: 6, league: 'Ligue 1', time: '22:00', live: false,
+    home: 'PSG', away: 'MIL', pick: 'OVER 3.5', odds: 2.30, ev: 11, stake: 35, conf: 67,
+  },
+];
+
+const SCHEDULE = [
+  { date: '21 КВІ', dow: 'ПОНЕДІЛОК', count: 4, picks: [
+    { league: 'Premier League', time: '20:00', home: 'NEW', away: 'TOT', pick: 'HOME', odds: 1.95, ev: 13 },
+    { league: 'La Liga', time: '21:00', home: 'ATM', away: 'BAR', pick: 'UNDER 2.5', odds: 2.05, ev: 8 },
+    { league: 'Serie A', time: '19:45', home: 'NAP', away: 'MIL', pick: 'BTTS', odds: 1.72, ev: 7 },
+    { league: 'Bundesliga', time: '20:30', home: 'BVB', away: 'BAY', pick: 'OVER 2.5', odds: 1.55, ev: 5 },
+  ]},
+  { date: '22 КВІ', dow: 'ВІВТОРОК', count: 3, picks: [
+    { league: 'Champions League', time: '21:00', home: 'RMA', away: 'MCI', pick: 'OVER 2.5', odds: 1.78, ev: 10 },
+    { league: 'Champions League', time: '21:00', home: 'PSG', away: 'BAY', pick: 'AWAY', odds: 2.55, ev: 16 },
+    { league: 'Premier League', time: '19:30', home: 'AVL', away: 'WHU', pick: 'HOME', odds: 1.65, ev: 6 },
+  ]},
+  { date: '23 КВІ', dow: 'СЕРЕДА', count: 2, picks: [
+    { league: 'Champions League', time: '21:00', home: 'BAR', away: 'INT', pick: 'BTTS', odds: 1.60, ev: 9 },
+    { league: 'Europa League', time: '19:00', home: 'CHE', away: 'JUV', pick: 'HOME', odds: 2.20, ev: 12 },
+  ]},
+  { date: '24 КВІ', dow: 'ЧЕТВЕР', count: 5, picks: [
+    { league: 'Europa League', time: '21:00', home: 'TOT', away: 'MIL', pick: 'AWAY', odds: 2.85, ev: 19 },
+    { league: 'Conference', time: '21:00', home: 'BRI', away: 'FUL', pick: 'OVER 2.5', odds: 1.90, ev: 11 },
+    { league: 'Eredivisie', time: '20:00', home: 'ARS', away: 'LIV', pick: 'HOME', odds: 1.88, ev: 8 },
+    { league: 'Primeira', time: '21:30', home: 'PSG', away: 'NAP', pick: 'OVER 3.5', odds: 2.40, ev: 14 },
+    { league: 'Pro League', time: '20:30', home: 'NEW', away: 'AVL', pick: 'BTTS', odds: 1.75, ev: 7 },
+  ]},
+];
+
+// Sparkline data — bankroll growth over 30 days
+const SPARK_DATA = [
+  1000, 1015, 1003, 1042, 1028, 1071, 1085, 1063, 1097, 1112,
+  1098, 1124, 1141, 1135, 1158, 1172, 1156, 1183, 1198, 1175,
+  1209, 1221, 1208, 1235, 1247, 1228, 1251, 1239, 1238, 1243,
+];
+
+// Streak — last 15 bets
+const STREAK = ['W','W','L','W','W','W','P','W','L','W','W','W','L','W','W'];
+
+// Curve data — 90 days of profit (pct)
+const CURVE_DATA = [
+  0, 1.2, -0.5, 2.1, 1.8, 3.4, 4.1, 3.6, 5.2, 6.8,
+  6.1, 7.5, 8.3, 7.9, 9.1, 10.4, 9.7, 11.2, 12.5, 11.8,
+  13.4, 14.7, 13.9, 15.2, 16.8, 15.5, 17.3, 16.4, 18.1, 19.6,
+  18.7, 20.3, 21.5, 20.8, 22.4, 23.7, 22.9, 24.3,
+];
+
+window.CAPPER_DATA = { TEAMS, TODAY_PICKS, SCHEDULE, SPARK_DATA, STREAK, CURVE_DATA };
+
+
+// === device-frame.jsx ===
+// Minimal device frame for Capper — no dependencies, single component
+function IOSDevice({ children, width = 402, height = 874, dark = true }) {
+  return (
+    <div style={{
+      width, height, borderRadius: 48, overflow: 'hidden',
+      position: 'relative', background: dark ? '#000' : '#F2F2F7',
+      boxShadow: '0 40px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.06), 0 0 0 8px #1a1a1d, 0 0 0 9px #2a2a2f',
+      fontFamily: '-apple-system, system-ui, sans-serif',
+      WebkitFontSmoothing: 'antialiased',
+    }}>
+      {/* status bar */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: 60,
+        zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '21px 32px 0', boxSizing: 'border-box',
+      }}>
+        <span style={{
+          fontFamily: '-apple-system, "SF Pro", system-ui', fontWeight: 600,
+          fontSize: 16, color: '#fff', letterSpacing: 0.2,
+        }}>9:41</span>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          <svg width="17" height="11" viewBox="0 0 19 12">
+            <rect x="0" y="7.5" width="3.2" height="4.5" rx="0.7" fill="#fff"/>
+            <rect x="4.8" y="5" width="3.2" height="7" rx="0.7" fill="#fff"/>
+            <rect x="9.6" y="2.5" width="3.2" height="9.5" rx="0.7" fill="#fff"/>
+            <rect x="14.4" y="0" width="3.2" height="12" rx="0.7" fill="#fff"/>
+          </svg>
+          <svg width="15" height="11" viewBox="0 0 17 12">
+            <path d="M8.5 3.2C10.8 3.2 12.9 4.1 14.4 5.6L15.5 4.5C13.7 2.7 11.2 1.5 8.5 1.5C5.8 1.5 3.3 2.7 1.5 4.5L2.6 5.6C4.1 4.1 6.2 3.2 8.5 3.2Z" fill="#fff"/>
+            <path d="M8.5 6.8C9.9 6.8 11.1 7.3 12 8.2L13.1 7.1C11.8 5.9 10.2 5.1 8.5 5.1C6.8 5.1 5.2 5.9 3.9 7.1L5 8.2C5.9 7.3 7.1 6.8 8.5 6.8Z" fill="#fff"/>
+            <circle cx="8.5" cy="10.5" r="1.5" fill="#fff"/>
+          </svg>
+          <svg width="25" height="12" viewBox="0 0 27 13">
+            <rect x="0.5" y="0.5" width="23" height="12" rx="3.5" stroke="rgba(255,255,255,0.5)" fill="none"/>
+            <rect x="2" y="2" width="20" height="9" rx="2" fill="#fff"/>
+            <path d="M25 4.5V8.5C25.8 8.2 26.5 7.2 26.5 6.5C26.5 5.8 25.8 4.8 25 4.5Z" fill="rgba(255,255,255,0.5)"/>
+          </svg>
+        </div>
+      </div>
+      {/* dynamic island */}
+      <div style={{
+        position: 'absolute', top: 11, left: '50%', transform: 'translateX(-50%)',
+        width: 126, height: 37, borderRadius: 24, background: '#000', zIndex: 50,
+      }} />
+      {/* content */}
+      {children}
+      {/* home indicator */}
+      <div style={{
+        position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)',
+        zIndex: 60, width: 139, height: 5, borderRadius: 100,
+        background: 'rgba(255,255,255,0.55)', pointerEvents: 'none',
+      }}/>
+    </div>
+  );
+}
+
+window.IOSDevice = IOSDevice;
+
+
+// === components.jsx ===
+// Capper — shared UI primitives
+const { useState, useEffect, useRef, useMemo } = React;
+const D = window.CAPPER_DATA;
+
+// Crest — colored circle with team initials
+function Crest({ code, size = 26 }) {
+  const team = D.TEAMS[code] || { name: code, color: '#444' };
+  const initials = team.name.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
+  return (
+    <div className="team-crest" style={{
+      width: size, height: size,
+      background: `linear-gradient(135deg, ${team.color} 0%, ${shade(team.color, -25)} 100%)`,
+    }}>{initials}</div>
+  );
+}
+function shade(hex, pct) {
+  const num = parseInt(hex.slice(1), 16);
+  let r = (num >> 16) + pct;
+  let g = ((num >> 8) & 0xff) + pct;
+  let b = (num & 0xff) + pct;
+  r = Math.max(0, Math.min(255, r));
+  g = Math.max(0, Math.min(255, g));
+  b = Math.max(0, Math.min(255, b));
+  return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+}
+
+// Sparkline
+function Sparkline({ data, height = 56, gradient = true }) {
+  const w = 320, h = height;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  const pts = data.map((v, i) => [
+    (i / (data.length - 1)) * w,
+    h - ((v - min) / range) * (h - 8) - 4,
+  ]);
+  const d = pts.map((p, i) => (i === 0 ? `M${p[0]},${p[1]}` : `L${p[0]},${p[1]}`)).join(' ');
+  const area = d + ` L${w},${h} L0,${h} Z`;
+  const last = pts[pts.length - 1];
+  return (
+    <svg className="spark-svg" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#7C86E0" stopOpacity="0.35"/>
+          <stop offset="100%" stopColor="#7C86E0" stopOpacity="0"/>
+        </linearGradient>
+      </defs>
+      {gradient && <path d={area} className="spark-area" />}
+      <path d={d} className="spark-line" />
+      <circle cx={last[0]} cy={last[1]} r="3" className="spark-end" />
+    </svg>
+  );
+}
+
+// Profit curve — bigger, with axis hints
+function ProfitCurve({ data, height = 160 }) {
+  const w = 360, h = height;
+  const min = Math.min(0, ...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  const pts = data.map((v, i) => [
+    (i / (data.length - 1)) * w,
+    h - ((v - min) / range) * (h - 24) - 12,
+  ]);
+  const d = pts.map((p, i) => (i === 0 ? `M${p[0]},${p[1]}` : `L${p[0]},${p[1]}`)).join(' ');
+  const area = d + ` L${w},${h} L0,${h} Z`;
+  const zeroY = h - ((0 - min) / range) * (h - 24) - 12;
+  const last = pts[pts.length - 1];
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height, display: 'block' }} preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="curveGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#7C86E0" stopOpacity="0.40"/>
+          <stop offset="100%" stopColor="#7C86E0" stopOpacity="0"/>
+        </linearGradient>
+        <filter id="curveGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="2" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      {/* zero line */}
+      <line x1="0" x2={w} y1={zeroY} y2={zeroY} stroke="rgba(255,255,255,0.06)" strokeDasharray="2 4"/>
+      <path d={area} fill="url(#curveGrad)"/>
+      <path d={d} fill="none" stroke="#7C86E0" strokeWidth="1.8" filter="url(#curveGlow)"
+        strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx={last[0]} cy={last[1]} r="3.5" fill="#7C86E0" filter="url(#curveGlow)"/>
+    </svg>
+  );
+}
+
+// Telegram chrome bar — with model switcher
+function TelegramBar({ model, onModelChange }) {
+  return (
+    <div className="tg-bar">
+      <div className="tg-close">Закрити</div>
+      <div className="model-switch">
+        {['WC Gap','Monster','Aqua'].map(m => (
+          <button key={m}
+            className={'model-btn' + (model === m ? ' active' : '')}
+            onClick={() => onModelChange(m)}>{m}</button>
+        ))}
+      </div>
+      <div className="tg-more">
+        <svg width="18" height="4" viewBox="0 0 18 4">
+          <circle cx="2" cy="2" r="1.6" fill="#8A8A93"/>
+          <circle cx="9" cy="2" r="1.6" fill="#8A8A93"/>
+          <circle cx="16" cy="2" r="1.6" fill="#8A8A93"/>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+// Bottom nav
+function BottomNav({ active, onChange }) {
+  const items = [
+    { id: 'picks', label: 'Schedule', icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="5" width="18" height="16" rx="3" stroke="currentColor" strokeWidth="1.8"/>
+        <path d="M3 9h18M8 3v4M16 3v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+      </svg>
+    )},
+    { id: 'stats', label: 'Statistics', icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M4 19V8M10 19V4M16 19v-7M22 19H2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      </svg>
+    )},
+    { id: 'compare', label: 'Compare', icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M8 3v18M16 3v18M3 8h5M3 16h5M16 8h5M16 16h5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+      </svg>
+    )},
+  ];
+  return (
+    <div className="bottom-nav">
+      {items.map(it => (
+        <div key={it.id}
+          className={'nav-item' + (active === it.id ? ' active' : '')}
+          onClick={() => onChange(it.id)}>
+          {it.icon}
+          <div className="nav-label">{it.label}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Day picker chip pill
+function DayChip({ day, active, hasPicks, onClick }) {
+  const isNamed = !!day.narrow;
+  return (
+    <div className={'day-chip' + (active ? ' active' : '') + (isNamed ? ' named' : '')} onClick={onClick}>
+      <div className="dp-dow">{day.narrow || day.dow}</div>
+      <div className="dp-num">{day.num}</div>
+      {hasPicks && <div className="dp-dot"/>}
+    </div>
+  );
+}
+
+// Match card
+function MatchCard({ m, compact = false }) {
+  const win = (m.stake * (m.odds - 1)).toFixed(0);
+  return (
+    <div className={'match-card glass'}>
+      <div className="match-head">
+        <div className="match-meta">
+          <span className="league">{m.league}</span>
+          <span className="dot"/>
+          <span className="match-time">{m.live ? m.minute : m.time}</span>
+        </div>
+        {m.live && (
+          <div className="live-pill">
+            <div className="live-dot"/>
+            LIVE
+          </div>
+        )}
+      </div>
+      <div className="match-teams">
+        <div className="team home">
+          <Crest code={m.home} size={28}/>
+          <div className="team-name">{D.TEAMS[m.home].name}</div>
+        </div>
+        {m.live && m.score ? (
+          <div className="score">{m.score}</div>
+        ) : (
+          <div className="vs">vs</div>
+        )}
+        <div className="team away">
+          <Crest code={m.away} size={28}/>
+          <div className="team-name">{D.TEAMS[m.away].name}</div>
+        </div>
+      </div>
+      <div className="pick-tag-wrap">
+        <div className="pick-tag">
+          {m.pick}
+          <span className="odds">×{m.odds.toFixed(2)}</span>
+        </div>
+      </div>
+      <div className="money-row">
+        <div className="money-side">
+          <div className="money-label">Ставка</div>
+          <div className="money-value">${m.stake}</div>
+        </div>
+        <div className="money-side right">
+          <div className="money-label">Виграш</div>
+          <div className="money-value win">+${win}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, {
+  Crest, Sparkline, ProfitCurve, TelegramBar, BottomNav, DayChip, MatchCard,
+});
+
+
+// === picks.jsx ===
+// Picks screen
+const { useState: useStateP } = React;
+
+function PicksScreen({ density }) {
+  const [activeDay, setActiveDay] = useStateP(2);
+  const [showTop, setShowTop] = useStateP(false);
+  const scrollRef = React.useRef(null);
+
+  // 7 days centered on today (idx 2 = today)
+  const today = new Date(2026, 3, 19); // Apr 19 2026
+  const days = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(today);
+    d.setDate(today.getDate() + (i - 2));
+    const dows = ['НД','ПН','ВТ','СР','ЧТ','ПТ','СБ'];
+    let dow = dows[d.getDay()];
+    let narrow = null;
+    if (i === 1) { narrow = 'ВЧОРА'; }
+    else if (i === 2) { narrow = 'СЬОГОДНІ'; }
+    else if (i === 3) { narrow = 'ЗАВТРА'; }
+    return { num: d.getDate(), dow, narrow, idx: i };
+  });
+
+  React.useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => setShowTop(el.scrollTop > 200);
+    el.addEventListener('scroll', onScroll);
+    return () => el.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const scrollTop = () => scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const picks = window.CAPPER_DATA.TODAY_PICKS;
+  const compact = density === 'compact';
+
+  return (
+    <div className="page-enter">
+      <div className="scroll-area" ref={scrollRef}>
+        {/* Bankroll */}
+        <div className="bankroll glass-strong" style={{ marginBottom: 14 }}>
+          <div className="bankroll-row">
+            <div>
+              <div className="bankroll-label" style={{ marginBottom: 6 }}>Банкрол</div>
+              <div className="bankroll-amount">
+                <span className="currency">$</span>1,243<span style={{ fontSize: 22, color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>.50</span>
+              </div>
+            </div>
+            <div className="bankroll-meta">
+              <div className="bankroll-roi">
+                <svg width="10" height="10" viewBox="0 0 10 10"><path d="M5 1l4 5H6v3H4V6H1l4-5z" fill="currentColor"/></svg>
+                ROI +24.3%
+              </div>
+              <div className="bankroll-label">30 ДНІВ</div>
+            </div>
+          </div>
+          <div className="bankroll-spark">
+            <Sparkline data={window.CAPPER_DATA.SPARK_DATA} height={56}/>
+          </div>
+        </div>
+
+        {/* Day picker */}
+        <div className="eyebrow" style={{ marginTop: 4 }}>День</div>
+        <div className="day-picker" style={{ marginBottom: 14 }}>
+          {days.map(d => (
+            <DayChip key={d.idx} day={d}
+              active={activeDay === d.idx}
+              hasPicks={d.idx === 2}
+              onClick={() => setActiveDay(d.idx)}/>
+          ))}
+        </div>
+
+        {/* Match list */}
+        <div className="eyebrow" style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <span>Матчі сьогодні</span>
+          <span style={{ color: 'var(--indigo-2)' }}>{picks.length} PICKS</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {picks.map(m => <MatchCard key={m.id} m={m} compact={compact}/>)}
+        </div>
+      </div>
+
+      <div className={'scroll-top' + (showTop ? ' visible' : '')} onClick={scrollTop}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+window.PicksScreen = PicksScreen;
+
+
+// === stats.jsx ===
+// Statistics screen
+function StatsScreen() {
+  const [period, setPeriod] = React.useState('30D');
+  const D = window.CAPPER_DATA;
+
+  const wins = D.STREAK.filter(s => s === 'W').length;
+  const losses = D.STREAK.filter(s => s === 'L').length;
+  const pushes = D.STREAK.filter(s => s === 'P').length;
+  const winRate = (wins / (wins + losses)) * 100;
+
+  return (
+    <div className="page-enter">
+      <div className="scroll-area">
+        {/* Profit curve */}
+        <div className="curve-card glass-strong" style={{ marginBottom: 12 }}>
+          <div className="curve-head">
+            <div>
+              <div className="eyebrow" style={{ marginBottom: 6 }}>Profit Curve</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: 30, color: 'var(--green)', letterSpacing: '-0.5px' }}>+24.3%</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-dim)' }}>ROI</div>
+              </div>
+            </div>
+            <div className="curve-period">
+              {['7D','30D','90D','ALL'].map(p => (
+                <div key={p}
+                  className={'period-chip' + (period === p ? ' active' : '')}
+                  onClick={() => setPeriod(p)}>{p}</div>
+              ))}
+            </div>
+          </div>
+          <ProfitCurve data={D.CURVE_DATA}/>
+        </div>
+
+        {/* Metrics grid */}
+        <div className="stat-grid" style={{ marginBottom: 12 }}>
+          <div className="stat-card glass">
+            <div className="stat-value green">+24.3%</div>
+            <div className="stat-label">ROI</div>
+          </div>
+          <div className="stat-card glass">
+            <div className="stat-value indigo">61%</div>
+            <div className="stat-label">Win Rate</div>
+          </div>
+          <div className="stat-card glass">
+            <div className="stat-value">47</div>
+            <div className="stat-label">Bets</div>
+          </div>
+          <div className="stat-card glass">
+            <div className="stat-value">2.14</div>
+            <div className="stat-label">Avg Odds</div>
+          </div>
+        </div>
+
+        {/* Streak */}
+        <div className="streak-card glass-strong">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div>
+              <div className="eyebrow" style={{ marginBottom: 4 }}>Streak</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, color: 'var(--text)' }}>
+                Останні 15
+              </div>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-dim)' }}>
+                <span style={{ color: 'var(--indigo-2)', fontWeight: 600 }}>{wins}W</span> / {wins+losses+pushes} bets
+              </div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-mute)', marginTop: 2 }}>
+                {losses}L · {pushes}P
+              </div>
+            </div>
+          </div>
+          <div className="streak-dots">
+            {D.STREAK.map((s, i) => (
+              <div key={i} className={'streak-dot ' + s} title={s}/>
+            ))}
+          </div>
+          <div className="streak-legend">
+            <span style={{ color: 'var(--indigo-2)', fontWeight: 600 }}>{wins}W</span>
+            <div className="legend-bar">
+              <div className="legend-bar-fill" style={{ width: `${(wins/15)*100}%` }}/>
+            </div>
+            <span>{wins} / 14 bets</span>
+          </div>
+        </div>
+
+        {/* By league snippet */}
+        <div className="curve-card glass" style={{ marginTop: 12 }}>
+          <div className="eyebrow" style={{ marginBottom: 10 }}>By League</div>
+          {[
+            { name: 'Premier League', bets: 14, roi: 28.4 },
+            { name: 'La Liga', bets: 11, roi: 19.7 },
+            { name: 'Serie A', bets: 9, roi: 22.1 },
+            { name: 'Bundesliga', bets: 8, roi: -4.2 },
+            { name: 'Ligue 1', bets: 5, roi: 11.5 },
+          ].map(l => (
+            <div key={l.name} style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '8px 0', borderBottom: '0.5px solid rgba(255,255,255,0.05)',
+            }}>
+              <div style={{ fontSize: 13, color: 'var(--text)' }}>{l.name}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-mute)' }}>{l.bets} bets</span>
+                <span style={{
+                  fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600,
+                  color: l.roi >= 0 ? 'var(--green)' : 'var(--red)',
+                  minWidth: 56, textAlign: 'right',
+                }}>{l.roi >= 0 ? '+' : ''}{l.roi.toFixed(1)}%</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+window.StatsScreen = StatsScreen;
+
+
+// === compare.jsx ===
+// Compare screen — model comparison
+function CompareScreen() {
+  const D = window.CAPPER_DATA;
+
+  const models = [
+    {
+      name: 'WC Gap', tag: 'gap', color: '#7C86E0',
+      roi: 18.4, win: 56, bets: 42, avgOdds: 2.31, profit: 218,
+      curve: [0, 1.1, 0.4, 2.2, 1.8, 3.5, 4.2, 3.8, 5.1, 6.4, 5.9, 7.8, 8.5, 9.2, 10.4, 12.1, 11.5, 13.2, 14.5, 15.8, 16.4, 17.1, 18.4],
+    },
+    {
+      name: 'Monster', tag: 'monster', color: '#22C55E',
+      roi: 24.3, win: 61, bets: 47, avgOdds: 2.14, profit: 287,
+      curve: [0, 1.5, 0.8, 2.8, 3.4, 4.7, 5.9, 6.2, 7.8, 9.1, 10.4, 11.8, 12.5, 13.9, 15.2, 16.7, 17.8, 19.4, 20.5, 21.7, 22.8, 23.5, 24.3],
+    },
+    {
+      name: 'Aqua', tag: 'aqua', color: '#22D3EE',
+      roi: 11.7, win: 52, bets: 38, avgOdds: 2.48, profit: 142,
+      curve: [0, 0.8, -0.4, 1.2, 0.7, 2.1, 1.5, 3.2, 2.8, 4.5, 3.9, 5.7, 5.2, 6.8, 7.4, 8.1, 8.8, 9.5, 10.2, 10.7, 11.1, 11.4, 11.7],
+    },
+  ];
+
+  // mini line for each model
+  const Mini = ({ data, color }) => {
+    const w = 320, h = 60;
+    const min = Math.min(0, ...data);
+    const max = Math.max(...data);
+    const range = max - min || 1;
+    const pts = data.map((v, i) => [
+      (i / (data.length - 1)) * w,
+      h - ((v - min) / range) * (h - 12) - 6,
+    ]);
+    const d = pts.map((p, i) => (i === 0 ? `M${p[0]},${p[1]}` : `L${p[0]},${p[1]}`)).join(' ');
+    const area = d + ` L${w},${h} L0,${h} Z`;
+    return (
+      <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: h, display: 'block' }} preserveAspectRatio="none">
+        <defs>
+          <linearGradient id={`gradMini-${color.slice(1)}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity="0.32"/>
+            <stop offset="100%" stopColor={color} stopOpacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d={area} fill={`url(#gradMini-${color.slice(1)})`}/>
+        <path d={d} fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"
+          style={{ filter: `drop-shadow(0 0 4px ${color}99)` }}/>
+      </svg>
+    );
+  };
+
+  // Best metric per column
+  const best = {
+    roi: Math.max(...models.map(m => m.roi)),
+    win: Math.max(...models.map(m => m.win)),
+    profit: Math.max(...models.map(m => m.profit)),
+  };
+
+  return (
+    <div className="page-enter">
+      <div className="scroll-area">
+        <div className="eyebrow" style={{ marginBottom: 8 }}>Порівняння моделей · 30 ДНІВ</div>
+
+        {/* Combined curves */}
+        <div className="curve-card glass-strong" style={{ marginBottom: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 12 }}>
+            <div style={{ fontSize: 14, fontWeight: 500 }}>Profit Curves</div>
+            <div style={{ display: 'flex', gap: 10 }}>
+              {models.map(m => (
+                <div key={m.tag} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: 50, background: m.color, boxShadow: `0 0 6px ${m.color}` }}/>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dim)' }}>{m.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ position: 'relative', height: 160 }}>
+            <CombinedCurves models={models}/>
+          </div>
+        </div>
+
+        {/* Per-model cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {models.map(m => (
+            <div key={m.tag} className="model-card glass" style={{
+              borderColor: `${m.color}55`,
+            }}>
+              <div className="model-card-head">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div className="model-dot" style={{ background: m.color, boxShadow: `0 0 10px ${m.color}` }}/>
+                  <div>
+                    <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--text)' }}>{m.name}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-mute)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: 2 }}>{m.bets} bets · {m.avgOdds.toFixed(2)} avg</div>
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{
+                    fontFamily: 'var(--font-display)', fontSize: 22, color: m.color,
+                    textShadow: m.roi === best.roi ? `0 0 12px ${m.color}80` : 'none',
+                    letterSpacing: '-0.3px',
+                  }}>+{m.roi}%</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9.5, color: 'var(--text-mute)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>ROI</div>
+                </div>
+              </div>
+              <div style={{ margin: '8px 0' }}>
+                <Mini data={m.curve} color={m.color}/>
+              </div>
+              <div className="model-stats">
+                <div className="ms-cell">
+                  <div className={'ms-val' + (m.win === best.win ? ' best' : '')}>{m.win}%</div>
+                  <div className="ms-lbl">Win Rate</div>
+                </div>
+                <div className="ms-cell">
+                  <div className={'ms-val' + (m.profit === best.profit ? ' best' : '')}>+${m.profit}</div>
+                  <div className="ms-lbl">Profit</div>
+                </div>
+                <div className="ms-cell">
+                  <div className="ms-val">{m.bets}</div>
+                  <div className="ms-lbl">Bets</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Side-by-side comparison table */}
+        <div className="curve-card glass" style={{ marginTop: 14 }}>
+          <div className="eyebrow" style={{ marginBottom: 10 }}>Деталі</div>
+          {[
+            { label: 'ROI', vals: models.map(m => `+${m.roi}%`), bestIdx: models.findIndex(m => m.roi === best.roi) },
+            { label: 'Win Rate', vals: models.map(m => `${m.win}%`), bestIdx: models.findIndex(m => m.win === best.win) },
+            { label: 'Profit', vals: models.map(m => `+$${m.profit}`), bestIdx: models.findIndex(m => m.profit === best.profit) },
+            { label: 'Bets', vals: models.map(m => `${m.bets}`), bestIdx: -1 },
+            { label: 'Avg Odds', vals: models.map(m => m.avgOdds.toFixed(2)), bestIdx: -1 },
+          ].map(row => (
+            <div key={row.label} style={{
+              display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr',
+              padding: '8px 0', borderBottom: '0.5px solid rgba(255,255,255,0.05)',
+              alignItems: 'center', gap: 6,
+            }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-mute)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{row.label}</div>
+              {row.vals.map((v, i) => (
+                <div key={i} style={{
+                  fontFamily: 'var(--font-mono)', fontSize: 12,
+                  textAlign: 'center', fontWeight: row.bestIdx === i ? 600 : 500,
+                  color: row.bestIdx === i ? models[i].color : 'var(--text)',
+                  textShadow: row.bestIdx === i ? `0 0 8px ${models[i].color}50` : 'none',
+                }}>{v}</div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CombinedCurves({ models }) {
+  const w = 360, h = 160;
+  const allVals = models.flatMap(m => m.curve);
+  const min = Math.min(0, ...allVals);
+  const max = Math.max(...allVals);
+  const range = max - min || 1;
+  const len = models[0].curve.length;
+  const zeroY = h - ((0 - min) / range) * (h - 24) - 12;
+
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: h, display: 'block' }} preserveAspectRatio="none">
+      <defs>
+        {models.map(m => (
+          <linearGradient key={m.tag} id={`grad-${m.tag}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={m.color} stopOpacity="0.22"/>
+            <stop offset="100%" stopColor={m.color} stopOpacity="0"/>
+          </linearGradient>
+        ))}
+      </defs>
+      <line x1="0" x2={w} y1={zeroY} y2={zeroY} stroke="rgba(255,255,255,0.06)" strokeDasharray="2 4"/>
+      {models.map(m => {
+        const pts = m.curve.map((v, i) => [
+          (i / (len - 1)) * w,
+          h - ((v - min) / range) * (h - 24) - 12,
+        ]);
+        const d = pts.map((p, i) => (i === 0 ? `M${p[0]},${p[1]}` : `L${p[0]},${p[1]}`)).join(' ');
+        const area = d + ` L${w},${h} L0,${h} Z`;
+        const last = pts[pts.length - 1];
+        return (
+          <g key={m.tag}>
+            <path d={area} fill={`url(#grad-${m.tag})`}/>
+            <path d={d} fill="none" stroke={m.color} strokeWidth="1.8"
+              strokeLinecap="round" strokeLinejoin="round"
+              style={{ filter: `drop-shadow(0 0 4px ${m.color})` }}/>
+            <circle cx={last[0]} cy={last[1]} r="3" fill={m.color}
+              style={{ filter: `drop-shadow(0 0 6px ${m.color})` }}/>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+window.CompareScreen = CompareScreen;
+
+
+
+  </script>
+
+  <script type="text/babel" data-presets="react">
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "density": "compact"
+    }/*EDITMODE-END*/;
+
+    function App() {
+      const [tab, setTab] = React.useState(() => localStorage.getItem('capper:tab') || 'picks');
+      const [density, setDensity] = React.useState(() => localStorage.getItem('capper:density') || TWEAK_DEFAULTS.density);
+      const [model, setModel] = React.useState(() => localStorage.getItem('capper:model') || 'Monster');
+      const [editMode, setEditMode] = React.useState(false);
+
+      React.useEffect(() => { localStorage.setItem('capper:tab', tab); }, [tab]);
+      React.useEffect(() => { localStorage.setItem('capper:density', density); }, [density]);
+      React.useEffect(() => { localStorage.setItem('capper:model', model); }, [model]);
+
+      React.useEffect(() => {
+        const handler = (e) => {
+          if (e.data?.type === '__activate_edit_mode') setEditMode(true);
+          if (e.data?.type === '__deactivate_edit_mode') setEditMode(false);
+        };
+        window.addEventListener('message', handler);
+        window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+        return () => window.removeEventListener('message', handler);
+      }, []);
+
+      const setKey = (k, v) => {
+        if (k === 'density') setDensity(v);
+        window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [k]: v } }, '*');
+      };
+
+      const screenLabel = ({
+        picks: '01 Schedule',
+        stats: '02 Statistics',
+        compare: '03 Compare',
+      })[tab];
+
+      return (
+        <div className="stage">
+          <IOSDevice width={402} height={874} dark={true}>
+            <div className="capper-root" data-screen-label={screenLabel}>
+              <div className="aurora"><div className="blob3"/></div>
+              <div className="grain"/>
+              <TelegramBar model={model} onModelChange={setModel}/>
+              <div style={{ position: 'absolute', inset: 0, zIndex: 5 }}>
+                {tab === 'picks' && <PicksScreen density={density}/>}
+                {tab === 'stats' && <StatsScreen/>}
+                {tab === 'compare' && <CompareScreen/>}
+              </div>
+              {editMode && (
+                <div className="tweaks-panel">
+                  <div className="tweaks-title">Tweaks</div>
+                  <div className="tweak-row">
+                    <span>Card density</span>
+                    <div className="tweak-options">
+                      {['compact','comfortable'].map(d => (
+                        <button key={d}
+                          className={density === d ? 'active' : ''}
+                          onClick={() => setKey('density', d)}>{d}</button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+              <BottomNav active={tab} onChange={setTab}/>
+            </div>
+          </IOSDevice>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  </script>
+</body>
+</html>

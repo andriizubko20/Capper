@@ -62,6 +62,36 @@ def build_elo_snapshots(matches_df: pd.DataFrame) -> dict[int, dict[int, float]]
     return snapshots
 
 
+def compute_elo_momentum(
+    elo_snapshots: dict[int, dict[int, float]],
+    matches_df: pd.DataFrame,
+    team_id: int,
+    before_date: pd.Timestamp,
+    n: int = 10,
+) -> float:
+    """
+    Динаміка Elo: поточний Elo мінус Elo n матчів тому.
+    Позитивне = команда в підйомі, негативне = спад форми.
+    Повертає 0.0 якщо недостатньо даних.
+    """
+    team_matches = matches_df[
+        ((matches_df["home_team_id"] == team_id) | (matches_df["away_team_id"] == team_id))
+        & (matches_df["date"] < before_date)
+        & (matches_df["home_score"].notna())
+    ].sort_values("date", ascending=False)
+
+    if len(team_matches) < n:
+        return 0.0
+
+    recent_id = int(team_matches.iloc[0]["id"])
+    old_id    = int(team_matches.iloc[n - 1]["id"])
+
+    recent_elo = elo_snapshots.get(recent_id, {}).get(team_id, DEFAULT_ELO)
+    old_elo    = elo_snapshots.get(old_id,    {}).get(team_id, DEFAULT_ELO)
+
+    return recent_elo - old_elo
+
+
 def compute_dynamic_elo(matches_df: pd.DataFrame) -> dict[int, float]:
     """Повертає {team_id: поточний_elo} після всіх матчів. Для predict path."""
     elos: dict[int, float] = {}

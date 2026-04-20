@@ -1,16 +1,25 @@
 import pandas as pd
 
 
-def compute_form(matches: pd.DataFrame, team_id: int, before_date: pd.Timestamp, n: int = 5) -> dict:
+def compute_form(
+    matches: pd.DataFrame,
+    team_id: int,
+    before_date: pd.Timestamp,
+    n: int = 5,
+    league_id: int | None = None,
+) -> dict:
     """
     Розраховує форму команди за останні n матчів до вказаної дати.
-    matches — DataFrame з колонками: date, home_team_id, away_team_id, home_score, away_score
+    league_id: якщо вказано — тільки матчі цієї ліги (для league-only форми).
     """
-    team_matches = matches[
+    mask = (
         ((matches["home_team_id"] == team_id) | (matches["away_team_id"] == team_id))
         & (matches["date"] < before_date)
         & (matches["home_score"].notna())
-    ].sort_values("date", ascending=False).head(n)
+    )
+    if league_id is not None and "league_id" in matches.columns:
+        mask = mask & (matches["league_id"] == league_id)
+    team_matches = matches[mask].sort_values("date", ascending=False).head(n)
 
     if team_matches.empty:
         return _empty_form(prefix="")
@@ -43,18 +52,27 @@ def compute_form(matches: pd.DataFrame, team_id: int, before_date: pd.Timestamp,
 
 
 def compute_home_away_form(
-    matches: pd.DataFrame, team_id: int, before_date: pd.Timestamp, side: str, n: int = 5
+    matches: pd.DataFrame,
+    team_id: int,
+    before_date: pd.Timestamp,
+    side: str,
+    n: int = 5,
+    league_id: int | None = None,
 ) -> dict:
     """
     Форма тільки вдома або тільки на виїзді.
     side: 'home' або 'away'
+    league_id: якщо вказано — тільки матчі цієї ліги.
     """
     col = "home_team_id" if side == "home" else "away_team_id"
-    team_matches = matches[
+    mask = (
         (matches[col] == team_id)
         & (matches["date"] < before_date)
         & (matches["home_score"].notna())
-    ].sort_values("date", ascending=False).head(n)
+    )
+    if league_id is not None and "league_id" in matches.columns:
+        mask = mask & (matches["league_id"] == league_id)
+    team_matches = matches[mask].sort_values("date", ascending=False).head(n)
 
     if team_matches.empty:
         return _empty_form(prefix=f"{side}_")
@@ -81,6 +99,90 @@ def compute_home_away_form(
         f"{side}_form_goals_for_avg": sum(goals_for) / len(goals_for),
         f"{side}_form_goals_against_avg": sum(goals_against) / len(goals_against),
         f"{side}_form_wins": results.count(3) / len(results),
+        f"{side}_form_losses": results.count(0) / len(results),
+    }
+
+
+def compute_form_advanced(
+    matches: pd.DataFrame,
+    team_id: int,
+    before_date: pd.Timestamp,
+    n: int = 10,
+) -> dict:
+    """
+    Розширені показники форми:
+    - clean_sheet_rate — % матчів без пропущеного гола
+    - failed_to_score_rate — % матчів без забитого гола
+    - btts_rate — % матчів, де обидві команди забили
+    - win_streak — поточна серія перемог
+    - loss_streak — поточна серія поразок
+    - goals_for_std — варіативність атаки (непостійна команда = ненадійна)
+    """
+    mask = (
+        ((matches["home_team_id"] == team_id) | (matches["away_team_id"] == team_id))
+        & (matches["date"] < before_date)
+        & (matches["home_score"].notna())
+    )
+    team_matches = matches[mask].sort_values("date", ascending=False).head(n)
+
+    if team_matches.empty:
+        return {
+            "clean_sheet_rate": 0.25,
+            "failed_to_score_rate": 0.2,
+            "btts_rate": 0.5,
+            "win_streak": 0,
+            "loss_streak": 0,
+            "goals_for_std": 1.0,
+        }
+
+    clean_sheets = 0
+    failed_to_score = 0
+    btts = 0
+    goals_for = []
+
+    for _, row in team_matches.iterrows():
+        is_home = row["home_team_id"] == team_id
+        gf = int(row["home_score"] if is_home else row["away_score"])
+        ga = int(row["away_score"] if is_home else row["home_score"])
+        goals_for.append(gf)
+        if ga == 0:
+            clean_sheets += 1
+        if gf == 0:
+            failed_to_score += 1
+        if gf > 0 and ga > 0:
+            btts += 1
+
+    # Поточна серія (найостанніші матчі)
+    win_streak = 0
+    loss_streak = 0
+    for _, row in team_matches.iterrows():
+        is_home = row["home_team_id"] == team_id
+        gf = int(row["home_score"] if is_home else row["away_score"])
+        ga = int(row["away_score"] if is_home else row["home_score"])
+        if gf > ga:
+            if loss_streak == 0:
+                win_streak += 1
+            else:
+                break
+        elif gf < ga:
+            if win_streak == 0:
+                loss_streak += 1
+            else:
+                break
+        else:
+            break
+
+    n_matches = len(team_matches)
+    import statistics
+    goals_std = statistics.stdev(goals_for) if len(goals_for) >= 2 else 1.0
+
+    return {
+        "clean_sheet_rate": clean_sheets / n_matches,
+        "failed_to_score_rate": failed_to_score / n_matches,
+        "btts_rate": btts / n_matches,
+        "win_streak": win_streak,
+        "loss_streak": loss_streak,
+        "goals_for_std": goals_std,
     }
 
 

@@ -30,8 +30,9 @@ class SStatsClient:
                 status = e.response.status_code
                 if status == 429:
                     attempt += 1
-                    logger.warning(f"Rate limit 429 {endpoint} — повтор через 30s (спроба {attempt})")
-                    time.sleep(30)
+                    wait = min(5 * attempt, 30)  # 5s, 10s, 15s... max 30s
+                    logger.warning(f"Rate limit 429 {endpoint} — повтор через {wait}s (спроба {attempt})")
+                    time.sleep(wait)
                 else:
                     logger.error(f"SStats API error: {status} {endpoint}")
                     raise SStatsAPIError(f"HTTP {status}: {endpoint}") from e

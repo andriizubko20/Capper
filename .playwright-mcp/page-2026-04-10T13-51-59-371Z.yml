@@ -1,0 +1,18 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - heading "fbref.com" [level=1] [ref=e5]
+      - heading "Триває перевірка безпеки" [level=2] [ref=e6]
+      - paragraph [ref=e7]: На цьому вебсайті використовується сервіс безпеки для захисту від зловмисних ботів. Ця сторінка відображається, поки вебсайт перевіряє, що ви не бот.
+  - contentinfo [ref=e11]:
+    - generic [ref=e13]:
+      - generic [ref=e15]:
+        - text: "Ray ID:"
+        - code [ref=e16]: 9ea23ab90cfd72c5
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - text: Продуктивність і безпека від
+          - link "Cloudflare" [ref=e19] [cursor=pointer]:
+            - /url: https://www.cloudflare.com?utm_source=challenge&utm_campaign=m
+        - link "Конфіденційність" [ref=e21] [cursor=pointer]:
+          - /url: https://www.cloudflare.com/privacypolicy/

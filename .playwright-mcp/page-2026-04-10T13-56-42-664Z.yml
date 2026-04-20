@@ -1,0 +1,2982 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - list [ref=e4]:
+      - listitem [ref=e5]:
+        - link "Sports Reference ®" [ref=e6] [cursor=pointer]:
+          - /url: https://www.sports-reference.com/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav
+          - img [ref=e7]
+          - text: Sports Reference ®
+      - listitem [ref=e9]:
+        - link "Baseball" [ref=e10] [cursor=pointer]:
+          - /url: https://www.baseball-reference.com/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav
+      - listitem [ref=e11]:
+        - link "Football" [ref=e12] [cursor=pointer]:
+          - /url: https://www.pro-football-reference.com/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav
+        - link "(college)" [ref=e13] [cursor=pointer]:
+          - /url: https://www.sports-reference.com/cfb/
+      - listitem [ref=e14]:
+        - link "Basketball" [ref=e15] [cursor=pointer]:
+          - /url: https://www.basketball-reference.com/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav
+        - link "(college)" [ref=e16] [cursor=pointer]:
+          - /url: https://www.sports-reference.com/cbb/
+      - listitem [ref=e17]:
+        - link "Hockey" [ref=e18] [cursor=pointer]:
+          - /url: https://www.hockey-reference.com/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav
+      - listitem [ref=e19]:
+        - link "Soccer" [ref=e20] [cursor=pointer]:
+          - /url: https://fbref.com/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav
+      - listitem [ref=e21]:
+        - link "Blog" [ref=e22] [cursor=pointer]:
+          - /url: https://www.sports-reference.com/blog/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav
+      - listitem [ref=e23]:
+        - link "Stathead ®" [ref=e24] [cursor=pointer]:
+          - /url: https://www.sports-reference.com/stathead/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav
+      - listitem [ref=e25]:
+        - link "Immaculate Footy ®" [ref=e26] [cursor=pointer]:
+          - /url: https://www.sports-reference.com/immaculate-footy/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav
+      - listitem [ref=e27]:
+        - link "Questions or Comments?" [ref=e28] [cursor=pointer]:
+          - /url: https://www.sports-reference.com/feedback/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav
+      - listitem [ref=e29]:
+        - link "Ad-Free Login" [ref=e30] [cursor=pointer]:
+          - /url: https://www.sports-reference.com/users/login.cgi?token=1
+    - link "FBref.com":
+      - /url: /
+      - img "FBref.com" [ref=e31] [cursor=pointer]
+    - text: ☰
+    - navigation "FBref.com sections" [ref=e32]:
+      - list:
+        - listitem [ref=e33]:
+          - link "Players" [ref=e34] [cursor=pointer]:
+            - /url: /en/players/
+        - listitem [ref=e35]:
+          - link "Clubs" [ref=e36] [cursor=pointer]:
+            - /url: /en/squads/
+        - listitem [ref=e37]:
+          - link "Competitions" [ref=e38] [cursor=pointer]:
+            - /url: /en/comps/
+        - listitem [ref=e39]:
+          - link "Matches 26" [ref=e40] [cursor=pointer]:
+            - /url: /en/matches/
+            - text: Matches
+            - generic [ref=e41]: "26"
+        - listitem [ref=e42]:
+          - link "Awards" [ref=e43] [cursor=pointer]:
+            - /url: /en/awards/
+        - listitem [ref=e44]:
+          - link "Countries" [ref=e45] [cursor=pointer]:
+            - /url: /en/countries/
+        - listitem [ref=e46]:
+          - link "Stathead" [ref=e47] [cursor=pointer]:
+            - /url: https://www.sports-reference.com/stathead/sport/fbref/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_11_site_navbar
+        - listitem [ref=e48]:
+          - link "Mailing List" [ref=e49] [cursor=pointer]:
+            - /url: /en/email/
+        - listitem [ref=e50]:
+          - link "Full Site Menu Below ▼" [ref=e51] [cursor=pointer]:
+            - /url: "#site_menu_link"
+      - text: · · ·
+    - search "Site Search for players, teams and sections" [ref=e52]:
+      - generic [ref=e53]:
+        - generic [ref=e55]:
+          - searchbox "Search suggestions based on user search input" [ref=e56]
+          - searchbox "Enter a player, team or section name" [ref=e57]
+        - button "Search" [ref=e58]
+  - generic [ref=e66]:
+    - generic [ref=e70]:
+      - generic:
+        - generic:
+          - generic: "Goal of the Matchday 6: Zavier Gozo"
+        - generic [ref=e74]:
+          - slider "Progress Bar" [ref=e76] [cursor=pointer]: "12"
+          - button "Pause" [ref=e77] [cursor=pointer]:
+            - img [ref=e78]
+          - button "Unmute" [ref=e82] [cursor=pointer]:
+            - img [ref=e83]
+          - slider "Volume Bar" [ref=e86] [cursor=pointer]: "25"
+          - button "-00:21" [ref=e88] [cursor=pointer]
+          - button "Quality Selector" [ref=e89] [cursor=pointer]:
+            - img [ref=e90]
+          - button "Subtitles" [ref=e92] [cursor=pointer]:
+            - img [ref=e93]
+          - button "Enter Fullscreen" [ref=e95] [cursor=pointer]:
+            - img [ref=e96]
+    - iframe [ref=e98]:
+      
+    - iframe [ref=e99]:
+      
+  - main [ref=e100]:
+    - heading "Burnley vs. Manchester City Match Report – Friday August 11, 2023" [level=1] [ref=e101]
+    - generic [ref=e102]:
+      - link "Premier League" [ref=e103] [cursor=pointer]:
+        - /url: /en/comps/9/2023-2024/2023-2024-Premier-League-Stats
+      - text: (Matchweek 1)
+    - generic [ref=e104]:
+      - generic [ref=e105]:
+        - generic [ref=e106]:
+          - img "Burnley Club Crest" [ref=e108]
+          - strong [ref=e109]:
+            - link "Burnley" [ref=e110] [cursor=pointer]:
+              - /url: /en/squads/943e8050/2023-2024/Burnley-Stats
+        - generic [ref=e112]: "0 :"
+        - generic [ref=e113]: 0-0-1
+        - generic [ref=e114]:
+          - link "‹‹Prev Match" [ref=e115] [cursor=pointer]:
+            - /url: /en/matches/feb8f66f/Burnley-Cardiff-City-May-8-2023-Championship
+          - link "Next Match››" [ref=e116] [cursor=pointer]:
+            - /url: /en/matches/b66a7def/Burnley-Aston-Villa-August-27-2023-Premier-League
+        - generic [ref=e117]:
+          - strong [ref=e118]: Manager
+          - text: ": Vincent Kompany"
+        - generic [ref=e119]:
+          - strong [ref=e120]: Captain
+          - text: ":"
+          - link "Josh Cullen" [ref=e121] [cursor=pointer]:
+            - /url: /en/players/f6d7d690/Josh-Cullen
+      - generic [ref=e122]:
+        - generic [ref=e123]:
+          - img "Manchester City Club Crest" [ref=e125]
+          - strong [ref=e126]:
+            - link "Manchester City" [ref=e127] [cursor=pointer]:
+              - /url: /en/squads/b8fd03ef/2023-2024/Manchester-City-Stats
+        - generic [ref=e129]: "3"
+        - generic [ref=e130]: 1-0-0
+        - generic [ref=e131]:
+          - link "‹‹Prev Match" [ref=e132] [cursor=pointer]:
+            - /url: /en/matches/10e5c045/Arsenal-Manchester-City-August-6-2023-FA-Community-Shield
+          - link "Next Match››" [ref=e133] [cursor=pointer]:
+            - /url: /en/matches/572ae2f0/Manchester-City-Sevilla-August-16-2023-UEFA-Super-Cup
+        - generic [ref=e134]:
+          - strong [ref=e135]: Manager
+          - text: ": Pep Guardiola"
+        - generic [ref=e136]:
+          - strong [ref=e137]: Captain
+          - text: ":"
+          - link "Kevin De Bruyne" [ref=e138] [cursor=pointer]:
+            - /url: /en/players/e46012d4/Kevin-De-Bruyne
+      - generic [ref=e139]:
+        - generic [ref=e140]:
+          - strong [ref=e141]:
+            - link "Friday August 11, 2023" [ref=e142] [cursor=pointer]:
+              - /url: /en/matches/2023-08-11
+          - text: ", 20:00 (venue time)"
+          - generic [ref=e143]: 22:00 (local time)
+        - generic [ref=e144]:
+          - link "Premier League" [ref=e145] [cursor=pointer]:
+            - /url: /en/comps/9/2023-2024/2023-2024-Premier-League-Stats
+          - text: (Matchweek 1)
+        - link "Manchester City vs. Burnley Historical Head-to-Head" [ref=e147] [cursor=pointer]:
+          - /url: /en/stathead/matchup/teams/b8fd03ef/943e8050/Manchester-City-vs-Burnley-History
+        - generic [ref=e149]:
+          - strong [ref=e150]: Attendance
+          - text: ": 21,572"
+        - generic [ref=e151]:
+          - strong [ref=e152]: Venue
+          - text: ": Turf Moor, Burnley"
+        - generic [ref=e153]:
+          - strong [ref=e154]: Officials
+          - text: ":"
+          - generic [ref=e155]:
+            - generic [ref=e156]: Craig Pawson (Referee)
+            - text: ·
+            - generic [ref=e157]: Simon Bennett (AR1)
+            - text: ·
+            - generic [ref=e158]: Steve Meredith (AR2)
+            - text: ·
+            - generic [ref=e159]: Graham Scott (4th)
+            - text: ·
+            - generic [ref=e160]: Michael Oliver (VAR)
+      - generic [ref=e162]:
+        - link "Anass Zaroury" [ref=e163] [cursor=pointer]:
+          - /url: /en/players/07d65234/Anass-Zaroury
+        - text: · 90+4’
+      - generic [ref=e165]:
+        - generic [ref=e166]:
+          - link "Erling Haaland" [ref=e168] [cursor=pointer]:
+            - /url: /en/players/1f44ac21/Erling-Haaland
+          - text: · 4’
+        - generic [ref=e169]:
+          - link "Erling Haaland" [ref=e171] [cursor=pointer]:
+            - /url: /en/players/1f44ac21/Erling-Haaland
+          - text: · 36’
+        - generic [ref=e172]:
+          - link "Rodri" [ref=e174] [cursor=pointer]:
+            - /url: /en/players/6434f10d/Rodri
+          - text: · 75’
+    - generic [ref=e177]:
+      - generic [ref=e178]:
+        - img "football pitch for squad formations" [ref=e179]
+        - generic "James Trafford" [ref=e180] [cursor=pointer]: "1"
+        - generic "Dara O'Shea" [ref=e181] [cursor=pointer]: "2"
+        - generic "Jordan Beyer" [ref=e182] [cursor=pointer]: "5"
+        - generic "Connor Roberts" [ref=e183] [cursor=pointer]: "14"
+        - generic "Sander Berge" [ref=e184] [cursor=pointer]: "16"
+        - generic "Lyle Foster" [ref=e185] [cursor=pointer]: "17"
+        - generic "Vitinho" [ref=e186] [cursor=pointer]: "22"
+        - generic "Josh Cullen" [ref=e187] [cursor=pointer]: "24"
+        - generic "Zeki Amdouni" [ref=e188] [cursor=pointer]: "25"
+        - generic "Ameen Al-Dakhil" [ref=e189] [cursor=pointer]: "28"
+        - generic "Luca Koleosho" [ref=e190] [cursor=pointer]: "30"
+        - generic "Ederson" [ref=e191] [cursor=pointer]: "31"
+        - generic "Kyle Walker" [ref=e192] [cursor=pointer]: "2"
+        - generic "Nathan Aké" [ref=e193] [cursor=pointer]: "6"
+        - generic "Erling Haaland" [ref=e194] [cursor=pointer]: "9"
+        - generic "Rodri" [ref=e195] [cursor=pointer]: "16"
+        - generic "Kevin De Bruyne" [ref=e196] [cursor=pointer]: "17"
+        - generic "Julián Álvarez" [ref=e197] [cursor=pointer]: "19"
+        - generic "Bernardo Silva" [ref=e198] [cursor=pointer]: "20"
+        - generic "Manuel Akanji" [ref=e199] [cursor=pointer]: "25"
+        - generic "Phil Foden" [ref=e200] [cursor=pointer]: "47"
+        - generic "Rico Lewis" [ref=e201] [cursor=pointer]: "82"
+      - table [ref=e203]:
+        - rowgroup [ref=e204]:
+          - row "Burnley (5-4-1)" [ref=e205]:
+            - columnheader "Burnley (5-4-1)" [ref=e206]
+          - row "1 James Trafford" [ref=e207]:
+            - cell "1" [ref=e208]
+            - cell "James Trafford" [ref=e209]:
+              - link "James Trafford" [ref=e210] [cursor=pointer]:
+                - /url: /en/players/259fea27/James-Trafford
+          - row "2 Dara O'Shea" [ref=e211]:
+            - cell "2" [ref=e212]
+            - cell "Dara O'Shea" [ref=e213]:
+              - link "Dara O'Shea" [ref=e214] [cursor=pointer]:
+                - /url: /en/players/1d042188/Dara-OShea
+          - row "5 Jordan Beyer" [ref=e215]:
+            - cell "5" [ref=e216]
+            - cell "Jordan Beyer" [ref=e217]:
+              - link "Jordan Beyer" [ref=e218] [cursor=pointer]:
+                - /url: /en/players/9af1f9ff/Jordan-Beyer
+          - row "14 Connor Roberts" [ref=e220]:
+            - cell "14" [ref=e221]
+            - cell "Connor Roberts" [ref=e222]:
+              - link "Connor Roberts" [ref=e223] [cursor=pointer]:
+                - /url: /en/players/24fae784/Connor-Roberts
+          - row "16 Sander Berge" [ref=e224]:
+            - cell "16" [ref=e225]
+            - cell "Sander Berge" [ref=e226]:
+              - link "Sander Berge" [ref=e227] [cursor=pointer]:
+                - /url: /en/players/d0b6129f/Sander-Berge
+          - row "17 Lyle Foster" [ref=e229]:
+            - cell "17" [ref=e230]
+            - cell "Lyle Foster" [ref=e231]:
+              - link "Lyle Foster" [ref=e232] [cursor=pointer]:
+                - /url: /en/players/f84a807c/Lyle-Foster
+          - row "22 Vitinho" [ref=e234]:
+            - cell "22" [ref=e235]
+            - cell "Vitinho" [ref=e236]:
+              - link "Vitinho" [ref=e237] [cursor=pointer]:
+                - /url: /en/players/9295dc1c/Vitinho
+          - row "24 Josh Cullen" [ref=e238]:
+            - cell "24" [ref=e239]
+            - cell "Josh Cullen" [ref=e240]:
+              - link "Josh Cullen" [ref=e241] [cursor=pointer]:
+                - /url: /en/players/f6d7d690/Josh-Cullen
+          - row "25 Zeki Amdouni" [ref=e242]:
+            - cell "25" [ref=e243]
+            - cell "Zeki Amdouni" [ref=e244]:
+              - link "Zeki Amdouni" [ref=e245] [cursor=pointer]:
+                - /url: /en/players/2ee5b0c9/Zeki-Amdouni
+          - row "28 Ameen Al-Dakhil" [ref=e247]:
+            - cell "28" [ref=e248]
+            - cell "Ameen Al-Dakhil" [ref=e249]:
+              - link "Ameen Al-Dakhil" [ref=e250] [cursor=pointer]:
+                - /url: /en/players/93e08bce/Ameen-Al-Dakhil
+          - row "30 Luca Koleosho" [ref=e251]:
+            - cell "30" [ref=e252]
+            - cell "Luca Koleosho" [ref=e253]:
+              - link "Luca Koleosho" [ref=e254] [cursor=pointer]:
+                - /url: /en/players/fc076f78/Luca-Koleosho
+          - row "Bench" [ref=e256]:
+            - columnheader "Bench" [ref=e257]
+          - row "49 Arijanet Muric" [ref=e258]:
+            - cell "49" [ref=e259]
+            - cell "Arijanet Muric" [ref=e260]:
+              - link "Arijanet Muric" [ref=e261] [cursor=pointer]:
+                - /url: /en/players/99aa1a84/Arijanet-Muric
+          - row "4 Jack Cork" [ref=e262]:
+            - cell "4" [ref=e263]
+            - cell "Jack Cork" [ref=e264]:
+              - link "Jack Cork" [ref=e265] [cursor=pointer]:
+                - /url: /en/players/74e12f1e/Jack-Cork
+          - row "7 Jóhann Berg Guðmundsson" [ref=e266]:
+            - cell "7" [ref=e267]
+            - cell "Jóhann Berg Guðmundsson" [ref=e268]:
+              - link "Jóhann Berg Guðmundsson" [ref=e269] [cursor=pointer]:
+                - /url: /en/players/f72293fc/Johann-Berg-Gudmundsson
+          - row "8 Josh Brownhill" [ref=e270]:
+            - cell "8" [ref=e271]
+            - cell "Josh Brownhill" [ref=e272]:
+              - link "Josh Brownhill" [ref=e273] [cursor=pointer]:
+                - /url: /en/players/47369df8/Josh-Brownhill
+          - row "10 Benson Manuel" [ref=e275]:
+            - cell "10" [ref=e276]
+            - cell "Benson Manuel" [ref=e277]:
+              - link "Benson Manuel" [ref=e278] [cursor=pointer]:
+                - /url: /en/players/d7f99582/Benson-Manuel
+          - row "15 Nathan Redmond" [ref=e280]:
+            - cell "15" [ref=e281]
+            - cell "Nathan Redmond" [ref=e282]:
+              - link "Nathan Redmond" [ref=e283] [cursor=pointer]:
+                - /url: /en/players/ab651565/Nathan-Redmond
+          - row "18 Hjalmar Ekdal" [ref=e285]:
+            - cell "18" [ref=e286]
+            - cell "Hjalmar Ekdal" [ref=e287]:
+              - link "Hjalmar Ekdal" [ref=e288] [cursor=pointer]:
+                - /url: /en/players/3d554589/Hjalmar-Ekdal
+          - row "19 Anass Zaroury" [ref=e289]:
+            - cell "19" [ref=e290]
+            - cell "Anass Zaroury" [ref=e291]:
+              - link "Anass Zaroury" [ref=e292] [cursor=pointer]:
+                - /url: /en/players/07d65234/Anass-Zaroury
+          - row "34 Jacob Bruun Larsen" [ref=e295]:
+            - cell "34" [ref=e296]
+            - cell "Jacob Bruun Larsen" [ref=e297]:
+              - link "Jacob Bruun Larsen" [ref=e298] [cursor=pointer]:
+                - /url: /en/players/4e204552/Jacob-Bruun-Larsen
+      - table [ref=e301]:
+        - rowgroup [ref=e302]:
+          - row "Manchester City (4-2-3-1)" [ref=e303]:
+            - columnheader "Manchester City (4-2-3-1)" [ref=e304]
+          - row "31 Ederson" [ref=e305]:
+            - cell "31" [ref=e306]
+            - cell "Ederson" [ref=e307]:
+              - link "Ederson" [ref=e308] [cursor=pointer]:
+                - /url: /en/players/3bb7b8b4/Ederson
+          - row "2 Kyle Walker" [ref=e309]:
+            - cell "2" [ref=e310]
+            - cell "Kyle Walker" [ref=e311]:
+              - link "Kyle Walker" [ref=e312] [cursor=pointer]:
+                - /url: /en/players/86dd77d1/Kyle-Walker
+          - row "6 Nathan Aké" [ref=e314]:
+            - cell "6" [ref=e315]
+            - cell "Nathan Aké" [ref=e316]:
+              - link "Nathan Aké" [ref=e317] [cursor=pointer]:
+                - /url: /en/players/eaeca114/Nathan-Ake
+          - row "9 Erling Haaland" [ref=e319]:
+            - cell "9" [ref=e320]
+            - cell "Erling Haaland" [ref=e321]:
+              - link "Erling Haaland" [ref=e322] [cursor=pointer]:
+                - /url: /en/players/1f44ac21/Erling-Haaland
+          - row "16 Rodri" [ref=e326]:
+            - cell "16" [ref=e327]
+            - cell "Rodri" [ref=e328]:
+              - link "Rodri" [ref=e329] [cursor=pointer]:
+                - /url: /en/players/6434f10d/Rodri
+          - row "17 Kevin De Bruyne" [ref=e331]:
+            - cell "17" [ref=e332]
+            - cell "Kevin De Bruyne" [ref=e333]:
+              - link "Kevin De Bruyne" [ref=e334] [cursor=pointer]:
+                - /url: /en/players/e46012d4/Kevin-De-Bruyne
+          - row "19 Julián Álvarez" [ref=e336]:
+            - cell "19" [ref=e337]
+            - cell "Julián Álvarez" [ref=e338]:
+              - link "Julián Álvarez" [ref=e339] [cursor=pointer]:
+                - /url: /en/players/15ab5a2b/Julian-Alvarez
+          - row "20 Bernardo Silva" [ref=e340]:
+            - cell "20" [ref=e341]
+            - cell "Bernardo Silva" [ref=e342]:
+              - link "Bernardo Silva" [ref=e343] [cursor=pointer]:
+                - /url: /en/players/3eb22ec9/Bernardo-Silva
+          - row "25 Manuel Akanji" [ref=e344]:
+            - cell "25" [ref=e345]
+            - cell "Manuel Akanji" [ref=e346]:
+              - link "Manuel Akanji" [ref=e347] [cursor=pointer]:
+                - /url: /en/players/89ac64a6/Manuel-Akanji
+          - row "47 Phil Foden" [ref=e348]:
+            - cell "47" [ref=e349]
+            - cell "Phil Foden" [ref=e350]:
+              - link "Phil Foden" [ref=e351] [cursor=pointer]:
+                - /url: /en/players/ed1e53f3/Phil-Foden
+          - row "82 Rico Lewis" [ref=e352]:
+            - cell "82" [ref=e353]
+            - cell "Rico Lewis" [ref=e354]:
+              - link "Rico Lewis" [ref=e355] [cursor=pointer]:
+                - /url: /en/players/b57e066e/Rico-Lewis
+          - row "Bench" [ref=e357]:
+            - columnheader "Bench" [ref=e358]
+          - row "18 Stefan Ortega" [ref=e359]:
+            - cell "18" [ref=e360]
+            - cell "Stefan Ortega" [ref=e361]:
+              - link "Stefan Ortega" [ref=e362] [cursor=pointer]:
+                - /url: /en/players/c1242d4e/Stefan-Ortega
+          - row "4 Kalvin Phillips" [ref=e363]:
+            - cell "4" [ref=e364]
+            - cell "Kalvin Phillips" [ref=e365]:
+              - link "Kalvin Phillips" [ref=e366] [cursor=pointer]:
+                - /url: /en/players/4f565d77/Kalvin-Phillips
+          - row "8 Mateo Kovačić" [ref=e367]:
+            - cell "8" [ref=e368]
+            - cell "Mateo Kovačić" [ref=e369]:
+              - link "Mateo Kovačić" [ref=e370] [cursor=pointer]:
+                - /url: /en/players/79c0821a/Mateo-Kovacic
+          - row "10 Jack Grealish" [ref=e372]:
+            - cell "10" [ref=e373]
+            - cell "Jack Grealish" [ref=e374]:
+              - link "Jack Grealish" [ref=e375] [cursor=pointer]:
+                - /url: /en/players/b0b4fd3e/Jack-Grealish
+          - row "14 Aymeric Laporte" [ref=e376]:
+            - cell "14" [ref=e377]
+            - cell "Aymeric Laporte" [ref=e378]:
+              - link "Aymeric Laporte" [ref=e379] [cursor=pointer]:
+                - /url: /en/players/119b9a8e/Aymeric-Laporte
+          - row "21 Sergio Gómez" [ref=e381]:
+            - cell "21" [ref=e382]
+            - cell "Sergio Gómez" [ref=e383]:
+              - link "Sergio Gómez" [ref=e384] [cursor=pointer]:
+                - /url: /en/players/01e5f06e/Sergio-Gomez
+          - row "24 Joško Gvardiol" [ref=e385]:
+            - cell "24" [ref=e386]
+            - cell "Joško Gvardiol" [ref=e387]:
+              - link "Joško Gvardiol" [ref=e388] [cursor=pointer]:
+                - /url: /en/players/5ad50391/Josko-Gvardiol
+          - row "80 Cole Palmer" [ref=e390]:
+            - cell "80" [ref=e391]
+            - cell "Cole Palmer" [ref=e392]:
+              - link "Cole Palmer" [ref=e393] [cursor=pointer]:
+                - /url: /en/players/dc7f8a28/Cole-Palmer
+          - row "87 James Mcatee" [ref=e395]:
+            - cell "87" [ref=e396]
+            - cell "James Mcatee" [ref=e397]:
+              - link "James Mcatee" [ref=e398] [cursor=pointer]:
+                - /url: /en/players/96593e89/James-Mcatee
+    - generic [ref=e400]:
+      - generic [ref=e401]:
+        - link "Stathead Logo" [ref=e402] [cursor=pointer]:
+          - /url: "\n  \nhttps://www.sports-reference.com/stathead/sport/fbref/?&utm_medium=sr_xsite&utm_source=fb&utm_campaign=2023_02_bnnr_player_stathead&utm_content=img_logo"
+          - img "Stathead Logo" [ref=e403]
+        - generic [ref=e404]: POWERED BY
+        - link ".com Logo" [ref=e405] [cursor=pointer]:
+          - /url: "\n  \nhttps://www.sports-reference.com/stathead/sport/fbref/?&utm_medium=sr_xsite&utm_source=fb&utm_campaign=2023_02_bnnr_player_stathead&utm_content=img_logo"
+          - img ".com Logo" [ref=e406]
+      - generic [ref=e407]:
+        - generic [ref=e408]: Looking for something amazing? Uncover the story that stats can tell with Stathead.
+        - generic [ref=e409]: Search through thousands of matches from football history using our Match Finder tools.
+        - link "Try it & get your first month FREE" [ref=e411] [cursor=pointer]:
+          - /url: "\n  \nhttps://www.sports-reference.com/stathead/sport/fbref/?&utm_medium=sr_xsite&utm_source=fb&utm_campaign=2023_02_bnnr_player_stathead&utm_content=bttn_cta"
+    - generic [ref=e416]:
+      - heading "Match Summary" [level=2] [ref=e417]
+      - generic [ref=e418]: Kick Off
+      - generic [ref=e419]:
+        - generic [ref=e420]:
+          - text: 4’
+          - generic [ref=e421]: 0:1
+        - generic [ref=e422]:
+          - generic [ref=e424]:
+            - link "Erling Haaland" [ref=e426] [cursor=pointer]:
+              - /url: /en/players/1f44ac21/Erling-Haaland
+            - generic [ref=e427]:
+              - text: "Assist:"
+              - link "Rodri" [ref=e428] [cursor=pointer]:
+                - /url: /en/players/6434f10d/Rodri
+          - img "Manchester City Club Crest" [ref=e431]
+      - generic [ref=e432]:
+        - generic [ref=e433]:
+          - text: 23’
+          - generic [ref=e434]: 0:1
+        - generic [ref=e435]:
+          - generic [ref=e437]:
+            - link "Mateo Kovačić" [ref=e439] [cursor=pointer]:
+              - /url: /en/players/79c0821a/Mateo-Kovacic
+            - generic [ref=e440]:
+              - text: for
+              - link "Kevin De Bruyne" [ref=e441] [cursor=pointer]:
+                - /url: /en/players/e46012d4/Kevin-De-Bruyne
+          - img "Manchester City Club Crest" [ref=e444]
+      - generic [ref=e445]:
+        - generic [ref=e446]:
+          - text: 36’
+          - generic [ref=e447]: 0:2
+        - generic [ref=e448]:
+          - generic [ref=e450]:
+            - link "Erling Haaland" [ref=e452] [cursor=pointer]:
+              - /url: /en/players/1f44ac21/Erling-Haaland
+            - generic [ref=e453]:
+              - text: "Assist:"
+              - link "Julián Álvarez" [ref=e454] [cursor=pointer]:
+                - /url: /en/players/15ab5a2b/Julian-Alvarez
+          - img "Manchester City Club Crest" [ref=e457]
+      - generic [ref=e458]: Half Time
+      - generic [ref=e459]:
+        - generic [ref=e460]:
+          - text: 61’
+          - generic [ref=e461]: 0:2
+        - generic [ref=e462]:
+          - generic [ref=e464]:
+            - link "Jacob Bruun Larsen" [ref=e466] [cursor=pointer]:
+              - /url: /en/players/4e204552/Jacob-Bruun-Larsen
+            - generic [ref=e467]:
+              - text: for
+              - link "Luca Koleosho" [ref=e468] [cursor=pointer]:
+                - /url: /en/players/fc076f78/Luca-Koleosho
+          - img "Burnley Club Crest" [ref=e471]
+      - generic [ref=e472]:
+        - generic [ref=e473]:
+          - text: 61’
+          - generic [ref=e474]: 0:2
+        - generic [ref=e475]:
+          - generic [ref=e477]:
+            - link "Anass Zaroury" [ref=e479] [cursor=pointer]:
+              - /url: /en/players/07d65234/Anass-Zaroury
+            - generic [ref=e480]:
+              - text: for
+              - link "Zeki Amdouni" [ref=e481] [cursor=pointer]:
+                - /url: /en/players/2ee5b0c9/Zeki-Amdouni
+          - img "Burnley Club Crest" [ref=e484]
+      - generic [ref=e485]:
+        - generic [ref=e486]:
+          - text: 74’
+          - generic [ref=e487]: 0:2
+        - generic [ref=e488]:
+          - generic [ref=e490]:
+            - link "Benson Manuel" [ref=e492] [cursor=pointer]:
+              - /url: /en/players/d7f99582/Benson-Manuel
+            - generic [ref=e493]:
+              - text: for
+              - link "Jordan Beyer" [ref=e494] [cursor=pointer]:
+                - /url: /en/players/9af1f9ff/Jordan-Beyer
+          - img "Burnley Club Crest" [ref=e497]
+      - generic [ref=e498]:
+        - generic [ref=e499]:
+          - text: 75’
+          - generic [ref=e500]: 0:3
+        - generic [ref=e501]:
+          - link "Rodri" [ref=e505] [cursor=pointer]:
+            - /url: /en/players/6434f10d/Rodri
+          - img "Manchester City Club Crest" [ref=e508]
+      - generic [ref=e509]:
+        - generic [ref=e510]:
+          - text: 79’
+          - generic [ref=e511]: 0:3
+        - generic [ref=e512]:
+          - generic [ref=e514]:
+            - link "Joško Gvardiol" [ref=e516] [cursor=pointer]:
+              - /url: /en/players/5ad50391/Josko-Gvardiol
+            - generic [ref=e517]:
+              - text: for
+              - link "Rico Lewis" [ref=e518] [cursor=pointer]:
+                - /url: /en/players/b57e066e/Rico-Lewis
+          - img "Manchester City Club Crest" [ref=e521]
+      - generic [ref=e522]:
+        - generic [ref=e523]:
+          - text: 79’
+          - generic [ref=e524]: 0:3
+        - generic [ref=e525]:
+          - generic [ref=e527]:
+            - link "Aymeric Laporte" [ref=e529] [cursor=pointer]:
+              - /url: /en/players/119b9a8e/Aymeric-Laporte
+            - generic [ref=e530]:
+              - text: for
+              - link "Nathan Aké" [ref=e531] [cursor=pointer]:
+                - /url: /en/players/eaeca114/Nathan-Ake
+          - img "Manchester City Club Crest" [ref=e534]
+      - generic [ref=e535]:
+        - generic [ref=e536]:
+          - text: 80’
+          - generic [ref=e537]: 0:3
+        - generic [ref=e538]:
+          - generic [ref=e540]:
+            - link "Cole Palmer" [ref=e542] [cursor=pointer]:
+              - /url: /en/players/dc7f8a28/Cole-Palmer
+            - generic [ref=e543]:
+              - text: for
+              - link "Erling Haaland" [ref=e544] [cursor=pointer]:
+                - /url: /en/players/1f44ac21/Erling-Haaland
+          - img "Manchester City Club Crest" [ref=e547]
+      - generic [ref=e548]:
+        - generic [ref=e549]:
+          - text: 90+1’
+          - generic [ref=e550]: 0:3
+        - generic [ref=e551]:
+          - generic [ref=e553]:
+            - link "Josh Brownhill" [ref=e555] [cursor=pointer]:
+              - /url: /en/players/47369df8/Josh-Brownhill
+            - generic [ref=e556]:
+              - text: for
+              - link "Sander Berge" [ref=e557] [cursor=pointer]:
+                - /url: /en/players/d0b6129f/Sander-Berge
+          - img "Burnley Club Crest" [ref=e560]
+      - generic [ref=e561]:
+        - generic [ref=e562]:
+          - text: 90+1’
+          - generic [ref=e563]: 0:3
+        - generic [ref=e564]:
+          - generic [ref=e566]:
+            - link "Nathan Redmond" [ref=e568] [cursor=pointer]:
+              - /url: /en/players/ab651565/Nathan-Redmond
+            - generic [ref=e569]:
+              - text: for
+              - link "Lyle Foster" [ref=e570] [cursor=pointer]:
+                - /url: /en/players/f84a807c/Lyle-Foster
+          - img "Burnley Club Crest" [ref=e573]
+      - generic [ref=e574]:
+        - generic [ref=e575]:
+          - text: 90+4’
+          - generic [ref=e576]: 0:3
+        - generic [ref=e577]:
+          - link "Anass Zaroury" [ref=e581] [cursor=pointer]:
+            - /url: /en/players/07d65234/Anass-Zaroury
+          - img "Burnley Club Crest" [ref=e584]
+      - generic [ref=e585]:
+        - generic [ref=e586]:
+          - text: 90+5’
+          - generic [ref=e587]: 0:3
+        - generic [ref=e588]:
+          - generic [ref=e590]:
+            - link "James Mcatee" [ref=e592] [cursor=pointer]:
+              - /url: /en/players/96593e89/James-Mcatee
+            - generic [ref=e593]:
+              - text: for
+              - link "Kyle Walker" [ref=e594] [cursor=pointer]:
+                - /url: /en/players/86dd77d1/Kyle-Walker
+          - img "Manchester City Club Crest" [ref=e597]
+    - generic [ref=e598]:
+      - generic [ref=e599]:
+        - heading "Team Stats" [level=2] [ref=e600]
+        - table [ref=e601]:
+          - rowgroup [ref=e602]:
+            - row "Burnley Burnley Club Crest Manchester City Club Crest Manchester City" [ref=e603]:
+              - columnheader "Burnley Burnley Club Crest" [ref=e604]:
+                - generic [ref=e605]:
+                  - text: Burnley
+                  - img "Burnley Club Crest" [ref=e607]
+              - columnheader "Manchester City Club Crest Manchester City" [ref=e608]:
+                - generic [ref=e609]:
+                  - img "Manchester City Club Crest" [ref=e611]
+                  - text: Manchester City
+            - row "Possession" [ref=e612]:
+              - columnheader "Possession" [ref=e613]
+            - row "34% 66%" [ref=e614]:
+              - cell "34%" [ref=e615]:
+                - strong [ref=e618]: 34%
+              - cell "66%" [ref=e622]:
+                - strong [ref=e625]: 66%
+            - row "Shots on Target" [ref=e629]:
+              - columnheader "Shots on Target" [ref=e630]
+            - row "1 of 6 — 17% 47% — 8 of 17" [ref=e631]:
+              - cell "1 of 6 — 17%" [ref=e632]:
+                - generic [ref=e634]:
+                  - text: 1 of 6 —
+                  - strong [ref=e635]: 17%
+              - cell "47% — 8 of 17" [ref=e639]:
+                - generic [ref=e641]:
+                  - strong [ref=e642]: 47%
+                  - text: — 8 of 17
+            - row "Saves" [ref=e646]:
+              - columnheader "Saves" [ref=e647]
+            - row "5 of 8 — 62% 100% — 1 of 1" [ref=e648]:
+              - cell "5 of 8 — 62%" [ref=e649]:
+                - generic [ref=e651]:
+                  - text: 5 of 8 —
+                  - strong [ref=e652]: 62%
+              - cell "100% — 1 of 1" [ref=e656]:
+                - generic [ref=e658]:
+                  - strong [ref=e659]: 100%
+                  - text: — 1 of 1
+            - row "Cards" [ref=e663]:
+              - columnheader "Cards" [ref=e664]
+            - row [ref=e665]:
+              - cell [ref=e666]
+              - cell [ref=e671]
+      - generic [ref=e675]:
+        - generic [ref=e676]:
+          - generic [ref=e677]: Burnley
+          - generic [ref=e679]: Manchester City
+          - generic [ref=e680]: "11"
+          - generic [ref=e681]: Fouls
+          - generic [ref=e682]: "8"
+          - generic [ref=e683]: "6"
+          - generic [ref=e684]: Corners
+          - generic [ref=e685]: "5"
+          - generic [ref=e686]: "7"
+          - generic [ref=e687]: Crosses
+          - generic [ref=e688]: "15"
+        - generic [ref=e689]:
+          - generic [ref=e690]: Burnley
+          - generic [ref=e692]: Manchester City
+          - generic [ref=e693]: "7"
+          - generic [ref=e694]: Interceptions
+          - generic [ref=e695]: "4"
+        - generic [ref=e696]:
+          - generic [ref=e697]: Burnley
+          - generic [ref=e699]: Manchester City
+          - generic [ref=e700]: "0"
+          - generic [ref=e701]: Offsides
+          - generic [ref=e702]: "1"
+    - link "Become a Stathead & surf this site ad-free." [ref=e706] [cursor=pointer]:
+      - /url: https://www.sports-reference.com/stathead/?ref=fb&utm_source=fb&utm_medium=sr_xsite&utm_campaign=2024_04_23_adfree_callouts
+    - generic [ref=e707]:
+      - generic [ref=e708]:
+        - heading "Burnley Player Stats" [level=2] [ref=e709]
+        - list [ref=e711]:
+          - listitem [ref=e712]:
+            - button "Glossary" [ref=e713] [cursor=pointer]
+      - table "Burnley Player Stats Table" [ref=e715]:
+        - rowgroup [ref=e740]:
+          - row "Performance" [ref=e741]:
+            - columnheader [ref=e742] [cursor=pointer]
+            - columnheader "Performance" [ref=e743] [cursor=pointer]
+          - row "Player Shirt Number Nation Position Age Minutes Goals Assists Penalty Kicks Made Penalty Kicks Attempted Shots Total Shots on Target Yellow Cards Red Cards Fouls Committed Fouls Drawn Offsides Crosses Tackles Won Interceptions Own Goals Penalty Kicks Won Penalty Kicks Conceded" [ref=e744]:
+            - columnheader "Player" [ref=e745] [cursor=pointer]
+            - columnheader "Shirt Number" [ref=e746] [cursor=pointer]: "#"
+            - columnheader "Nation" [ref=e747] [cursor=pointer]
+            - columnheader "Position" [ref=e748] [cursor=pointer]: Pos
+            - columnheader "Age" [ref=e749] [cursor=pointer]
+            - columnheader "Minutes" [ref=e750] [cursor=pointer]: Min
+            - columnheader "Goals" [ref=e751] [cursor=pointer]: Gls
+            - columnheader "Assists" [ref=e752] [cursor=pointer]: Ast
+            - columnheader "Penalty Kicks Made" [ref=e753] [cursor=pointer]: PK
+            - columnheader "Penalty Kicks Attempted" [ref=e754] [cursor=pointer]: PKatt
+            - columnheader "Shots Total" [ref=e755] [cursor=pointer]: Sh
+            - columnheader "Shots on Target" [ref=e756] [cursor=pointer]: SoT
+            - columnheader "Yellow Cards" [ref=e757] [cursor=pointer]: CrdY
+            - columnheader "Red Cards" [ref=e758] [cursor=pointer]: CrdR
+            - columnheader "Fouls Committed" [ref=e759] [cursor=pointer]: Fls
+            - columnheader "Fouls Drawn" [ref=e760] [cursor=pointer]: Fld
+            - columnheader "Offsides" [ref=e761] [cursor=pointer]: "Off"
+            - columnheader "Crosses" [ref=e762] [cursor=pointer]: Crs
+            - columnheader "Tackles Won" [ref=e763] [cursor=pointer]: TklW
+            - columnheader "Interceptions" [ref=e764] [cursor=pointer]: Int
+            - columnheader "Own Goals" [ref=e765] [cursor=pointer]: OG
+            - columnheader "Penalty Kicks Won" [ref=e766] [cursor=pointer]: PKwon
+            - columnheader "Penalty Kicks Conceded" [ref=e767] [cursor=pointer]: PKcon
+        - rowgroup [ref=e768]:
+          - row "Zeki Amdouni 25 ch SUI FW 22-250 60 0 0 0 0 1 1 0 0 0 2 0 0 1 0 0" [ref=e769]:
+            - rowheader "Zeki Amdouni" [ref=e770]:
+              - link "Zeki Amdouni" [ref=e771] [cursor=pointer]:
+                - /url: /en/players/2ee5b0c9/Zeki-Amdouni
+            - cell "25" [ref=e772]
+            - cell "ch SUI" [ref=e773]:
+              - link "ch SUI" [ref=e774] [cursor=pointer]:
+                - /url: /en/country/SUI/Switzerland-Football
+                - generic [ref=e775]:
+                  - generic [ref=e776]: ch
+                  - text: SUI
+            - cell "FW" [ref=e777]
+            - cell "22-250" [ref=e778]
+            - cell "60" [ref=e779]
+            - cell "0" [ref=e780]
+            - cell "0" [ref=e781]
+            - cell "0" [ref=e782]
+            - cell "0" [ref=e783]
+            - cell "1" [ref=e784]
+            - cell "1" [ref=e785]
+            - cell "0" [ref=e786]
+            - cell "0" [ref=e787]
+            - cell "0" [ref=e788]
+            - cell "2" [ref=e789]
+            - cell "0" [ref=e790]
+            - cell "0" [ref=e791]
+            - cell "1" [ref=e792]
+            - cell "0" [ref=e793]
+            - cell "0" [ref=e794]
+            - cell [ref=e795]
+            - cell [ref=e796]
+          - row "Anass Zaroury 19 ma MAR FW,MF 22-277 29 0 0 0 0 1 0 0 1 1 1 0 4 0 0 0" [ref=e797]:
+            - rowheader "Anass Zaroury" [ref=e798]:
+              - link "Anass Zaroury" [ref=e799] [cursor=pointer]:
+                - /url: /en/players/07d65234/Anass-Zaroury
+            - cell "19" [ref=e800]
+            - cell "ma MAR" [ref=e801]:
+              - link "ma MAR" [ref=e802] [cursor=pointer]:
+                - /url: /en/country/MAR/Morocco-Football
+                - generic [ref=e803]:
+                  - generic [ref=e804]: ma
+                  - text: MAR
+            - cell "FW,MF" [ref=e805]
+            - cell "22-277" [ref=e806]
+            - cell "29" [ref=e807]
+            - cell "0" [ref=e808]
+            - cell "0" [ref=e809]
+            - cell "0" [ref=e810]
+            - cell "0" [ref=e811]
+            - cell "1" [ref=e812]
+            - cell "0" [ref=e813]
+            - cell "0" [ref=e814]
+            - cell "1" [ref=e815]
+            - cell "1" [ref=e816]
+            - cell "1" [ref=e817]
+            - cell "0" [ref=e818]
+            - cell "4" [ref=e819]
+            - cell "0" [ref=e820]
+            - cell "0" [ref=e821]
+            - cell "0" [ref=e822]
+            - cell [ref=e823]
+            - cell [ref=e824]
+          - row "Lyle Foster 17 za RSA LM 22-342 89 0 0 0 0 2 0 0 0 1 0 0 0 1 0 0" [ref=e825]:
+            - rowheader "Lyle Foster" [ref=e826]:
+              - link "Lyle Foster" [ref=e827] [cursor=pointer]:
+                - /url: /en/players/f84a807c/Lyle-Foster
+            - cell "17" [ref=e828]
+            - cell "za RSA" [ref=e829]:
+              - link "za RSA" [ref=e830] [cursor=pointer]:
+                - /url: /en/country/RSA/South-Africa-Football
+                - generic [ref=e831]:
+                  - generic [ref=e832]: za
+                  - text: RSA
+            - cell "LM" [ref=e833]
+            - cell "22-342" [ref=e834]
+            - cell "89" [ref=e835]
+            - cell "0" [ref=e836]
+            - cell "0" [ref=e837]
+            - cell "0" [ref=e838]
+            - cell "0" [ref=e839]
+            - cell "2" [ref=e840]
+            - cell "0" [ref=e841]
+            - cell "0" [ref=e842]
+            - cell "0" [ref=e843]
+            - cell "1" [ref=e844]
+            - cell "0" [ref=e845]
+            - cell "0" [ref=e846]
+            - cell "0" [ref=e847]
+            - cell "1" [ref=e848]
+            - cell "0" [ref=e849]
+            - cell "0" [ref=e850]
+            - cell [ref=e851]
+            - cell [ref=e852]
+          - row "Nathan Redmond 15 eng ENG FW,MF 29-158 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" [ref=e853]:
+            - rowheader "Nathan Redmond" [ref=e854]:
+              - link "Nathan Redmond" [ref=e855] [cursor=pointer]:
+                - /url: /en/players/ab651565/Nathan-Redmond
+            - cell "15" [ref=e856]
+            - cell "eng ENG" [ref=e857]:
+              - link "eng ENG" [ref=e858] [cursor=pointer]:
+                - /url: /en/country/ENG/England-Football
+                - generic [ref=e859]:
+                  - generic [ref=e860]: eng
+                  - text: ENG
+            - cell "FW,MF" [ref=e861]
+            - cell "29-158" [ref=e862]
+            - cell "1" [ref=e863]
+            - cell "0" [ref=e864]
+            - cell "0" [ref=e865]
+            - cell "0" [ref=e866]
+            - cell "0" [ref=e867]
+            - cell "0" [ref=e868]
+            - cell "0" [ref=e869]
+            - cell "0" [ref=e870]
+            - cell "0" [ref=e871]
+            - cell "0" [ref=e872]
+            - cell "0" [ref=e873]
+            - cell "0" [ref=e874]
+            - cell "0" [ref=e875]
+            - cell "0" [ref=e876]
+            - cell "0" [ref=e877]
+            - cell "0" [ref=e878]
+            - cell [ref=e879]
+            - cell [ref=e880]
+          - row "Josh Cullen 24 ie IRL CM 27-126 90 0 0 0 0 0 0 0 0 0 2 0 2 0 0 0" [ref=e881]:
+            - rowheader "Josh Cullen" [ref=e882]:
+              - link "Josh Cullen" [ref=e883] [cursor=pointer]:
+                - /url: /en/players/f6d7d690/Josh-Cullen
+            - cell "24" [ref=e884]
+            - cell "ie IRL" [ref=e885]:
+              - link "ie IRL" [ref=e886] [cursor=pointer]:
+                - /url: /en/country/IRL/Republic-of-Ireland-Football
+                - generic [ref=e887]:
+                  - generic [ref=e888]: ie
+                  - text: IRL
+            - cell "CM" [ref=e889]
+            - cell "27-126" [ref=e890]
+            - cell "90" [ref=e891]
+            - cell "0" [ref=e892]
+            - cell "0" [ref=e893]
+            - cell "0" [ref=e894]
+            - cell "0" [ref=e895]
+            - cell "0" [ref=e896]
+            - cell "0" [ref=e897]
+            - cell "0" [ref=e898]
+            - cell "0" [ref=e899]
+            - cell "0" [ref=e900]
+            - cell "2" [ref=e901]
+            - cell "0" [ref=e902]
+            - cell "2" [ref=e903]
+            - cell "0" [ref=e904]
+            - cell "0" [ref=e905]
+            - cell "0" [ref=e906]
+            - cell [ref=e907]
+            - cell [ref=e908]
+          - row "Sander Berge 16 no NOR CM 25-178 89 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0" [ref=e909]:
+            - rowheader "Sander Berge" [ref=e910]:
+              - link "Sander Berge" [ref=e911] [cursor=pointer]:
+                - /url: /en/players/d0b6129f/Sander-Berge
+            - cell "16" [ref=e912]
+            - cell "no NOR" [ref=e913]:
+              - link "no NOR" [ref=e914] [cursor=pointer]:
+                - /url: /en/country/NOR/Norway-Football
+                - generic [ref=e915]:
+                  - generic [ref=e916]: "no"
+                  - text: NOR
+            - cell "CM" [ref=e917]
+            - cell "25-178" [ref=e918]
+            - cell "89" [ref=e919]
+            - cell "0" [ref=e920]
+            - cell "0" [ref=e921]
+            - cell "0" [ref=e922]
+            - cell "0" [ref=e923]
+            - cell "0" [ref=e924]
+            - cell "0" [ref=e925]
+            - cell "0" [ref=e926]
+            - cell "0" [ref=e927]
+            - cell "2" [ref=e928]
+            - cell "0" [ref=e929]
+            - cell "0" [ref=e930]
+            - cell "0" [ref=e931]
+            - cell "0" [ref=e932]
+            - cell "0" [ref=e933]
+            - cell "0" [ref=e934]
+            - cell [ref=e935]
+            - cell [ref=e936]
+          - row "Josh Brownhill 8 eng ENG MF 27-235 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" [ref=e937]:
+            - rowheader "Josh Brownhill" [ref=e938]:
+              - link "Josh Brownhill" [ref=e939] [cursor=pointer]:
+                - /url: /en/players/47369df8/Josh-Brownhill
+            - cell "8" [ref=e940]
+            - cell "eng ENG" [ref=e941]:
+              - link "eng ENG" [ref=e942] [cursor=pointer]:
+                - /url: /en/country/ENG/England-Football
+                - generic [ref=e943]:
+                  - generic [ref=e944]: eng
+                  - text: ENG
+            - cell "MF" [ref=e945]
+            - cell "27-235" [ref=e946]
+            - cell "1" [ref=e947]
+            - cell "0" [ref=e948]
+            - cell "0" [ref=e949]
+            - cell "0" [ref=e950]
+            - cell "0" [ref=e951]
+            - cell "0" [ref=e952]
+            - cell "0" [ref=e953]
+            - cell "0" [ref=e954]
+            - cell "0" [ref=e955]
+            - cell "0" [ref=e956]
+            - cell "0" [ref=e957]
+            - cell "0" [ref=e958]
+            - cell "0" [ref=e959]
+            - cell "0" [ref=e960]
+            - cell "0" [ref=e961]
+            - cell "0" [ref=e962]
+            - cell [ref=e963]
+            - cell [ref=e964]
+          - row "Luca Koleosho 30 it ITA RM 18-330 60 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0" [ref=e965]:
+            - rowheader "Luca Koleosho" [ref=e966]:
+              - link "Luca Koleosho" [ref=e967] [cursor=pointer]:
+                - /url: /en/players/fc076f78/Luca-Koleosho
+            - cell "30" [ref=e968]
+            - cell "it ITA" [ref=e969]:
+              - link "it ITA" [ref=e970] [cursor=pointer]:
+                - /url: /en/country/ITA/Italy-Football
+                - generic [ref=e971]:
+                  - generic [ref=e972]: it
+                  - text: ITA
+            - cell "RM" [ref=e973]
+            - cell "18-330" [ref=e974]
+            - cell "60" [ref=e975]
+            - cell "0" [ref=e976]
+            - cell "0" [ref=e977]
+            - cell "0" [ref=e978]
+            - cell "0" [ref=e979]
+            - cell "1" [ref=e980]
+            - cell "0" [ref=e981]
+            - cell "0" [ref=e982]
+            - cell "0" [ref=e983]
+            - cell "1" [ref=e984]
+            - cell "0" [ref=e985]
+            - cell "0" [ref=e986]
+            - cell "0" [ref=e987]
+            - cell "0" [ref=e988]
+            - cell "0" [ref=e989]
+            - cell "0" [ref=e990]
+            - cell [ref=e991]
+            - cell [ref=e992]
+          - row "Jacob Bruun Larsen 34 dk DEN FW,MF 24-326 30 0 0 0 0 1 0 0 0 2 0 0 0 0 0 0" [ref=e993]:
+            - rowheader "Jacob Bruun Larsen" [ref=e994]:
+              - link "Jacob Bruun Larsen" [ref=e995] [cursor=pointer]:
+                - /url: /en/players/4e204552/Jacob-Bruun-Larsen
+            - cell "34" [ref=e996]
+            - cell "dk DEN" [ref=e997]:
+              - link "dk DEN" [ref=e998] [cursor=pointer]:
+                - /url: /en/country/DEN/Denmark-Football
+                - generic [ref=e999]:
+                  - generic [ref=e1000]: dk
+                  - text: DEN
+            - cell "FW,MF" [ref=e1001]
+            - cell "24-326" [ref=e1002]
+            - cell "30" [ref=e1003]
+            - cell "0" [ref=e1004]
+            - cell "0" [ref=e1005]
+            - cell "0" [ref=e1006]
+            - cell "0" [ref=e1007]
+            - cell "1" [ref=e1008]
+            - cell "0" [ref=e1009]
+            - cell "0" [ref=e1010]
+            - cell "0" [ref=e1011]
+            - cell "2" [ref=e1012]
+            - cell "0" [ref=e1013]
+            - cell "0" [ref=e1014]
+            - cell "0" [ref=e1015]
+            - cell "0" [ref=e1016]
+            - cell "0" [ref=e1017]
+            - cell "0" [ref=e1018]
+            - cell [ref=e1019]
+            - cell [ref=e1020]
+          - row "Vitinho 22 br BRA LB 24-019 90 0 0 0 0 0 0 0 0 1 1 0 0 0 1 0" [ref=e1021]:
+            - rowheader "Vitinho" [ref=e1022]:
+              - link "Vitinho" [ref=e1023] [cursor=pointer]:
+                - /url: /en/players/9295dc1c/Vitinho
+            - cell "22" [ref=e1024]
+            - cell "br BRA" [ref=e1025]:
+              - link "br BRA" [ref=e1026] [cursor=pointer]:
+                - /url: /en/country/BRA/Brazil-Football
+                - generic [ref=e1027]:
+                  - generic [ref=e1028]: br
+                  - text: BRA
+            - cell "LB" [ref=e1029]
+            - cell "24-019" [ref=e1030]
+            - cell "90" [ref=e1031]
+            - cell "0" [ref=e1032]
+            - cell "0" [ref=e1033]
+            - cell "0" [ref=e1034]
+            - cell "0" [ref=e1035]
+            - cell "0" [ref=e1036]
+            - cell "0" [ref=e1037]
+            - cell "0" [ref=e1038]
+            - cell "0" [ref=e1039]
+            - cell "1" [ref=e1040]
+            - cell "1" [ref=e1041]
+            - cell "0" [ref=e1042]
+            - cell "0" [ref=e1043]
+            - cell "0" [ref=e1044]
+            - cell "1" [ref=e1045]
+            - cell "0" [ref=e1046]
+            - cell [ref=e1047]
+            - cell [ref=e1048]
+          - row "Jordan Beyer 5 de GER CB 23-084 73 0 0 0 0 0 0 0 0 1 0 0 0 4 4 0" [ref=e1049]:
+            - rowheader "Jordan Beyer" [ref=e1050]:
+              - link "Jordan Beyer" [ref=e1051] [cursor=pointer]:
+                - /url: /en/players/9af1f9ff/Jordan-Beyer
+            - cell "5" [ref=e1052]
+            - cell "de GER" [ref=e1053]:
+              - link "de GER" [ref=e1054] [cursor=pointer]:
+                - /url: /en/country/GER/Germany-Football
+                - generic [ref=e1055]:
+                  - generic [ref=e1056]: de
+                  - text: GER
+            - cell "CB" [ref=e1057]
+            - cell "23-084" [ref=e1058]
+            - cell "73" [ref=e1059]
+            - cell "0" [ref=e1060]
+            - cell "0" [ref=e1061]
+            - cell "0" [ref=e1062]
+            - cell "0" [ref=e1063]
+            - cell "0" [ref=e1064]
+            - cell "0" [ref=e1065]
+            - cell "0" [ref=e1066]
+            - cell "0" [ref=e1067]
+            - cell "1" [ref=e1068]
+            - cell "0" [ref=e1069]
+            - cell "0" [ref=e1070]
+            - cell "0" [ref=e1071]
+            - cell "4" [ref=e1072]
+            - cell "4" [ref=e1073]
+            - cell "0" [ref=e1074]
+            - cell [ref=e1075]
+            - cell [ref=e1076]
+          - row "Benson Manuel 10 ao ANG FW,MF 26-136 17 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0" [ref=e1077]:
+            - rowheader "Benson Manuel" [ref=e1078]:
+              - link "Benson Manuel" [ref=e1079] [cursor=pointer]:
+                - /url: /en/players/d7f99582/Benson-Manuel
+            - cell "10" [ref=e1080]
+            - cell "ao ANG" [ref=e1081]:
+              - link "ao ANG" [ref=e1082] [cursor=pointer]:
+                - /url: /en/country/ANG/Angola-Football
+                - generic [ref=e1083]:
+                  - generic [ref=e1084]: ao
+                  - text: ANG
+            - cell "FW,MF" [ref=e1085]
+            - cell "26-136" [ref=e1086]
+            - cell "17" [ref=e1087]
+            - cell "0" [ref=e1088]
+            - cell "0" [ref=e1089]
+            - cell "0" [ref=e1090]
+            - cell "0" [ref=e1091]
+            - cell "0" [ref=e1092]
+            - cell "0" [ref=e1093]
+            - cell "0" [ref=e1094]
+            - cell "0" [ref=e1095]
+            - cell "0" [ref=e1096]
+            - cell "0" [ref=e1097]
+            - cell "0" [ref=e1098]
+            - cell "1" [ref=e1099]
+            - cell "0" [ref=e1100]
+            - cell "0" [ref=e1101]
+            - cell "0" [ref=e1102]
+            - cell [ref=e1103]
+            - cell [ref=e1104]
+          - row "Dara O'Shea 2 ie IRL CB 24-160 90 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0" [ref=e1105]:
+            - rowheader "Dara O'Shea" [ref=e1106]:
+              - link "Dara O'Shea" [ref=e1107] [cursor=pointer]:
+                - /url: /en/players/1d042188/Dara-OShea
+            - cell "2" [ref=e1108]
+            - cell "ie IRL" [ref=e1109]:
+              - link "ie IRL" [ref=e1110] [cursor=pointer]:
+                - /url: /en/country/IRL/Republic-of-Ireland-Football
+                - generic [ref=e1111]:
+                  - generic [ref=e1112]: ie
+                  - text: IRL
+            - cell "CB" [ref=e1113]
+            - cell "24-160" [ref=e1114]
+            - cell "90" [ref=e1115]
+            - cell "0" [ref=e1116]
+            - cell "0" [ref=e1117]
+            - cell "0" [ref=e1118]
+            - cell "0" [ref=e1119]
+            - cell "0" [ref=e1120]
+            - cell "0" [ref=e1121]
+            - cell "0" [ref=e1122]
+            - cell "0" [ref=e1123]
+            - cell "0" [ref=e1124]
+            - cell "1" [ref=e1125]
+            - cell "0" [ref=e1126]
+            - cell "0" [ref=e1127]
+            - cell "0" [ref=e1128]
+            - cell "1" [ref=e1129]
+            - cell "0" [ref=e1130]
+            - cell [ref=e1131]
+            - cell [ref=e1132]
+          - row "Ameen Al-Dakhil 28 be BEL CB 21-158 90 0 0 0 0 0 0 0 0 1 1 0 0 1 1 0" [ref=e1133]:
+            - rowheader "Ameen Al-Dakhil" [ref=e1134]:
+              - link "Ameen Al-Dakhil" [ref=e1135] [cursor=pointer]:
+                - /url: /en/players/93e08bce/Ameen-Al-Dakhil
+            - cell "28" [ref=e1136]
+            - cell "be BEL" [ref=e1137]:
+              - link "be BEL" [ref=e1138] [cursor=pointer]:
+                - /url: /en/country/BEL/Belgium-Football
+                - generic [ref=e1139]:
+                  - generic [ref=e1140]: be
+                  - text: BEL
+            - cell "CB" [ref=e1141]
+            - cell "21-158" [ref=e1142]
+            - cell "90" [ref=e1143]
+            - cell "0" [ref=e1144]
+            - cell "0" [ref=e1145]
+            - cell "0" [ref=e1146]
+            - cell "0" [ref=e1147]
+            - cell "0" [ref=e1148]
+            - cell "0" [ref=e1149]
+            - cell "0" [ref=e1150]
+            - cell "0" [ref=e1151]
+            - cell "1" [ref=e1152]
+            - cell "1" [ref=e1153]
+            - cell "0" [ref=e1154]
+            - cell "0" [ref=e1155]
+            - cell "1" [ref=e1156]
+            - cell "1" [ref=e1157]
+            - cell "0" [ref=e1158]
+            - cell [ref=e1159]
+            - cell [ref=e1160]
+          - row "Connor Roberts 14 wls WAL RB 27-322 90 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0" [ref=e1161]:
+            - rowheader "Connor Roberts" [ref=e1162]:
+              - link "Connor Roberts" [ref=e1163] [cursor=pointer]:
+                - /url: /en/players/24fae784/Connor-Roberts
+            - cell "14" [ref=e1164]
+            - cell "wls WAL" [ref=e1165]:
+              - link "wls WAL" [ref=e1166] [cursor=pointer]:
+                - /url: /en/country/WAL/Wales-Football
+                - generic [ref=e1167]:
+                  - generic [ref=e1168]: wls
+                  - text: WAL
+            - cell "RB" [ref=e1169]
+            - cell "27-322" [ref=e1170]
+            - cell "90" [ref=e1171]
+            - cell "0" [ref=e1172]
+            - cell "0" [ref=e1173]
+            - cell "0" [ref=e1174]
+            - cell "0" [ref=e1175]
+            - cell "0" [ref=e1176]
+            - cell "0" [ref=e1177]
+            - cell "0" [ref=e1178]
+            - cell "0" [ref=e1179]
+            - cell "1" [ref=e1180]
+            - cell "0" [ref=e1181]
+            - cell "0" [ref=e1182]
+            - cell "0" [ref=e1183]
+            - cell "1" [ref=e1184]
+            - cell "0" [ref=e1185]
+            - cell "0" [ref=e1186]
+            - cell [ref=e1187]
+            - cell [ref=e1188]
+          - row "James Trafford 1 eng ENG GK 20-305 90 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" [ref=e1189]:
+            - rowheader "James Trafford" [ref=e1190]:
+              - link "James Trafford" [ref=e1191] [cursor=pointer]:
+                - /url: /en/players/259fea27/James-Trafford
+            - cell "1" [ref=e1192]
+            - cell "eng ENG" [ref=e1193]:
+              - link "eng ENG" [ref=e1194] [cursor=pointer]:
+                - /url: /en/country/ENG/England-Football
+                - generic [ref=e1195]:
+                  - generic [ref=e1196]: eng
+                  - text: ENG
+            - cell "GK" [ref=e1197]
+            - cell "20-305" [ref=e1198]
+            - cell "90" [ref=e1199]
+            - cell "0" [ref=e1200]
+            - cell "0" [ref=e1201]
+            - cell "0" [ref=e1202]
+            - cell "0" [ref=e1203]
+            - cell "0" [ref=e1204]
+            - cell "0" [ref=e1205]
+            - cell "0" [ref=e1206]
+            - cell "0" [ref=e1207]
+            - cell "0" [ref=e1208]
+            - cell "0" [ref=e1209]
+            - cell "0" [ref=e1210]
+            - cell "0" [ref=e1211]
+            - cell "0" [ref=e1212]
+            - cell "0" [ref=e1213]
+            - cell "0" [ref=e1214]
+            - cell [ref=e1215]
+            - cell [ref=e1216]
+        - rowgroup [ref=e1217]:
+          - row "16 Players 989 0 0 0 0 6 1 0 1 11 8 0 7 8 7 0" [ref=e1218]:
+            - rowheader "16 Players" [ref=e1219]
+            - cell [ref=e1220]
+            - cell [ref=e1221]
+            - cell [ref=e1222]
+            - cell [ref=e1223]
+            - cell "989" [ref=e1224]
+            - cell "0" [ref=e1225]
+            - cell "0" [ref=e1226]
+            - cell "0" [ref=e1227]
+            - cell "0" [ref=e1228]
+            - cell "6" [ref=e1229]
+            - cell "1" [ref=e1230]
+            - cell "0" [ref=e1231]
+            - cell "1" [ref=e1232]
+            - cell "11" [ref=e1233]
+            - cell "8" [ref=e1234]
+            - cell "0" [ref=e1235]
+            - cell "7" [ref=e1236]
+            - cell "8" [ref=e1237]
+            - cell "7" [ref=e1238]
+            - cell "0" [ref=e1239]
+            - cell [ref=e1240]
+            - cell [ref=e1241]
+    - generic [ref=e1242]:
+      - generic [ref=e1243]:
+        - heading "Burnley Goalkeeper Stats" [level=2] [ref=e1244]
+        - list [ref=e1246]:
+          - listitem [ref=e1247]:
+            - button "Glossary" [ref=e1248] [cursor=pointer]
+      - table "Burnley Goalkeeper Stats Table" [ref=e1250]:
+        - rowgroup [ref=e1260]:
+          - row "Shot Stopping" [ref=e1261]:
+            - columnheader [ref=e1262] [cursor=pointer]
+            - columnheader "Shot Stopping" [ref=e1263] [cursor=pointer]
+          - row "Player Nation Age Minutes Shots on Target Against Goals Against Saves Save Percentage" [ref=e1264]:
+            - columnheader "Player" [ref=e1265] [cursor=pointer]
+            - columnheader "Nation" [ref=e1266] [cursor=pointer]
+            - columnheader "Age" [ref=e1267] [cursor=pointer]
+            - columnheader "Minutes" [ref=e1268] [cursor=pointer]: Min
+            - columnheader "Shots on Target Against" [ref=e1269] [cursor=pointer]: SoTA
+            - columnheader "Goals Against" [ref=e1270] [cursor=pointer]: GA
+            - columnheader "Saves" [ref=e1271] [cursor=pointer]
+            - columnheader "Save Percentage" [ref=e1272] [cursor=pointer]: Save%
+        - rowgroup [ref=e1273]:
+          - row "James Trafford eng ENG 20-305 90 8 3 5 62.5" [ref=e1274]:
+            - rowheader "James Trafford" [ref=e1275]:
+              - link "James Trafford" [ref=e1276] [cursor=pointer]:
+                - /url: /en/players/259fea27/
+            - cell "eng ENG" [ref=e1277]:
+              - link "eng ENG" [ref=e1278] [cursor=pointer]:
+                - /url: /en/country/ENG/England-Football
+                - generic [ref=e1279]:
+                  - generic [ref=e1280]: eng
+                  - text: ENG
+            - cell "20-305" [ref=e1281]
+            - cell "90" [ref=e1282]
+            - cell "8" [ref=e1283]
+            - cell "3" [ref=e1284]
+            - cell "5" [ref=e1285]
+            - cell "62.5" [ref=e1286]
+    - generic [ref=e1287]:
+      - generic [ref=e1288]:
+        - heading "Manchester City Player Stats" [level=2] [ref=e1289]
+        - list [ref=e1291]:
+          - listitem [ref=e1292]:
+            - button "Glossary" [ref=e1293] [cursor=pointer]
+      - table "Manchester City Player Stats Table" [ref=e1295]:
+        - rowgroup [ref=e1320]:
+          - row "Performance" [ref=e1321]:
+            - columnheader [ref=e1322] [cursor=pointer]
+            - columnheader "Performance" [ref=e1323] [cursor=pointer]
+          - row "Player Shirt Number Nation Position Age Minutes Goals Assists Penalty Kicks Made Penalty Kicks Attempted Shots Total Shots on Target Yellow Cards Red Cards Fouls Committed Fouls Drawn Offsides Crosses Tackles Won Interceptions Own Goals Penalty Kicks Won Penalty Kicks Conceded" [ref=e1324]:
+            - columnheader "Player" [ref=e1325] [cursor=pointer]
+            - columnheader "Shirt Number" [ref=e1326] [cursor=pointer]: "#"
+            - columnheader "Nation" [ref=e1327] [cursor=pointer]
+            - columnheader "Position" [ref=e1328] [cursor=pointer]: Pos
+            - columnheader "Age" [ref=e1329] [cursor=pointer]
+            - columnheader "Minutes" [ref=e1330] [cursor=pointer]: Min
+            - columnheader "Goals" [ref=e1331] [cursor=pointer]: Gls
+            - columnheader "Assists" [ref=e1332] [cursor=pointer]: Ast
+            - columnheader "Penalty Kicks Made" [ref=e1333] [cursor=pointer]: PK
+            - columnheader "Penalty Kicks Attempted" [ref=e1334] [cursor=pointer]: PKatt
+            - columnheader "Shots Total" [ref=e1335] [cursor=pointer]: Sh
+            - columnheader "Shots on Target" [ref=e1336] [cursor=pointer]: SoT
+            - columnheader "Yellow Cards" [ref=e1337] [cursor=pointer]: CrdY
+            - columnheader "Red Cards" [ref=e1338] [cursor=pointer]: CrdR
+            - columnheader "Fouls Committed" [ref=e1339] [cursor=pointer]: Fls
+            - columnheader "Fouls Drawn" [ref=e1340] [cursor=pointer]: Fld
+            - columnheader "Offsides" [ref=e1341] [cursor=pointer]: "Off"
+            - columnheader "Crosses" [ref=e1342] [cursor=pointer]: Crs
+            - columnheader "Tackles Won" [ref=e1343] [cursor=pointer]: TklW
+            - columnheader "Interceptions" [ref=e1344] [cursor=pointer]: Int
+            - columnheader "Own Goals" [ref=e1345] [cursor=pointer]: OG
+            - columnheader "Penalty Kicks Won" [ref=e1346] [cursor=pointer]: PKwon
+            - columnheader "Penalty Kicks Conceded" [ref=e1347] [cursor=pointer]: PKcon
+        - rowgroup [ref=e1348]:
+          - row "Erling Haaland 9 no NOR FW 23-021 79 2 0 0 0 4 2 0 0 1 2 0 0 0 0 0" [ref=e1349]:
+            - rowheader "Erling Haaland" [ref=e1350]:
+              - link "Erling Haaland" [ref=e1351] [cursor=pointer]:
+                - /url: /en/players/1f44ac21/Erling-Haaland
+            - cell "9" [ref=e1352]
+            - cell "no NOR" [ref=e1353]:
+              - link "no NOR" [ref=e1354] [cursor=pointer]:
+                - /url: /en/country/NOR/Norway-Football
+                - generic [ref=e1355]:
+                  - generic [ref=e1356]: "no"
+                  - text: NOR
+            - cell "FW" [ref=e1357]
+            - cell "23-021" [ref=e1358]
+            - cell "79" [ref=e1359]
+            - cell "2" [ref=e1360]
+            - cell "0" [ref=e1361]
+            - cell "0" [ref=e1362]
+            - cell "0" [ref=e1363]
+            - cell "4" [ref=e1364]
+            - cell "2" [ref=e1365]
+            - cell "0" [ref=e1366]
+            - cell "0" [ref=e1367]
+            - cell "1" [ref=e1368]
+            - cell "2" [ref=e1369]
+            - cell "0" [ref=e1370]
+            - cell "0" [ref=e1371]
+            - cell "0" [ref=e1372]
+            - cell "0" [ref=e1373]
+            - cell "0" [ref=e1374]
+            - cell [ref=e1375]
+            - cell [ref=e1376]
+          - row "Cole Palmer 80 eng ENG FW,MF 21-097 11 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0" [ref=e1377]:
+            - rowheader "Cole Palmer" [ref=e1378]:
+              - link "Cole Palmer" [ref=e1379] [cursor=pointer]:
+                - /url: /en/players/dc7f8a28/Cole-Palmer
+            - cell "80" [ref=e1380]
+            - cell "eng ENG" [ref=e1381]:
+              - link "eng ENG" [ref=e1382] [cursor=pointer]:
+                - /url: /en/country/ENG/England-Football
+                - generic [ref=e1383]:
+                  - generic [ref=e1384]: eng
+                  - text: ENG
+            - cell "FW,MF" [ref=e1385]
+            - cell "21-097" [ref=e1386]
+            - cell "11" [ref=e1387]
+            - cell "0" [ref=e1388]
+            - cell "0" [ref=e1389]
+            - cell "0" [ref=e1390]
+            - cell "0" [ref=e1391]
+            - cell "0" [ref=e1392]
+            - cell "0" [ref=e1393]
+            - cell "0" [ref=e1394]
+            - cell "0" [ref=e1395]
+            - cell "1" [ref=e1396]
+            - cell "0" [ref=e1397]
+            - cell "0" [ref=e1398]
+            - cell "0" [ref=e1399]
+            - cell "0" [ref=e1400]
+            - cell "0" [ref=e1401]
+            - cell "0" [ref=e1402]
+            - cell [ref=e1403]
+            - cell [ref=e1404]
+          - row "Phil Foden 47 eng ENG AM 23-075 90 0 0 0 0 3 1 0 0 0 1 0 3 0 1 0" [ref=e1405]:
+            - rowheader "Phil Foden" [ref=e1406]:
+              - link "Phil Foden" [ref=e1407] [cursor=pointer]:
+                - /url: /en/players/ed1e53f3/Phil-Foden
+            - cell "47" [ref=e1408]
+            - cell "eng ENG" [ref=e1409]:
+              - link "eng ENG" [ref=e1410] [cursor=pointer]:
+                - /url: /en/country/ENG/England-Football
+                - generic [ref=e1411]:
+                  - generic [ref=e1412]: eng
+                  - text: ENG
+            - cell "AM" [ref=e1413]
+            - cell "23-075" [ref=e1414]
+            - cell "90" [ref=e1415]
+            - cell "0" [ref=e1416]
+            - cell "0" [ref=e1417]
+            - cell "0" [ref=e1418]
+            - cell "0" [ref=e1419]
+            - cell "3" [ref=e1420]
+            - cell "1" [ref=e1421]
+            - cell "0" [ref=e1422]
+            - cell "0" [ref=e1423]
+            - cell "0" [ref=e1424]
+            - cell "1" [ref=e1425]
+            - cell "0" [ref=e1426]
+            - cell "3" [ref=e1427]
+            - cell "0" [ref=e1428]
+            - cell "1" [ref=e1429]
+            - cell "0" [ref=e1430]
+            - cell [ref=e1431]
+            - cell [ref=e1432]
+          - row "Julián Álvarez 19 ar ARG AM 23-192 90 0 1 0 0 3 1 0 0 1 1 0 5 1 0 0" [ref=e1433]:
+            - rowheader "Julián Álvarez" [ref=e1434]:
+              - link "Julián Álvarez" [ref=e1435] [cursor=pointer]:
+                - /url: /en/players/15ab5a2b/Julian-Alvarez
+            - cell "19" [ref=e1436]
+            - cell "ar ARG" [ref=e1437]:
+              - link "ar ARG" [ref=e1438] [cursor=pointer]:
+                - /url: /en/country/ARG/Argentina-Football
+                - generic [ref=e1439]:
+                  - generic [ref=e1440]: ar
+                  - text: ARG
+            - cell "AM" [ref=e1441]
+            - cell "23-192" [ref=e1442]
+            - cell "90" [ref=e1443]
+            - cell "0" [ref=e1444]
+            - cell "1" [ref=e1445]
+            - cell "0" [ref=e1446]
+            - cell "0" [ref=e1447]
+            - cell "3" [ref=e1448]
+            - cell "1" [ref=e1449]
+            - cell "0" [ref=e1450]
+            - cell "0" [ref=e1451]
+            - cell "1" [ref=e1452]
+            - cell "1" [ref=e1453]
+            - cell "0" [ref=e1454]
+            - cell "5" [ref=e1455]
+            - cell "1" [ref=e1456]
+            - cell "0" [ref=e1457]
+            - cell "0" [ref=e1458]
+            - cell [ref=e1459]
+            - cell [ref=e1460]
+          - row "Bernardo Silva 20 pt POR AM 29-001 90 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0" [ref=e1461]:
+            - rowheader "Bernardo Silva" [ref=e1462]:
+              - link "Bernardo Silva" [ref=e1463] [cursor=pointer]:
+                - /url: /en/players/3eb22ec9/Bernardo-Silva
+            - cell "20" [ref=e1464]
+            - cell "pt POR" [ref=e1465]:
+              - link "pt POR" [ref=e1466] [cursor=pointer]:
+                - /url: /en/country/POR/Portugal-Football
+                - generic [ref=e1467]:
+                  - generic [ref=e1468]: pt
+                  - text: POR
+            - cell "AM" [ref=e1469]
+            - cell "29-001" [ref=e1470]
+            - cell "90" [ref=e1471]
+            - cell "0" [ref=e1472]
+            - cell "0" [ref=e1473]
+            - cell "0" [ref=e1474]
+            - cell "0" [ref=e1475]
+            - cell "0" [ref=e1476]
+            - cell "0" [ref=e1477]
+            - cell "0" [ref=e1478]
+            - cell "0" [ref=e1479]
+            - cell "0" [ref=e1480]
+            - cell "0" [ref=e1481]
+            - cell "0" [ref=e1482]
+            - cell "3" [ref=e1483]
+            - cell "0" [ref=e1484]
+            - cell "0" [ref=e1485]
+            - cell "0" [ref=e1486]
+            - cell [ref=e1487]
+            - cell [ref=e1488]
+          - row "Rodri 16 es ESP DM 27-050 90 1 1 0 0 4 3 0 0 2 0 1 0 3 0 0" [ref=e1489]:
+            - rowheader "Rodri" [ref=e1490]:
+              - link "Rodri" [ref=e1491] [cursor=pointer]:
+                - /url: /en/players/6434f10d/Rodri
+            - cell "16" [ref=e1492]
+            - cell "es ESP" [ref=e1493]:
+              - link "es ESP" [ref=e1494] [cursor=pointer]:
+                - /url: /en/country/ESP/Spain-Football
+                - generic [ref=e1495]:
+                  - generic [ref=e1496]: es
+                  - text: ESP
+            - cell "DM" [ref=e1497]
+            - cell "27-050" [ref=e1498]
+            - cell "90" [ref=e1499]
+            - cell "1" [ref=e1500]
+            - cell "1" [ref=e1501]
+            - cell "0" [ref=e1502]
+            - cell "0" [ref=e1503]
+            - cell "4" [ref=e1504]
+            - cell "3" [ref=e1505]
+            - cell "0" [ref=e1506]
+            - cell "0" [ref=e1507]
+            - cell "2" [ref=e1508]
+            - cell "0" [ref=e1509]
+            - cell "1" [ref=e1510]
+            - cell "0" [ref=e1511]
+            - cell "3" [ref=e1512]
+            - cell "0" [ref=e1513]
+            - cell "0" [ref=e1514]
+            - cell [ref=e1515]
+            - cell [ref=e1516]
+          - row "Kevin De Bruyne 17 be BEL DM 32-044 22 0 0 0 0 1 0 0 0 1 0 0 3 0 0 0" [ref=e1517]:
+            - rowheader "Kevin De Bruyne" [ref=e1518]:
+              - link "Kevin De Bruyne" [ref=e1519] [cursor=pointer]:
+                - /url: /en/players/e46012d4/Kevin-De-Bruyne
+            - cell "17" [ref=e1520]
+            - cell "be BEL" [ref=e1521]:
+              - link "be BEL" [ref=e1522] [cursor=pointer]:
+                - /url: /en/country/BEL/Belgium-Football
+                - generic [ref=e1523]:
+                  - generic [ref=e1524]: be
+                  - text: BEL
+            - cell "DM" [ref=e1525]
+            - cell "32-044" [ref=e1526]
+            - cell "22" [ref=e1527]
+            - cell "0" [ref=e1528]
+            - cell "0" [ref=e1529]
+            - cell "0" [ref=e1530]
+            - cell "0" [ref=e1531]
+            - cell "1" [ref=e1532]
+            - cell "0" [ref=e1533]
+            - cell "0" [ref=e1534]
+            - cell "0" [ref=e1535]
+            - cell "1" [ref=e1536]
+            - cell "0" [ref=e1537]
+            - cell "0" [ref=e1538]
+            - cell "3" [ref=e1539]
+            - cell "0" [ref=e1540]
+            - cell "0" [ref=e1541]
+            - cell "0" [ref=e1542]
+            - cell [ref=e1543]
+            - cell [ref=e1544]
+          - row "Mateo Kovačić 8 hr CRO MF 29-097 68 0 0 0 0 0 0 0 0 1 2 0 0 2 0 0" [ref=e1545]:
+            - rowheader "Mateo Kovačić" [ref=e1546]:
+              - link "Mateo Kovačić" [ref=e1547] [cursor=pointer]:
+                - /url: /en/players/79c0821a/Mateo-Kovacic
+            - cell "8" [ref=e1548]
+            - cell "hr CRO" [ref=e1549]:
+              - link "hr CRO" [ref=e1550] [cursor=pointer]:
+                - /url: /en/country/CRO/Croatia-Football
+                - generic [ref=e1551]:
+                  - generic [ref=e1552]: hr
+                  - text: CRO
+            - cell "MF" [ref=e1553]
+            - cell "29-097" [ref=e1554]
+            - cell "68" [ref=e1555]
+            - cell "0" [ref=e1556]
+            - cell "0" [ref=e1557]
+            - cell "0" [ref=e1558]
+            - cell "0" [ref=e1559]
+            - cell "0" [ref=e1560]
+            - cell "0" [ref=e1561]
+            - cell "0" [ref=e1562]
+            - cell "0" [ref=e1563]
+            - cell "1" [ref=e1564]
+            - cell "2" [ref=e1565]
+            - cell "0" [ref=e1566]
+            - cell "0" [ref=e1567]
+            - cell "2" [ref=e1568]
+            - cell "0" [ref=e1569]
+            - cell "0" [ref=e1570]
+            - cell [ref=e1571]
+            - cell [ref=e1572]
+          - row "Rico Lewis 82 eng ENG LB 18-263 78 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0" [ref=e1573]:
+            - rowheader "Rico Lewis" [ref=e1574]:
+              - link "Rico Lewis" [ref=e1575] [cursor=pointer]:
+                - /url: /en/players/b57e066e/Rico-Lewis
+            - cell "82" [ref=e1576]
+            - cell "eng ENG" [ref=e1577]:
+              - link "eng ENG" [ref=e1578] [cursor=pointer]:
+                - /url: /en/country/ENG/England-Football
+                - generic [ref=e1579]:
+                  - generic [ref=e1580]: eng
+                  - text: ENG
+            - cell "LB" [ref=e1581]
+            - cell "18-263" [ref=e1582]
+            - cell "78" [ref=e1583]
+            - cell "0" [ref=e1584]
+            - cell "0" [ref=e1585]
+            - cell "0" [ref=e1586]
+            - cell "0" [ref=e1587]
+            - cell "0" [ref=e1588]
+            - cell "0" [ref=e1589]
+            - cell "0" [ref=e1590]
+            - cell "0" [ref=e1591]
+            - cell "0" [ref=e1592]
+            - cell "1" [ref=e1593]
+            - cell "0" [ref=e1594]
+            - cell "0" [ref=e1595]
+            - cell "0" [ref=e1596]
+            - cell "1" [ref=e1597]
+            - cell "0" [ref=e1598]
+            - cell [ref=e1599]
+            - cell [ref=e1600]
+          - row "Joško Gvardiol 24 hr CRO DF 21-200 12 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0" [ref=e1601]:
+            - rowheader "Joško Gvardiol" [ref=e1602]:
+              - link "Joško Gvardiol" [ref=e1603] [cursor=pointer]:
+                - /url: /en/players/5ad50391/Josko-Gvardiol
+            - cell "24" [ref=e1604]
+            - cell "hr CRO" [ref=e1605]:
+              - link "hr CRO" [ref=e1606] [cursor=pointer]:
+                - /url: /en/country/CRO/Croatia-Football
+                - generic [ref=e1607]:
+                  - generic [ref=e1608]: hr
+                  - text: CRO
+            - cell "DF" [ref=e1609]
+            - cell "21-200" [ref=e1610]
+            - cell "12" [ref=e1611]
+            - cell "0" [ref=e1612]
+            - cell "0" [ref=e1613]
+            - cell "0" [ref=e1614]
+            - cell "0" [ref=e1615]
+            - cell "0" [ref=e1616]
+            - cell "0" [ref=e1617]
+            - cell "0" [ref=e1618]
+            - cell "0" [ref=e1619]
+            - cell "0" [ref=e1620]
+            - cell "0" [ref=e1621]
+            - cell "0" [ref=e1622]
+            - cell "0" [ref=e1623]
+            - cell "2" [ref=e1624]
+            - cell "0" [ref=e1625]
+            - cell "0" [ref=e1626]
+            - cell [ref=e1627]
+            - cell [ref=e1628]
+          - row "Nathan Aké 6 nl NED CB 28-174 78 0 0 0 0 1 0 0 0 0 1 0 0 3 2 0" [ref=e1629]:
+            - rowheader "Nathan Aké" [ref=e1630]:
+              - link "Nathan Aké" [ref=e1631] [cursor=pointer]:
+                - /url: /en/players/eaeca114/Nathan-Ake
+            - cell "6" [ref=e1632]
+            - cell "nl NED" [ref=e1633]:
+              - link "nl NED" [ref=e1634] [cursor=pointer]:
+                - /url: /en/country/NED/Netherlands-Football
+                - generic [ref=e1635]:
+                  - generic [ref=e1636]: nl
+                  - text: NED
+            - cell "CB" [ref=e1637]
+            - cell "28-174" [ref=e1638]
+            - cell "78" [ref=e1639]
+            - cell "0" [ref=e1640]
+            - cell "0" [ref=e1641]
+            - cell "0" [ref=e1642]
+            - cell "0" [ref=e1643]
+            - cell "1" [ref=e1644]
+            - cell "0" [ref=e1645]
+            - cell "0" [ref=e1646]
+            - cell "0" [ref=e1647]
+            - cell "0" [ref=e1648]
+            - cell "1" [ref=e1649]
+            - cell "0" [ref=e1650]
+            - cell "0" [ref=e1651]
+            - cell "3" [ref=e1652]
+            - cell "2" [ref=e1653]
+            - cell "0" [ref=e1654]
+            - cell [ref=e1655]
+            - cell [ref=e1656]
+          - row "Aymeric Laporte 14 es ESP DF 29-076 12 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0" [ref=e1657]:
+            - rowheader "Aymeric Laporte" [ref=e1658]:
+              - link "Aymeric Laporte" [ref=e1659] [cursor=pointer]:
+                - /url: /en/players/119b9a8e/Aymeric-Laporte
+            - cell "14" [ref=e1660]
+            - cell "es ESP" [ref=e1661]:
+              - link "es ESP" [ref=e1662] [cursor=pointer]:
+                - /url: /en/country/ESP/Spain-Football
+                - generic [ref=e1663]:
+                  - generic [ref=e1664]: es
+                  - text: ESP
+            - cell "DF" [ref=e1665]
+            - cell "29-076" [ref=e1666]
+            - cell "12" [ref=e1667]
+            - cell "0" [ref=e1668]
+            - cell "0" [ref=e1669]
+            - cell "0" [ref=e1670]
+            - cell "0" [ref=e1671]
+            - cell "1" [ref=e1672]
+            - cell "1" [ref=e1673]
+            - cell "0" [ref=e1674]
+            - cell "0" [ref=e1675]
+            - cell "0" [ref=e1676]
+            - cell "0" [ref=e1677]
+            - cell "0" [ref=e1678]
+            - cell "0" [ref=e1679]
+            - cell "0" [ref=e1680]
+            - cell "0" [ref=e1681]
+            - cell "0" [ref=e1682]
+            - cell [ref=e1683]
+            - cell [ref=e1684]
+          - row "Manuel Akanji 25 ch SUI CB 28-023 90 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0" [ref=e1685]:
+            - rowheader "Manuel Akanji" [ref=e1686]:
+              - link "Manuel Akanji" [ref=e1687] [cursor=pointer]:
+                - /url: /en/players/89ac64a6/Manuel-Akanji
+            - cell "25" [ref=e1688]
+            - cell "ch SUI" [ref=e1689]:
+              - link "ch SUI" [ref=e1690] [cursor=pointer]:
+                - /url: /en/country/SUI/Switzerland-Football
+                - generic [ref=e1691]:
+                  - generic [ref=e1692]: ch
+                  - text: SUI
+            - cell "CB" [ref=e1693]
+            - cell "28-023" [ref=e1694]
+            - cell "90" [ref=e1695]
+            - cell "0" [ref=e1696]
+            - cell "0" [ref=e1697]
+            - cell "0" [ref=e1698]
+            - cell "0" [ref=e1699]
+            - cell "0" [ref=e1700]
+            - cell "0" [ref=e1701]
+            - cell "0" [ref=e1702]
+            - cell "0" [ref=e1703]
+            - cell "0" [ref=e1704]
+            - cell "0" [ref=e1705]
+            - cell "0" [ref=e1706]
+            - cell "1" [ref=e1707]
+            - cell "1" [ref=e1708]
+            - cell "0" [ref=e1709]
+            - cell "0" [ref=e1710]
+            - cell [ref=e1711]
+            - cell [ref=e1712]
+          - row "Kyle Walker 2 eng ENG RB 33-075 89 0 0 0 0 0 0 0 0 1 2 0 0 0 0 0" [ref=e1713]:
+            - rowheader "Kyle Walker" [ref=e1714]:
+              - link "Kyle Walker" [ref=e1715] [cursor=pointer]:
+                - /url: /en/players/86dd77d1/Kyle-Walker
+            - cell "2" [ref=e1716]
+            - cell "eng ENG" [ref=e1717]:
+              - link "eng ENG" [ref=e1718] [cursor=pointer]:
+                - /url: /en/country/ENG/England-Football
+                - generic [ref=e1719]:
+                  - generic [ref=e1720]: eng
+                  - text: ENG
+            - cell "RB" [ref=e1721]
+            - cell "33-075" [ref=e1722]
+            - cell "89" [ref=e1723]
+            - cell "0" [ref=e1724]
+            - cell "0" [ref=e1725]
+            - cell "0" [ref=e1726]
+            - cell "0" [ref=e1727]
+            - cell "0" [ref=e1728]
+            - cell "0" [ref=e1729]
+            - cell "0" [ref=e1730]
+            - cell "0" [ref=e1731]
+            - cell "1" [ref=e1732]
+            - cell "2" [ref=e1733]
+            - cell "0" [ref=e1734]
+            - cell "0" [ref=e1735]
+            - cell "0" [ref=e1736]
+            - cell "0" [ref=e1737]
+            - cell "0" [ref=e1738]
+            - cell [ref=e1739]
+            - cell [ref=e1740]
+          - row "James Mcatee 87 eng ENG MF 20-297 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" [ref=e1741]:
+            - rowheader "James Mcatee" [ref=e1742]:
+              - link "James Mcatee" [ref=e1743] [cursor=pointer]:
+                - /url: /en/players/96593e89/James-Mcatee
+            - cell "87" [ref=e1744]
+            - cell "eng ENG" [ref=e1745]:
+              - link "eng ENG" [ref=e1746] [cursor=pointer]:
+                - /url: /en/country/ENG/England-Football
+                - generic [ref=e1747]:
+                  - generic [ref=e1748]: eng
+                  - text: ENG
+            - cell "MF" [ref=e1749]
+            - cell "20-297" [ref=e1750]
+            - cell "1" [ref=e1751]
+            - cell "0" [ref=e1752]
+            - cell "0" [ref=e1753]
+            - cell "0" [ref=e1754]
+            - cell "0" [ref=e1755]
+            - cell "0" [ref=e1756]
+            - cell "0" [ref=e1757]
+            - cell "0" [ref=e1758]
+            - cell "0" [ref=e1759]
+            - cell "0" [ref=e1760]
+            - cell "0" [ref=e1761]
+            - cell "0" [ref=e1762]
+            - cell "0" [ref=e1763]
+            - cell "0" [ref=e1764]
+            - cell "0" [ref=e1765]
+            - cell "0" [ref=e1766]
+            - cell [ref=e1767]
+            - cell [ref=e1768]
+          - row "Ederson 31 br BRA GK 29-359 90 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0" [ref=e1769]:
+            - rowheader "Ederson" [ref=e1770]:
+              - link "Ederson" [ref=e1771] [cursor=pointer]:
+                - /url: /en/players/3bb7b8b4/Ederson
+            - cell "31" [ref=e1772]
+            - cell "br BRA" [ref=e1773]:
+              - link "br BRA" [ref=e1774] [cursor=pointer]:
+                - /url: /en/country/BRA/Brazil-Football
+                - generic [ref=e1775]:
+                  - generic [ref=e1776]: br
+                  - text: BRA
+            - cell "GK" [ref=e1777]
+            - cell "29-359" [ref=e1778]
+            - cell "90" [ref=e1779]
+            - cell "0" [ref=e1780]
+            - cell "0" [ref=e1781]
+            - cell "0" [ref=e1782]
+            - cell "0" [ref=e1783]
+            - cell "0" [ref=e1784]
+            - cell "0" [ref=e1785]
+            - cell "0" [ref=e1786]
+            - cell "0" [ref=e1787]
+            - cell "0" [ref=e1788]
+            - cell "1" [ref=e1789]
+            - cell "0" [ref=e1790]
+            - cell "0" [ref=e1791]
+            - cell "0" [ref=e1792]
+            - cell "0" [ref=e1793]
+            - cell "0" [ref=e1794]
+            - cell [ref=e1795]
+            - cell [ref=e1796]
+        - rowgroup [ref=e1797]:
+          - row "16 Players 990 3 2 0 0 17 8 0 0 8 11 1 15 12 4 0" [ref=e1798]:
+            - rowheader "16 Players" [ref=e1799]
+            - cell [ref=e1800]
+            - cell [ref=e1801]
+            - cell [ref=e1802]
+            - cell [ref=e1803]
+            - cell "990" [ref=e1804]
+            - cell "3" [ref=e1805]
+            - cell "2" [ref=e1806]
+            - cell "0" [ref=e1807]
+            - cell "0" [ref=e1808]
+            - cell "17" [ref=e1809]
+            - cell "8" [ref=e1810]
+            - cell "0" [ref=e1811]
+            - cell "0" [ref=e1812]
+            - cell "8" [ref=e1813]
+            - cell "11" [ref=e1814]
+            - cell "1" [ref=e1815]
+            - cell "15" [ref=e1816]
+            - cell "12" [ref=e1817]
+            - cell "4" [ref=e1818]
+            - cell "0" [ref=e1819]
+            - cell [ref=e1820]
+            - cell [ref=e1821]
+    - generic [ref=e1824]:
+      - generic [ref=e1825]:
+        - heading "Manchester City Goalkeeper Stats" [level=2] [ref=e1826]
+        - list [ref=e1828]:
+          - listitem [ref=e1829]:
+            - button "Glossary" [ref=e1830] [cursor=pointer]
+      - table "Manchester City Goalkeeper Stats Table" [ref=e1832]:
+        - rowgroup [ref=e1842]:
+          - row "Shot Stopping" [ref=e1843]:
+            - columnheader [ref=e1844] [cursor=pointer]
+            - columnheader "Shot Stopping" [ref=e1845] [cursor=pointer]
+          - row "Player Nation Age Minutes Shots on Target Against Goals Against Saves Save Percentage" [ref=e1846]:
+            - columnheader "Player" [ref=e1847] [cursor=pointer]
+            - columnheader "Nation" [ref=e1848] [cursor=pointer]
+            - columnheader "Age" [ref=e1849] [cursor=pointer]
+            - columnheader "Minutes" [ref=e1850] [cursor=pointer]: Min
+            - columnheader "Shots on Target Against" [ref=e1851] [cursor=pointer]: SoTA
+            - columnheader "Goals Against" [ref=e1852] [cursor=pointer]: GA
+            - columnheader "Saves" [ref=e1853] [cursor=pointer]
+            - columnheader "Save Percentage" [ref=e1854] [cursor=pointer]: Save%
+        - rowgroup [ref=e1855]:
+          - row "Ederson br BRA 29-359 90 1 0 1 100.0" [ref=e1856]:
+            - rowheader "Ederson" [ref=e1857]:
+              - link "Ederson" [ref=e1858] [cursor=pointer]:
+                - /url: /en/players/3bb7b8b4/
+            - cell "br BRA" [ref=e1859]:
+              - link "br BRA" [ref=e1860] [cursor=pointer]:
+                - /url: /en/country/BRA/Brazil-Football
+                - generic [ref=e1861]:
+                  - generic [ref=e1862]: br
+                  - text: BRA
+            - cell "29-359" [ref=e1863]
+            - cell "90" [ref=e1864]
+            - cell "1" [ref=e1865]
+            - cell "0" [ref=e1866]
+            - cell "1" [ref=e1867]
+            - cell "100.0" [ref=e1868]
+    - generic [ref=e1869]:
+      - heading "About FBref.com" [level=3] [ref=e1870]
+      - paragraph [ref=e1871]:
+        - text: FBref.com launched (June 13, 2018) with domestic league coverage for England, France, Germany, Italy, Spain, and United States. Since then we have been steadily expanding our coverage to include domestic leagues from over 40 countries as well as domestic cup, super cup and youth leagues from top European countries. We have also added coverage for major international cups such as the
+        - link "UEFA Champions League" [ref=e1872] [cursor=pointer]:
+          - /url: https://fbref.com/en/comps/8/UEFA-Champions-League-Stats
+        - text: and
+        - link "Copa Libertadores" [ref=e1873] [cursor=pointer]:
+          - /url: https://fbref.com/en/comps/14/Copa-Libertadores-Stats
+        - text: .
+      - paragraph [ref=e1874]:
+        - text: FBref is the most complete sources for women's football data on the internet. This includes the entire history of the
+        - link "FIFA Women's World Cup" [ref=e1875] [cursor=pointer]:
+          - /url: https://fbref.com/en/comps/106/history/Womens-World-Cup-Seasons
+        - text: as well as recent domestic league seasons from nine countries.
+      - button "View Additional Information ▼" [ref=e1876] [cursor=pointer]
+  - contentinfo [ref=e1879]:
+    - generic [ref=e1880]:
+      - list [ref=e1881]:
+        - text: · ·
+        - listitem [ref=e1882]:
+          - link "Ad-Free Login" [ref=e1883] [cursor=pointer]:
+            - /url: https://www.sports-reference.com/users/login.cgi?token=1
+          - text: ·
+        - listitem [ref=e1884]:
+          - link "Create Account" [ref=e1885] [cursor=pointer]:
+            - /url: https://www.sports-reference.com/stathead/signup.cgi
+      - generic [ref=e1886]:
+        - text: "You are here:"
+        - link "FB Home Page" [ref=e1888] [cursor=pointer]:
+          - /url: /en/stathead/
+        - text: ">"
+        - link "Matches" [ref=e1890] [cursor=pointer]:
+          - /url: /en/matches/
+        - text: ">"
+        - strong [ref=e1891]: Burnley vs. Manchester City Match Report – Friday August 11, 2023
+    - generic [ref=e1892]:
+      - navigation "complete site index" [ref=e1893]:
+        - generic [ref=e1894]:
+          - heading "Full Site Menu" [level=2] [ref=e1895]
+          - list [ref=e1897]:
+            - listitem [ref=e1898]:
+              - link "Return to Top" [ref=e1899] [cursor=pointer]:
+                - /url: "#header"
+        - list [ref=e1900]:
+          - listitem [ref=e1901]:
+            - link "Stathead/FBref" [ref=e1902] [cursor=pointer]:
+              - /url: https://www.sports-reference.com/stathead/sport/fbref/?utm_campaign=2023_11_btn_home_stathead&utm_source=fb&utm_medium=sr_xsite
+            - generic [ref=e1903]:
+              - link "Player Match Finder" [ref=e1904] [cursor=pointer]:
+                - /url: https://www.sports-reference.com/stathead/fbref/player-match-finder.cgi?utm_campaign=2023_11_btn_home_stathead&utm_source=fb&utm_medium=sr_xsite
+              - text: ","
+              - link "Player Season Finder" [ref=e1905] [cursor=pointer]:
+                - /url: https://www.sports-reference.com/stathead/fbref/player-season-finder.cgi?utm_campaign=2023_11_btn_home_stathead&utm_source=fb&utm_medium=sr_xsite
+              - text: ","
+              - link "Team Match Finder" [ref=e1906] [cursor=pointer]:
+                - /url: https://www.sports-reference.com/stathead/fbref/team-match-finder.cgi?utm_campaign=2023_11_btn_home_stathead&utm_source=fb&utm_medium=sr_xsite
+              - text: ","
+              - link "Team Season Finder" [ref=e1907] [cursor=pointer]:
+                - /url: https://www.sports-reference.com/stathead/fbref/team-season-finder.cgi?utm_campaign=2023_11_btn_home_stathead&utm_source=fb&utm_medium=sr_xsite
+              - text: ","
+              - link "..." [ref=e1908] [cursor=pointer]:
+                - /url: https://www.sports-reference.com/stathead/fbref/?utm_campaign=2023_11_btn_home_stathead&utm_source=fb&utm_medium=sr_xsite
+          - listitem [ref=e1909]:
+            - link "Players" [ref=e1910] [cursor=pointer]:
+              - /url: /en/players/
+            - generic [ref=e1911]:
+              - link "Edin Džeko" [ref=e1912] [cursor=pointer]:
+                - /url: /en/players/3bb7f478/Edin-Dzeko
+              - text: ","
+              - link "Kevin De Bruyne" [ref=e1913] [cursor=pointer]:
+                - /url: /en/players/e46012d4/Kevin-De-Bruyne
+              - text: ","
+              - link "Luis Suárez" [ref=e1914] [cursor=pointer]:
+                - /url: /en/players/a6154613/Luis-Suarez
+              - text: ","
+              - link "Beatriz" [ref=e1915] [cursor=pointer]:
+                - /url: /en/players/d6ed0c7f/Beatriz
+              - text: ","
+              - link "Jamie Vardy" [ref=e1916] [cursor=pointer]:
+                - /url: /en/players/45963054/Jamie-Vardy
+              - text: ","
+              - link "Caitlin Foord" [ref=e1917] [cursor=pointer]:
+                - /url: /en/players/019544ff/Caitlin-Foord
+              - text: ","
+              - link "Alexandra Popp" [ref=e1918] [cursor=pointer]:
+                - /url: /en/players/655e7bd0/Alexandra-Popp
+              - text: ","
+              - link "Marta" [ref=e1919] [cursor=pointer]:
+                - /url: /en/players/3857e361/Marta
+              - text: ","
+              - link "Paulo Dybala" [ref=e1920] [cursor=pointer]:
+                - /url: /en/players/e0921a4f/Paulo-Dybala
+              - text: ","
+              - link "Cesc Fàbregas" [ref=e1921] [cursor=pointer]:
+                - /url: /en/players/33508c78/Cesc-Fabregas
+              - text: ","
+              - link "Isco" [ref=e1922] [cursor=pointer]:
+                - /url: /en/players/a0b4bb3e/Isco
+              - text: ","
+              - link "Tameka Yallop" [ref=e1923] [cursor=pointer]:
+                - /url: /en/players/c63e11a5/Tameka-Yallop
+              - text: ","
+              - link "Gareth Bale" [ref=e1924] [cursor=pointer]:
+                - /url: /en/players/a58bb1e1/Gareth-Bale
+              - text: ","
+              - link "Edinson Cavani" [ref=e1925] [cursor=pointer]:
+                - /url: /en/players/527f063d/Edinson-Cavani
+              - text: ","
+              - link "Amanda Ilestedt" [ref=e1926] [cursor=pointer]:
+                - /url: /en/players/93514385/Amanda-Ilestedt
+              - text: ","
+              - link "..." [ref=e1927] [cursor=pointer]:
+                - /url: /en/players/
+            - link "Players who played for multiple squads" [ref=e1929] [cursor=pointer]:
+              - /url: /en/friv/players-who-played-for-multiple-clubs-countries.fcgi
+          - listitem [ref=e1930]:
+            - link "Clubs" [ref=e1931] [cursor=pointer]:
+              - /url: /en/squads/
+            - generic [ref=e1932]:
+              - link "Arsenal (M)" [ref=e1933] [cursor=pointer]:
+                - /url: /en/squads/18bb7c10/Arsenal-Stats
+              - text: ","
+              - link "Chelsea (F)" [ref=e1934] [cursor=pointer]:
+                - /url: /en/squads/a6a4e67d/Chelsea-Women-Stats
+              - text: ","
+              - link "Barcelona (M)" [ref=e1935] [cursor=pointer]:
+                - /url: /en/squads/206d90db/Barcelona-Stats
+              - text: ","
+              - link "Barcelona (F)" [ref=e1936] [cursor=pointer]:
+                - /url: /en/squads/15f49df1/Barcelona-Women-Stats
+              - text: ","
+              - link "Paris Saint-Germain (M)" [ref=e1937] [cursor=pointer]:
+                - /url: /en/squads/e2d8892c/Paris-Saint-Germain-Stats
+              - text: ","
+              - link "OL Lyonnes (F)" [ref=e1938] [cursor=pointer]:
+                - /url: /en/squads/7f2012ad/OL-Lyonnes-Stats
+              - text: ","
+              - link "Bayern Munich (M)" [ref=e1939] [cursor=pointer]:
+                - /url: /en/squads/054efa67/Bayern-Munich-Stats
+              - text: ","
+              - link "Bayern Munich (F)" [ref=e1940] [cursor=pointer]:
+                - /url: /en/squads/51ec22be/Bayern-Munich-Women-Stats
+              - text: ","
+              - link "Internazionale (M)" [ref=e1941] [cursor=pointer]:
+                - /url: /en/squads/d609edc0/Internazionale-Stats
+              - text: ","
+              - link "AS Roma (F)" [ref=e1942] [cursor=pointer]:
+                - /url: /en/squads/02f8d026/AS-Roma-Stats
+              - text: ","
+              - link "River Plate (M)" [ref=e1943] [cursor=pointer]:
+                - /url: /en/squads/ef99c78c/River-Plate-Stats
+              - text: ","
+              - link "Melbourne City (M)" [ref=e1944] [cursor=pointer]:
+                - /url: /en/squads/31553c94/Melbourne-City-Stats
+              - text: ","
+              - link "Melbourne City (F)" [ref=e1945] [cursor=pointer]:
+                - /url: /en/squads/6082332e/Melbourne-City-Women-Stats
+              - text: ","
+              - link "Sturm Graz (M)" [ref=e1946] [cursor=pointer]:
+                - /url: /en/squads/3f4fe568/Sturm-Graz-Stats
+              - text: ","
+              - link "St. Pölten (F)" [ref=e1947] [cursor=pointer]:
+                - /url: /en/squads/3d377a8c/St-Polten-Women-Stats
+              - text: ","
+              - link "Union SG (M)" [ref=e1948] [cursor=pointer]:
+                - /url: /en/squads/e14f61a5/Union-SG-Stats
+              - text: ","
+              - link "OH Leuven (F)" [ref=e1949] [cursor=pointer]:
+                - /url: /en/squads/696ced1d/OH-Leuven-Women-Stats
+              - text: ","
+              - link "Bolívar (M)" [ref=e1950] [cursor=pointer]:
+                - /url: /en/squads/e69cb5b6/Bolivar-Stats
+              - text: ","
+              - link "Palmeiras (M)" [ref=e1951] [cursor=pointer]:
+                - /url: /en/squads/abdce579/Palmeiras-Stats
+              - text: ","
+              - link "Corinthians (F)" [ref=e1952] [cursor=pointer]:
+                - /url: /en/squads/9cdc3b24/Corinthians-Women-Stats
+              - text: ","
+              - link "Ludogorets Razgrad (M)" [ref=e1953] [cursor=pointer]:
+                - /url: /en/squads/488c6ba1/Ludogorets-Razgrad-Stats
+              - text: ","
+              - link "Forge FC (M)" [ref=e1954] [cursor=pointer]:
+                - /url: /en/squads/8514c671/Forge-FC-Stats
+              - text: ","
+              - link "Colo-Colo (M)" [ref=e1955] [cursor=pointer]:
+                - /url: /en/squads/2ff539f3/Colo-Colo-Stats
+              - text: ","
+              - link "Shanghai Port (M)" [ref=e1956] [cursor=pointer]:
+                - /url: /en/squads/c48512d3/Shanghai-Port-Stats
+              - text: ","
+              - link "Deportes Tolima (M)" [ref=e1957] [cursor=pointer]:
+                - /url: /en/squads/9c4c0cc1/Deportes-Tolima-Stats
+              - text: ","
+              - link "Dinamo Zagreb (M)" [ref=e1958] [cursor=pointer]:
+                - /url: /en/squads/edd0d381/Dinamo-Zagreb-Stats
+              - text: ","
+              - link "Slavia Prague (M)" [ref=e1959] [cursor=pointer]:
+                - /url: /en/squads/111cbfb1/Slavia-Prague-Stats
+              - text: ","
+              - link "Midtjylland (M)" [ref=e1960] [cursor=pointer]:
+                - /url: /en/squads/3c4fb635/Midtjylland-Stats
+              - text: ","
+              - link "HB Køge (F)" [ref=e1961] [cursor=pointer]:
+                - /url: /en/squads/b00041f6/HB-Koge-Stats
+              - text: ","
+              - link "Independiente del Valle (M)" [ref=e1962] [cursor=pointer]:
+                - /url: /en/squads/990519b8/Independiente-del-Valle-Stats
+              - text: ","
+              - link "KuPS (M)" [ref=e1963] [cursor=pointer]:
+                - /url: /en/squads/e6f63673/KuPS-Stats
+              - text: ","
+              - link "Olympiacos (M)" [ref=e1964] [cursor=pointer]:
+                - /url: /en/squads/2fdb4aef/Olympiacos-Stats
+              - text: ","
+              - link "Ferencváros (M)" [ref=e1965] [cursor=pointer]:
+                - /url: /en/squads/6611f992/Ferencvaros-Stats
+              - text: ","
+              - link "Mohun Bagan (M)" [ref=e1966] [cursor=pointer]:
+                - /url: /en/squads/5c7eb1c7/Mohun-Bagan-Stats
+              - text: ","
+              - link "Persepolis (M)" [ref=e1967] [cursor=pointer]:
+                - /url: /en/squads/95f42e44/Persepolis-Stats
+              - text: ","
+              - link "Kashima Antlers (M)" [ref=e1968] [cursor=pointer]:
+                - /url: /en/squads/dd694b37/Kashima-Antlers-Stats
+              - text: ","
+              - link "Kobe Leonessa (F)" [ref=e1969] [cursor=pointer]:
+                - /url: /en/squads/71dc1b0b/Kobe-Leonessa-Stats
+              - text: ","
+              - link "Jeonbuk Hyundai Motors (M)" [ref=e1970] [cursor=pointer]:
+                - /url: /en/squads/ae23a242/Jeonbuk-Hyundai-Motors-Stats
+              - text: ","
+              - link "Al-Hilal (M)" [ref=e1971] [cursor=pointer]:
+                - /url: /en/squads/972e2539/Al-Hilal-Stats
+              - text: ","
+              - link "América (M)" [ref=e1972] [cursor=pointer]:
+                - /url: /en/squads/18d3c3a3/America-Stats
+              - text: ","
+              - link "PSV Eindhoven (M)" [ref=e1973] [cursor=pointer]:
+                - /url: /en/squads/e334d850/PSV-Eindhoven-Stats
+              - text: ","
+              - link "Twente (F)" [ref=e1974] [cursor=pointer]:
+                - /url: /en/squads/e04b1b89/Twente-Women-Stats
+              - text: ","
+              - link "Bodø/Glimt (M)" [ref=e1975] [cursor=pointer]:
+                - /url: /en/squads/d86248bd/BodoGlimt-Stats
+              - text: ","
+              - link "Vålerenga (F)" [ref=e1976] [cursor=pointer]:
+                - /url: /en/squads/c1c51bdf/Valerenga-Women-Stats
+              - text: ","
+              - link "Cerro Porteño (M)" [ref=e1977] [cursor=pointer]:
+                - /url: /en/squads/e4cd6f9a/Cerro-Porteno-Stats
+              - text: ","
+              - link "Universitario (M)" [ref=e1978] [cursor=pointer]:
+                - /url: /en/squads/e4108102/Universitario-Stats
+              - text: ","
+              - link "Lech Poznań (M)" [ref=e1979] [cursor=pointer]:
+                - /url: /en/squads/fdba14df/Lech-Poznan-Stats
+              - text: ","
+              - link "Sporting CP (M)" [ref=e1980] [cursor=pointer]:
+                - /url: /en/squads/13dc44fd/Sporting-CP-Stats
+              - text: ","
+              - link "FCSB (M)" [ref=e1981] [cursor=pointer]:
+                - /url: /en/squads/aed59852/FCSB-Stats
+              - text: ","
+              - link "Mamelodi Sundowns (M)" [ref=e1982] [cursor=pointer]:
+                - /url: /en/squads/97d80fef/Mamelodi-Sundowns-Stats
+              - text: ","
+              - link "Zenit (M)" [ref=e1983] [cursor=pointer]:
+                - /url: /en/squads/98ce363d/Zenit-Stats
+              - text: ","
+              - link "Celtic (M)" [ref=e1984] [cursor=pointer]:
+                - /url: /en/squads/b81aa4fa/Celtic-Stats
+              - text: ","
+              - link "Red Star (M)" [ref=e1985] [cursor=pointer]:
+                - /url: /en/squads/099c6eb5/Red-Star-Stats
+              - text: ","
+              - link "Young Boys (M)" [ref=e1986] [cursor=pointer]:
+                - /url: /en/squads/4b682260/Young-Boys-Stats
+              - text: ","
+              - link "Servette (F)" [ref=e1987] [cursor=pointer]:
+                - /url: /en/squads/e83b563b/Servette-Stats
+              - text: ","
+              - link "Mjällby (M)" [ref=e1988] [cursor=pointer]:
+                - /url: /en/squads/b1a7a7b9/Mjallby-Stats
+              - text: ","
+              - link "BK Häcken (F)" [ref=e1989] [cursor=pointer]:
+                - /url: /en/squads/89f584e1/BK-Hacken-Women-Stats
+              - text: ","
+              - link "Galatasaray (M)" [ref=e1990] [cursor=pointer]:
+                - /url: /en/squads/ecd11ca2/Galatasaray-Stats
+              - text: ","
+              - link "Shakhtar Donetsk (M)" [ref=e1991] [cursor=pointer]:
+                - /url: /en/squads/e89d5a28/Shakhtar-Donetsk-Stats
+              - text: ","
+              - link "Peñarol (M)" [ref=e1992] [cursor=pointer]:
+                - /url: /en/squads/e2d73ee6/Penarol-Stats
+              - text: ","
+              - link "Los Angeles FC (M)" [ref=e1993] [cursor=pointer]:
+                - /url: /en/squads/81d817a3/Los-Angeles-FC-Stats
+              - text: ","
+              - link "Kansas City Current (F)" [ref=e1994] [cursor=pointer]:
+                - /url: /en/squads/6f666306/Kansas-City-Current-Stats
+              - text: ","
+              - link "Deportivo Táchira (M)" [ref=e1995] [cursor=pointer]:
+                - /url: /en/squads/7701ed02/Deportivo-Tachira-Stats
+              - text: ","
+              - link "..." [ref=e1996] [cursor=pointer]:
+                - /url: /en/squads/
+          - listitem [ref=e1997]:
+            - link "Seasons" [ref=e1998] [cursor=pointer]:
+              - /url: /en/comps/
+            - generic [ref=e1999]:
+              - link "2024" [ref=e2000] [cursor=pointer]:
+                - /url: /en/comps/season/2024
+              - text: ","
+              - link "2024-2025" [ref=e2001] [cursor=pointer]:
+                - /url: /en/comps/season/2024-2025
+              - text: ","
+              - link "2025" [ref=e2002] [cursor=pointer]:
+                - /url: /en/comps/season/2025
+              - text: ","
+              - link "2025-2026" [ref=e2003] [cursor=pointer]:
+                - /url: /en/comps/season/2025-2026
+              - text: ","
+              - link "2026" [ref=e2004] [cursor=pointer]:
+                - /url: /en/comps/season/2026
+              - text: ","
+              - link "2027" [ref=e2005] [cursor=pointer]:
+                - /url: /en/comps/season/2027
+              - text: ","
+              - link "..." [ref=e2006] [cursor=pointer]:
+                - /url: /en/comps/
+          - listitem [ref=e2007]:
+            - link "Competitions" [ref=e2008] [cursor=pointer]:
+              - /url: /en/comps/
+            - generic [ref=e2009]:
+              - link "UEFA Champions League" [ref=e2010] [cursor=pointer]:
+                - /url: /en/comps/8/Champions-League-Stats
+              - text: ","
+              - link "FIFA World Cup" [ref=e2011] [cursor=pointer]:
+                - /url: /en/comps/1/World-Cup-Stats
+              - text: ","
+              - link "AFC Asian Cup" [ref=e2012] [cursor=pointer]:
+                - /url: /en/comps/664/AFC-Asian-Cup-Stats
+              - text: ","
+              - link "UEFA European Football Championship" [ref=e2013] [cursor=pointer]:
+                - /url: /en/comps/676/UEFA-Euro-Stats
+              - text: ","
+              - link "UEFA Nations League" [ref=e2014] [cursor=pointer]:
+                - /url: /en/comps/677/UEFA-Nations-League-Stats
+              - text: ","
+              - link "CONMEBOL Copa América" [ref=e2015] [cursor=pointer]:
+                - /url: /en/comps/685/Copa-America-Stats
+              - text: ","
+              - link "CONCACAF Gold Cup" [ref=e2016] [cursor=pointer]:
+                - /url: /en/comps/681/Gold-Cup-Stats
+              - text: ","
+              - link "Africa Cup of Nations" [ref=e2017] [cursor=pointer]:
+                - /url: /en/comps/656/Africa-Cup-of-Nations-Stats
+              - text: ","
+              - link "UEFA Women's Champions League" [ref=e2018] [cursor=pointer]:
+                - /url: /en/comps/181/Champions-League-Stats
+              - text: ","
+              - link "FIFA Women's World Cup" [ref=e2019] [cursor=pointer]:
+                - /url: /en/comps/106/Womens-World-Cup-Stats
+              - text: ","
+              - link "Olympics — Women's Tournament" [ref=e2020] [cursor=pointer]:
+                - /url: /en/comps/180/Olympics-W-Stats
+              - text: ","
+              - link "AFC Women's Asian Cup" [ref=e2021] [cursor=pointer]:
+                - /url: /en/comps/161/AFC-Womens-Asian-Cup-Stats
+              - text: ","
+              - link "UEFA Women's Championship" [ref=e2022] [cursor=pointer]:
+                - /url: /en/comps/162/UEFA-Womens-Euro-Stats
+              - text: ","
+              - link "Copa América Femenina" [ref=e2023] [cursor=pointer]:
+                - /url: /en/comps/158/Copa-America-Femenina-Stats
+              - text: ","
+              - link "CONCACAF W Championship" [ref=e2024] [cursor=pointer]:
+                - /url: /en/comps/157/CONCACAF-W-Championship-Stats
+              - text: ","
+              - link "Women's Africa Cup of Nations" [ref=e2025] [cursor=pointer]:
+                - /url: /en/comps/156/Womens-Africa-Cup-of-Nations-Stats
+              - text: ","
+              - link "Premier League" [ref=e2026] [cursor=pointer]:
+                - /url: /en/comps/9/Premier-League-Stats
+              - text: ","
+              - link "FA Cup" [ref=e2027] [cursor=pointer]:
+                - /url: /en/comps/514/FA-Cup-Stats
+              - text: ","
+              - link "EFL Cup" [ref=e2028] [cursor=pointer]:
+                - /url: /en/comps/690/EFL-Cup-Stats
+              - text: ","
+              - link "FA Women's Super League" [ref=e2029] [cursor=pointer]:
+                - /url: /en/comps/189/Womens-Super-League-Stats
+              - text: ","
+              - link "La Liga" [ref=e2030] [cursor=pointer]:
+                - /url: /en/comps/12/La-Liga-Stats
+              - text: ","
+              - link "Copa del Rey" [ref=e2031] [cursor=pointer]:
+                - /url: /en/comps/569/Copa-del-Rey-Stats
+              - text: ","
+              - link "Liga F" [ref=e2032] [cursor=pointer]:
+                - /url: /en/comps/230/Liga-F-Stats
+              - text: ","
+              - link "Ligue 1" [ref=e2033] [cursor=pointer]:
+                - /url: /en/comps/13/Ligue-1-Stats
+              - text: ","
+              - link "Coupe de France" [ref=e2034] [cursor=pointer]:
+                - /url: /en/comps/518/Coupe-de-France-Stats
+              - text: ","
+              - link "Coupe de la Ligue" [ref=e2035] [cursor=pointer]:
+                - /url: /en/comps/693/Coupe-de-la-Ligue-Stats
+              - text: ","
+              - link "Première Ligue" [ref=e2036] [cursor=pointer]:
+                - /url: /en/comps/193/Premiere-Ligue-Stats
+              - text: ","
+              - link "Fußball-Bundesliga" [ref=e2037] [cursor=pointer]:
+                - /url: /en/comps/20/Bundesliga-Stats
+              - text: ","
+              - link "DFB-Pokal" [ref=e2038] [cursor=pointer]:
+                - /url: /en/comps/521/DFB-Pokal-Stats
+              - text: ","
+              - link "Frauen-Bundesliga" [ref=e2039] [cursor=pointer]:
+                - /url: /en/comps/183/Frauen-Bundesliga-Stats
+              - text: ","
+              - link "DFB-Pokal Frauen" [ref=e2040] [cursor=pointer]:
+                - /url: /en/comps/520/DFB-Pokal-Frauen-Stats
+              - text: ","
+              - link "Serie A" [ref=e2041] [cursor=pointer]:
+                - /url: /en/comps/11/Serie-A-Stats
+              - text: ","
+              - link "Coppa Italia" [ref=e2042] [cursor=pointer]:
+                - /url: /en/comps/529/Coppa-Italia-Stats
+              - text: ","
+              - link "Serie A" [ref=e2043] [cursor=pointer]:
+                - /url: /en/comps/208/Serie-A-Stats
+              - text: ","
+              - link "Liga Profesional de Fútbol Argentina" [ref=e2044] [cursor=pointer]:
+                - /url: /en/comps/21/Liga-Profesional-Argentina-Stats
+              - text: ","
+              - link "Copa de la Liga Profesional" [ref=e2045] [cursor=pointer]:
+                - /url: /en/comps/905/Copa-de-la-Liga-Profesional-Stats
+              - text: ","
+              - link "A-League Men" [ref=e2046] [cursor=pointer]:
+                - /url: /en/comps/65/A-League-Men-Stats
+              - text: ","
+              - link "A-League Women" [ref=e2047] [cursor=pointer]:
+                - /url: /en/comps/196/A-League-Women-Stats
+              - text: ","
+              - link "Austrian Football Bundesliga" [ref=e2048] [cursor=pointer]:
+                - /url: /en/comps/56/Austrian-Bundesliga-Stats
+              - text: ","
+              - link "ÖFB Frauen-Bundesliga" [ref=e2049] [cursor=pointer]:
+                - /url: /en/comps/286/OFB-Frauen-Bundesliga-Stats
+              - text: ","
+              - link "Belgian Pro League" [ref=e2050] [cursor=pointer]:
+                - /url: /en/comps/37/Belgian-Pro-League-Stats
+              - text: ","
+              - link "Belgian Women's Super League" [ref=e2051] [cursor=pointer]:
+                - /url: /en/comps/296/Belgian-Womens-Super-League-Stats
+              - text: ","
+              - link "División de Fútbol Profesional" [ref=e2052] [cursor=pointer]:
+                - /url: /en/comps/74/FBF-Division-Profesional-Stats
+              - text: ","
+              - link "Campeonato Brasileiro Série A" [ref=e2053] [cursor=pointer]:
+                - /url: /en/comps/24/Serie-A-Stats
+              - text: ","
+              - link "Campeonato Brasileiro de Futebol Feminino Série A1" [ref=e2054] [cursor=pointer]:
+                - /url: /en/comps/206/Serie-A1-Stats
+              - text: ","
+              - link "First Professional Football League" [ref=e2055] [cursor=pointer]:
+                - /url: /en/comps/67/Bulgarian-First-League-Stats
+              - text: ","
+              - link "Canadian Premier League" [ref=e2056] [cursor=pointer]:
+                - /url: /en/comps/211/Canadian-Premier-League-Stats
+              - text: ","
+              - link "Liga de Primera" [ref=e2057] [cursor=pointer]:
+                - /url: /en/comps/35/Liga-de-Primera-Stats
+              - text: ","
+              - link "Chinese Football Association Super League" [ref=e2058] [cursor=pointer]:
+                - /url: /en/comps/62/Chinese-Super-League-Stats
+              - text: ","
+              - link "Categoría Primera A" [ref=e2059] [cursor=pointer]:
+                - /url: /en/comps/41/Primera-A-Stats
+              - text: ","
+              - link "Croatian Football League" [ref=e2060] [cursor=pointer]:
+                - /url: /en/comps/63/Hrvatska-NL-Stats
+              - text: ","
+              - link "Czech First League" [ref=e2061] [cursor=pointer]:
+                - /url: /en/comps/66/Czech-First-League-Stats
+              - text: ","
+              - link "Danish Superliga" [ref=e2062] [cursor=pointer]:
+                - /url: /en/comps/50/Danish-Superliga-Stats
+              - text: ","
+              - link "A-Liga" [ref=e2063] [cursor=pointer]:
+                - /url: /en/comps/340/A-Liga-Stats
+              - text: ","
+              - link "Liga Profesional Ecuador" [ref=e2064] [cursor=pointer]:
+                - /url: /en/comps/58/Ecuadorian-Serie-A-Stats
+              - text: ","
+              - link "Veikkausliiga" [ref=e2065] [cursor=pointer]:
+                - /url: /en/comps/43/Veikkausliiga-Stats
+              - text: ","
+              - link "Super League Greece" [ref=e2066] [cursor=pointer]:
+                - /url: /en/comps/27/Super-League-Greece-Stats
+              - text: ","
+              - link "Nemzeti Bajnokság I" [ref=e2067] [cursor=pointer]:
+                - /url: /en/comps/46/NB-I-Stats
+              - text: ","
+              - link "Indian Super League" [ref=e2068] [cursor=pointer]:
+                - /url: /en/comps/82/Indian-Super-League-Stats
+              - text: ","
+              - link "Persian Gulf Pro League" [ref=e2069] [cursor=pointer]:
+                - /url: /en/comps/64/Persian-Gulf-Pro-League-Stats
+              - text: ","
+              - link "J1 League" [ref=e2070] [cursor=pointer]:
+                - /url: /en/comps/25/J1-League-Stats
+              - text: ","
+              - link "Women Empowerment League" [ref=e2071] [cursor=pointer]:
+                - /url: /en/comps/893/WE-League-Stats
+              - text: ","
+              - link "K League 1" [ref=e2072] [cursor=pointer]:
+                - /url: /en/comps/55/K-League-1-Stats
+              - text: ","
+              - link "Saudi Pro League" [ref=e2073] [cursor=pointer]:
+                - /url: /en/comps/70/Saudi-Pro-League-Stats
+              - text: ","
+              - link "Liga MX" [ref=e2074] [cursor=pointer]:
+                - /url: /en/comps/31/Liga-MX-Stats
+              - text: ","
+              - link "Eredivisie" [ref=e2075] [cursor=pointer]:
+                - /url: /en/comps/23/Eredivisie-Stats
+              - text: ","
+              - link "Eredivisie Vrouwen" [ref=e2076] [cursor=pointer]:
+                - /url: /en/comps/195/Eredivisie-Vrouwen-Stats
+              - text: ","
+              - link "Eliteserien" [ref=e2077] [cursor=pointer]:
+                - /url: /en/comps/28/Eliteserien-Stats
+              - text: ","
+              - link "Toppserien" [ref=e2078] [cursor=pointer]:
+                - /url: /en/comps/185/Toppserien-Stats
+              - text: ","
+              - link "APF División de Honor" [ref=e2079] [cursor=pointer]:
+                - /url: /en/comps/61/Copa-de-Primera-Stats
+              - text: ","
+              - link "Liga 1 de Fútbol Profesional" [ref=e2080] [cursor=pointer]:
+                - /url: /en/comps/44/Liga-1-Stats
+              - text: ","
+              - link "Ekstraklasa" [ref=e2081] [cursor=pointer]:
+                - /url: /en/comps/36/Ekstraklasa-Stats
+              - text: ","
+              - link "Primeira Liga" [ref=e2082] [cursor=pointer]:
+                - /url: /en/comps/32/Primeira-Liga-Stats
+              - text: ","
+              - link "Liga I" [ref=e2083] [cursor=pointer]:
+                - /url: /en/comps/47/Liga-I-Stats
+              - text: ","
+              - link "South African Premiership" [ref=e2084] [cursor=pointer]:
+                - /url: /en/comps/52/South-African-Premiership-Stats
+              - text: ","
+              - link "Russian Premier League" [ref=e2085] [cursor=pointer]:
+                - /url: /en/comps/30/Russian-Premier-League-Stats
+              - text: ","
+              - link "Scottish Premiership" [ref=e2086] [cursor=pointer]:
+                - /url: /en/comps/40/Scottish-Premiership-Stats
+              - text: ","
+              - link "Serbian SuperLiga" [ref=e2087] [cursor=pointer]:
+                - /url: /en/comps/54/Serbian-SuperLiga-Stats
+              - text: ","
+              - link "Swiss Super League" [ref=e2088] [cursor=pointer]:
+                - /url: /en/comps/57/Swiss-Super-League-Stats
+              - text: ","
+              - link "Swiss Women's Super League" [ref=e2089] [cursor=pointer]:
+                - /url: /en/comps/894/Swiss-Womens-Super-League-Stats
+              - text: ","
+              - link "Allsvenskan" [ref=e2090] [cursor=pointer]:
+                - /url: /en/comps/29/Allsvenskan-Stats
+              - text: ","
+              - link "Damallsvenskan" [ref=e2091] [cursor=pointer]:
+                - /url: /en/comps/187/Damallsvenskan-Stats
+              - text: ","
+              - link "Süper Lig" [ref=e2092] [cursor=pointer]:
+                - /url: /en/comps/26/Super-Lig-Stats
+              - text: ","
+              - link "Ukrainian Premier League" [ref=e2093] [cursor=pointer]:
+                - /url: /en/comps/39/Ukrainian-Premier-League-Stats
+              - text: ","
+              - link "Liga AUF Uruguaya" [ref=e2094] [cursor=pointer]:
+                - /url: /en/comps/45/Liga-AUF-Uruguaya-Stats
+              - text: ","
+              - link "Major League Soccer" [ref=e2095] [cursor=pointer]:
+                - /url: /en/comps/22/Major-League-Soccer-Stats
+              - text: ","
+              - link "Lamar Hunt U.S. Open Cup" [ref=e2096] [cursor=pointer]:
+                - /url: /en/comps/577/US-Open-Cup-Stats
+              - text: ","
+              - link "National Women's Soccer League" [ref=e2097] [cursor=pointer]:
+                - /url: /en/comps/182/NWSL-Stats
+              - text: ","
+              - link "NWSL Fall Series" [ref=e2098] [cursor=pointer]:
+                - /url: /en/comps/884/NWSL-Fall-Series-Stats
+              - text: ","
+              - link "Venezuelan Primera División" [ref=e2099] [cursor=pointer]:
+                - /url: /en/comps/105/Venezuelan-Primera-Division-Stats
+              - text: ","
+              - link "..." [ref=e2100] [cursor=pointer]:
+                - /url: /en/comps/
+          - listitem [ref=e2101]:
+            - link "Scores & Fixtures" [ref=e2102] [cursor=pointer]:
+              - /url: /en/matches/
+            - generic [ref=e2103]:
+              - link "Wednesday April 8, 2026" [ref=e2104] [cursor=pointer]:
+                - /url: /en/matches/2026-04-08
+              - text: ","
+              - link "Thursday April 9, 2026" [ref=e2105] [cursor=pointer]:
+                - /url: /en/matches/2026-04-09
+              - text: ","
+              - link "Friday April 10, 2026" [ref=e2106] [cursor=pointer]:
+                - /url: /en/matches/2026-04-10
+              - text: ","
+              - link "Saturday April 11, 2026" [ref=e2107] [cursor=pointer]:
+                - /url: /en/matches/2026-04-11
+              - text: ","
+              - link "Sunday April 12, 2026" [ref=e2108] [cursor=pointer]:
+                - /url: /en/matches/2026-04-12
+          - listitem [ref=e2109]:
+            - link "Awards" [ref=e2110] [cursor=pointer]:
+              - /url: /en/awards/
+            - generic [ref=e2111]:
+              - link "Ballon d'Or Féminin" [ref=e2112] [cursor=pointer]:
+                - /url: /en/awards/ballon_dor_f
+              - text: ","
+              - link "Ballon d'Or" [ref=e2113] [cursor=pointer]:
+                - /url: /en/awards/ballon_dor_m
+              - text: ","
+              - link "FIFA FIFPro Women's World XI" [ref=e2114] [cursor=pointer]:
+                - /url: /en/awards/fifa_fifpro_f
+              - text: ","
+              - link "FIFA FIFPro World XI" [ref=e2115] [cursor=pointer]:
+                - /url: /en/awards/fifa_fifpro_m
+              - text: ","
+              - link "FIFA World Cup All-Star Team" [ref=e2116] [cursor=pointer]:
+                - /url: /en/awards/wc_all_star
+              - text: ","
+              - link "FIFA Women's World Cup All-Star Team" [ref=e2117] [cursor=pointer]:
+                - /url: /en/awards/wwc_all_star
+              - text: ","
+              - link "African Women's Footballer of the Year" [ref=e2118] [cursor=pointer]:
+                - /url: /en/awards/african_foy_f
+              - text: ","
+              - link "African Footballer of the Year" [ref=e2119] [cursor=pointer]:
+                - /url: /en/awards/african_foy_m
+              - text: ","
+              - link "CONCACAF Female Player of the Year" [ref=e2120] [cursor=pointer]:
+                - /url: /en/awards/concacaf_poy_f
+              - text: ","
+              - link "CONCACAF Male Player of the Year" [ref=e2121] [cursor=pointer]:
+                - /url: /en/awards/concacaf_poy_m
+              - text: ","
+              - link "UEFA Women's Player of the Year" [ref=e2122] [cursor=pointer]:
+                - /url: /en/awards/uefa_poy_f
+              - text: ","
+              - link "UEFA Men's Player of the Year" [ref=e2123] [cursor=pointer]:
+                - /url: /en/awards/uefa_poy_m
+              - text: ","
+              - link "..." [ref=e2124] [cursor=pointer]:
+                - /url: /en/awards
+          - listitem [ref=e2125]:
+            - link "Countries" [ref=e2126] [cursor=pointer]:
+              - /url: /en/countries/
+            - generic [ref=e2127]:
+              - link "England" [ref=e2128] [cursor=pointer]:
+                - /url: /en/country/ENG/England-Football
+              - text: ","
+              - link "Spain" [ref=e2129] [cursor=pointer]:
+                - /url: /en/country/ESP/Spain-Football
+              - text: ","
+              - link "France" [ref=e2130] [cursor=pointer]:
+                - /url: /en/country/FRA/France-Football
+              - text: ","
+              - link "Germany" [ref=e2131] [cursor=pointer]:
+                - /url: /en/country/GER/Germany-Football
+              - text: ","
+              - link "Italy" [ref=e2132] [cursor=pointer]:
+                - /url: /en/country/ITA/Italy-Football
+              - text: ","
+              - link "Argentina" [ref=e2133] [cursor=pointer]:
+                - /url: /en/country/ARG/Argentina-Football
+              - text: ","
+              - link "Australia" [ref=e2134] [cursor=pointer]:
+                - /url: /en/country/AUS/Australia-Football
+              - text: ","
+              - link "Austria" [ref=e2135] [cursor=pointer]:
+                - /url: /en/country/AUT/Austria-Football
+              - text: ","
+              - link "Belgium" [ref=e2136] [cursor=pointer]:
+                - /url: /en/country/BEL/Belgium-Football
+              - text: ","
+              - link "Bolivia" [ref=e2137] [cursor=pointer]:
+                - /url: /en/country/BOL/Bolivia-Football
+              - text: ","
+              - link "Brazil" [ref=e2138] [cursor=pointer]:
+                - /url: /en/country/BRA/Brazil-Football
+              - text: ","
+              - link "Bulgaria" [ref=e2139] [cursor=pointer]:
+                - /url: /en/country/BUL/Bulgaria-Football
+              - text: ","
+              - link "Canada" [ref=e2140] [cursor=pointer]:
+                - /url: /en/country/CAN/Canada-Football
+              - text: ","
+              - link "Chile" [ref=e2141] [cursor=pointer]:
+                - /url: /en/country/CHI/Chile-Football
+              - text: ","
+              - link "China PR" [ref=e2142] [cursor=pointer]:
+                - /url: /en/country/CHN/China-PR-Football
+              - text: ","
+              - link "Colombia" [ref=e2143] [cursor=pointer]:
+                - /url: /en/country/COL/Colombia-Football
+              - text: ","
+              - link "Croatia" [ref=e2144] [cursor=pointer]:
+                - /url: /en/country/CRO/Croatia-Football
+              - text: ","
+              - link "Czech Republic" [ref=e2145] [cursor=pointer]:
+                - /url: /en/country/CZE/Czech-Republic-Football
+              - text: ","
+              - link "Denmark" [ref=e2146] [cursor=pointer]:
+                - /url: /en/country/DEN/Denmark-Football
+              - text: ","
+              - link "Ecuador" [ref=e2147] [cursor=pointer]:
+                - /url: /en/country/ECU/Ecuador-Football
+              - text: ","
+              - link "Finland" [ref=e2148] [cursor=pointer]:
+                - /url: /en/country/FIN/Finland-Football
+              - text: ","
+              - link "Greece" [ref=e2149] [cursor=pointer]:
+                - /url: /en/country/GRE/Greece-Football
+              - text: ","
+              - link "Hungary" [ref=e2150] [cursor=pointer]:
+                - /url: /en/country/HUN/Hungary-Football
+              - text: ","
+              - link "India" [ref=e2151] [cursor=pointer]:
+                - /url: /en/country/IND/India-Football
+              - text: ","
+              - link "Iran" [ref=e2152] [cursor=pointer]:
+                - /url: /en/country/IRN/Iran-Football
+              - text: ","
+              - link "Japan" [ref=e2153] [cursor=pointer]:
+                - /url: /en/country/JPN/Japan-Football
+              - text: ","
+              - link "Korea Republic" [ref=e2154] [cursor=pointer]:
+                - /url: /en/country/KOR/Korea-Republic-Football
+              - text: ","
+              - link "Saudi Arabia" [ref=e2155] [cursor=pointer]:
+                - /url: /en/country/KSA/Saudi-Arabia-Football
+              - text: ","
+              - link "Mexico" [ref=e2156] [cursor=pointer]:
+                - /url: /en/country/MEX/Mexico-Football
+              - text: ","
+              - link "Netherlands" [ref=e2157] [cursor=pointer]:
+                - /url: /en/country/NED/Netherlands-Football
+              - text: ","
+              - link "Norway" [ref=e2158] [cursor=pointer]:
+                - /url: /en/country/NOR/Norway-Football
+              - text: ","
+              - link "Paraguay" [ref=e2159] [cursor=pointer]:
+                - /url: /en/country/PAR/Paraguay-Football
+              - text: ","
+              - link "Peru" [ref=e2160] [cursor=pointer]:
+                - /url: /en/country/PER/Peru-Football
+              - text: ","
+              - link "Poland" [ref=e2161] [cursor=pointer]:
+                - /url: /en/country/POL/Poland-Football
+              - text: ","
+              - link "Portugal" [ref=e2162] [cursor=pointer]:
+                - /url: /en/country/POR/Portugal-Football
+              - text: ","
+              - link "Romania" [ref=e2163] [cursor=pointer]:
+                - /url: /en/country/ROU/Romania-Football
+              - text: ","
+              - link "South Africa" [ref=e2164] [cursor=pointer]:
+                - /url: /en/country/RSA/South-Africa-Football
+              - text: ","
+              - link "Russia" [ref=e2165] [cursor=pointer]:
+                - /url: /en/country/RUS/Russia-Football
+              - text: ","
+              - link "Scotland" [ref=e2166] [cursor=pointer]:
+                - /url: /en/country/SCO/Scotland-Football
+              - text: ","
+              - link "Serbia" [ref=e2167] [cursor=pointer]:
+                - /url: /en/country/SRB/Serbia-Football
+              - text: ","
+              - link "Switzerland" [ref=e2168] [cursor=pointer]:
+                - /url: /en/country/SUI/Switzerland-Football
+              - text: ","
+              - link "Sweden" [ref=e2169] [cursor=pointer]:
+                - /url: /en/country/SWE/Sweden-Football
+              - text: ","
+              - link "Turkey" [ref=e2170] [cursor=pointer]:
+                - /url: /en/country/TUR/Turkey-Football
+              - text: ","
+              - link "Ukraine" [ref=e2171] [cursor=pointer]:
+                - /url: /en/country/UKR/Ukraine-Football
+              - text: ","
+              - link "Uruguay" [ref=e2172] [cursor=pointer]:
+                - /url: /en/country/URU/Uruguay-Football
+              - text: ","
+              - link "United States" [ref=e2173] [cursor=pointer]:
+                - /url: /en/country/USA/United-States-Football
+              - text: ","
+              - link "Venezuela" [ref=e2174] [cursor=pointer]:
+                - /url: /en/country/VEN/Venezuela-Football
+              - text: ","
+              - link "..." [ref=e2175] [cursor=pointer]:
+                - /url: /en/countries/
+          - listitem [ref=e2176]:
+            - link "Draft History" [ref=e2177] [cursor=pointer]:
+              - /url: /en/draft/
+            - generic [ref=e2178]:
+              - strong [ref=e2179]:
+                - link "Major League Soccer" [ref=e2180] [cursor=pointer]:
+                  - /url: /en/draft/
+              - text: ":"
+              - link "2026" [ref=e2181] [cursor=pointer]:
+                - /url: /en/draft/22/2026/2026-MLS-Draft
+              - text: ","
+              - link "2025" [ref=e2182] [cursor=pointer]:
+                - /url: /en/draft/22/2025/2025-MLS-Draft
+              - text: ","
+              - link "2024" [ref=e2183] [cursor=pointer]:
+                - /url: /en/draft/22/2024/2024-MLS-Draft
+              - text: ","
+              - link "2023" [ref=e2184] [cursor=pointer]:
+                - /url: /en/draft/22/2023/2023-MLS-Draft
+              - text: ","
+              - link "2022" [ref=e2185] [cursor=pointer]:
+                - /url: /en/draft/22/2022/2022-MLS-Draft
+              - text: ","
+              - link "..." [ref=e2186] [cursor=pointer]:
+                - /url: /en/draft/
+            - generic [ref=e2187]:
+              - strong [ref=e2188]:
+                - link "NWSL" [ref=e2189] [cursor=pointer]:
+                  - /url: /en/draft/
+              - text: ":"
+              - link "2024" [ref=e2190] [cursor=pointer]:
+                - /url: /en/draft/182/2024/2024-NWSL-Draft
+              - text: ","
+              - link "2023" [ref=e2191] [cursor=pointer]:
+                - /url: /en/draft/182/2023/2023-NWSL-Draft
+              - text: ","
+              - link "2022" [ref=e2192] [cursor=pointer]:
+                - /url: /en/draft/182/2022/2022-NWSL-Draft
+              - text: ","
+              - link "2021" [ref=e2193] [cursor=pointer]:
+                - /url: /en/draft/182/2021/2021-NWSL-Draft
+              - text: ","
+              - link "2020" [ref=e2194] [cursor=pointer]:
+                - /url: /en/draft/182/2020/2020-NWSL-Draft
+              - text: ","
+              - link "..." [ref=e2195] [cursor=pointer]:
+                - /url: /en/draft/
+            - generic [ref=e2196]:
+              - strong [ref=e2197]:
+                - link "Women's Professional Soccer" [ref=e2198] [cursor=pointer]:
+                  - /url: /en/draft/
+              - text: ":"
+              - link "2011" [ref=e2199] [cursor=pointer]:
+                - /url: /en/draft/878/2011/2011-WPS-Draft
+              - text: ","
+              - link "2010" [ref=e2200] [cursor=pointer]:
+                - /url: /en/draft/878/2010/2010-WPS-Draft
+              - text: ","
+              - link "2009" [ref=e2201] [cursor=pointer]:
+                - /url: /en/draft/878/2009/2009-WPS-Draft
+          - listitem [ref=e2202]:
+            - link "Frivolities" [ref=e2203] [cursor=pointer]:
+              - /url: /en/friv/
+            - generic [ref=e2204]:
+              - link "Players With Multiple Squads" [ref=e2205] [cursor=pointer]:
+                - /url: /en/friv/players-who-played-for-multiple-clubs-countries.fcgi
+              - text: ","
+              - link "Birthdays" [ref=e2206] [cursor=pointer]:
+                - /url: /en/friv/birthdays.fcgi
+              - text: ","
+              - link "National Team Scouting" [ref=e2207] [cursor=pointer]:
+                - /url: /en/stathead/scout/USA
+          - listitem [ref=e2208]:
+            - link "About FBref" [ref=e2209] [cursor=pointer]:
+              - /url: /en/about/
+            - generic [ref=e2210]:
+              - link "Expected Goals Model Explained" [ref=e2211] [cursor=pointer]:
+                - /url: /en/expected-goals-model-explained/
+              - text: ","
+              - link "FBref Coverage" [ref=e2212] [cursor=pointer]:
+                - /url: /en/about/coverage
+              - text: ","
+              - link "Positions & Nationalities" [ref=e2213] [cursor=pointer]:
+                - /url: /en/about/errata
+              - text: ","
+              - link "Data Usage Terms" [ref=e2214] [cursor=pointer]:
+                - /url: https://www.sports-reference.com/data_use.html
+              - text: ","
+              - link "Frequently Asked Questions about Football" [ref=e2215] [cursor=pointer]:
+                - /url: /en/about/faq
+          - listitem [ref=e2216]:
+            - link "Immaculate Footy (World)" [ref=e2217] [cursor=pointer]:
+              - /url: https://www.sports-reference.com/immaculate-footy/?utm_campaign=2023_07_btn_home_ig&utm_source=fb&utm_medium=sr_xsite
+            - text: and
+            - link "Immaculate Footy (England)" [ref=e2218] [cursor=pointer]:
+              - /url: https://www.sports-reference.com/immaculate-footy/england/?utm_campaign=2023_07_btn_home_ig&utm_source=fb&utm_medium=sr_xsite
+            - generic [ref=e2219]: Put your football knowledge to the test with our daily football trivia game. Can you complete the grid?
+        - list [ref=e2220]:
+          - listitem [ref=e2221]
+          - listitem [ref=e2222]:
+            - link "FBref.com Blog and Articles" [ref=e2223] [cursor=pointer]:
+              - /url: https://fbref.com/fb-blog/
+      - generic [ref=e2224]:
+        - generic [ref=e2225]:
+          - heading "We're Social...for Statheads" [level=2] [ref=e2227]
+          - link "Telephone" [ref=e2228] [cursor=pointer]:
+            - /url: tel://888-512-8907
+            - img [ref=e2229]
+          - link "Our Blog" [ref=e2231] [cursor=pointer]:
+            - /url: //www.sports-reference.com/blog/
+            - img [ref=e2232]
+          - link "RSS Feed" [ref=e2234] [cursor=pointer]:
+            - /url: https://www.sports-reference.com/blog/feed/
+            - img [ref=e2235]
+          - link "Facebook" [ref=e2237] [cursor=pointer]:
+            - /url: https://www.facebook.com/@FutbolRef
+            - img [ref=e2238]
+          - link "Instagram" [ref=e2240] [cursor=pointer]:
+            - /url: https://instagram.com/FBref.stats
+            - img [ref=e2241]
+          - link "TikTok" [ref=e2243] [cursor=pointer]:
+            - /url: https://www.tiktok.com/@fbref
+            - img [ref=e2244]
+          - link "Reddit/r/SR" [ref=e2246] [cursor=pointer]:
+            - /url: https://reddit.com/r/SportsReference
+            - img [ref=e2247]
+          - link "YouTube" [ref=e2249] [cursor=pointer]:
+            - /url: https://www.youtube.com/user/sportsreference
+            - img [ref=e2250]
+          - link "LinkedIn" [ref=e2252] [cursor=pointer]:
+            - /url: https://www.linkedin.com/company/sports-reference-llc
+            - img [ref=e2253]
+          - link "PayPal" [ref=e2255] [cursor=pointer]:
+            - /url: https://www.paypal.me/sportsref
+            - img [ref=e2256]
+          - link "Threads" [ref=e2258] [cursor=pointer]:
+            - /url: https://threads.net/@fbref.stats
+            - img [ref=e2259]
+          - link "Bluesky" [ref=e2261] [cursor=pointer]:
+            - /url: https://bsky.app/profile/fbref.com
+            - img [ref=e2262]
+          - paragraph
+          - paragraph [ref=e2264]:
+            - strong [ref=e2265]: "Site Last Updated:"
+            - text: Friday, April 10, 5:21AM
+          - paragraph [ref=e2266]:
+            - link "Question, Comment, Feedback, or Correction?" [ref=e2267] [cursor=pointer]:
+              - /url: https://www.sports-reference.com/feedback/
+          - paragraph [ref=e2268]:
+            - link "Subscribe to our Free Email Newsletter" [ref=e2269] [cursor=pointer]:
+              - /url: https://fbref.com/en/email
+          - paragraph [ref=e2270]:
+            - 'link "Subscribe to Stathead FBref: Get your first month FREE Your All-Access Ticket to the FBref Database" [ref=e2271] [cursor=pointer]':
+              - /url: https://www.sports-reference.com/stathead/sport/fbref/?utm_medium=sr_xsite&utm_source=fb&utm_campaign=2023_01_footerbttn_stathead
+              - text: "Subscribe to Stathead FBref: Get your first month FREE"
+              - emphasis [ref=e2272]: Your All-Access Ticket to the FBref Database
+          - paragraph [ref=e2273]:
+            - link "Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more." [ref=e2274] [cursor=pointer]:
+              - /url: https://www.sports-reference.com/blog/ways-sports-reference-can-help-your-website/?utm_medium=sr&utm_source=fb&utm_campaign=site-footer-ways-help
+        - generic [ref=e2275]:
+          - heading "FAQs, Tip & Tricks" [level=2] [ref=e2277]
+          - list [ref=e2278]:
+            - listitem [ref=e2279]:
+              - 'link "FBref Launch Post: What we''ve done, what we have and what''s next." [ref=e2280] [cursor=pointer]':
+                - /url: https://www.sports-reference.com/blog/2018/06/fbref-com-launches-today
+            - listitem [ref=e2281]:
+              - link "Tips and Tricks from our Blog." [ref=e2282] [cursor=pointer]:
+                - /url: //www.sports-reference.com/blog/category/tips-and-tricks/
+            - listitem [ref=e2283]:
+              - link "Do you have a blog? Join our linker program." [ref=e2284] [cursor=pointer]:
+                - /url: /en/linker/
+            - listitem [ref=e2285]:
+              - link "Watch our How-To Videos to Become a Stathead" [ref=e2286] [cursor=pointer]:
+                - /url: https://www.sports-reference.com/blog/category/stathead-tutorial-series/
+            - listitem [ref=e2287]:
+              - link "Subscribe to Stathead and get access to more data than you can imagine" [ref=e2288] [cursor=pointer]:
+                - /url: https://www.sports-reference.com/stathead/?ref=fb
+        - generic [ref=e2289]:
+          - paragraph [ref=e2290]:
+            - text: All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes.
+            - link "Our reasoning for presenting offensive logos." [ref=e2291] [cursor=pointer]:
+              - /url: https://www.sports-reference.com/blog/2016/06/redesign-team-and-league-logos-courtesy-sportslogos-net/
+          - paragraph [ref=e2292]:
+            - text: Logos were compiled by the amazing
+            - link "SportsLogos.net." [ref=e2293] [cursor=pointer]:
+              - /url: http://sportslogos.net/
+          - paragraph [ref=e2294]:
+            - text: Copyright © 2000-2026
+            - link "Sports Reference LLC" [ref=e2295] [cursor=pointer]:
+              - /url: //www.sports-reference.com/
+            - text: . All rights reserved.
+          - paragraph [ref=e2296]: The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+          - generic [ref=e2297]:
+            - text: Football data provided by
+            - link "Data Sports Group" [ref=e2298] [cursor=pointer]:
+              - /url: http://datasportsgroup.com/
+              - img "Data Sports Group" [ref=e2299]
+    - list [ref=e2300]:
+      - listitem [ref=e2301]:
+        - link "Sports Reference ®" [ref=e2302] [cursor=pointer]:
+          - /url: https://www.sports-reference.com/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav_footer
+          - img [ref=e2303]
+          - text: Sports Reference ®
+        - text: ·
+      - listitem [ref=e2305]:
+        - link "Baseball" [ref=e2306] [cursor=pointer]:
+          - /url: https://www.baseball-reference.com/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav_footer
+        - text: ·
+      - listitem [ref=e2307]:
+        - link "Football" [ref=e2308] [cursor=pointer]:
+          - /url: https://www.pro-football-reference.com/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav_footer
+        - link "(college)" [ref=e2309] [cursor=pointer]:
+          - /url: https://www.sports-reference.com/cfb/
+        - text: ·
+      - listitem [ref=e2310]:
+        - link "Basketball" [ref=e2311] [cursor=pointer]:
+          - /url: https://www.basketball-reference.com/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav_footer
+        - link "(college)" [ref=e2312] [cursor=pointer]:
+          - /url: https://www.sports-reference.com/cbb/
+        - text: ·
+      - listitem [ref=e2313]:
+        - link "Hockey" [ref=e2314] [cursor=pointer]:
+          - /url: https://www.hockey-reference.com/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav_footer
+        - text: ·
+      - listitem [ref=e2315]:
+        - link "Soccer" [ref=e2316] [cursor=pointer]:
+          - /url: https://fbref.com/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav_footer
+        - text: ·
+      - listitem [ref=e2317]:
+        - link "Blog" [ref=e2318] [cursor=pointer]:
+          - /url: https://www.sports-reference.com/blog/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav_footer
+        - text: ·
+      - listitem [ref=e2319]:
+        - link "Stathead ®" [ref=e2320] [cursor=pointer]:
+          - /url: https://www.sports-reference.com/stathead/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav_footer
+        - text: ·
+      - listitem [ref=e2321]:
+        - link "Immaculate Footy ®" [ref=e2322] [cursor=pointer]:
+          - /url: https://www.sports-reference.com/immaculate-footy/?utm_source=fb&utm_medium=sr_xsite&utm_campaign=2023_01_srnav_footer
+    - generic [ref=e2323]:
+      - link "About" [ref=e2324] [cursor=pointer]:
+        - /url: //www.sports-reference.com/about.html
+      - text: •
+      - link "Conditions & Terms of Service" [ref=e2325] [cursor=pointer]:
+        - /url: //www.sports-reference.com/termsofuse.html
+      - text: •
+      - link "Advertise With Us" [ref=e2326] [cursor=pointer]:
+        - /url: //www.sports-reference.com/advertise.html
+      - text: •
+      - link "Jobs at SR" [ref=e2327] [cursor=pointer]:
+        - /url: //www.sports-reference.com/jobs.html
+      - text: •
+      - link "FBref.com T-Shirts & Store" [ref=e2328] [cursor=pointer]:
+        - /url: https://sportsreference.threadless.com/
+      - text: •
+      - link "Your Privacy Choices" [ref=e2329] [cursor=pointer]:
+        - /url: "#"
+      - text: "Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love."
+      - link "Privacy Policy" [ref=e2330] [cursor=pointer]:
+        - /url: //www.sports-reference.com/privacy.html
+      - text: •
+      - link "Gambling Revenue Policy" [ref=e2331] [cursor=pointer]:
+        - /url: //www.sports-reference.com/gambling-revenue-policy.html
+      - text: •
+      - link "Accessibility Policy" [ref=e2332] [cursor=pointer]:
+        - /url: //www.sports-reference.com/accessibility-policy.html
+      - text: •
+      - link "Use of Data" [ref=e2333] [cursor=pointer]:
+        - /url: //www.sports-reference.com/data_use.html

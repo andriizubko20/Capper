@@ -34,8 +34,22 @@ def run_retrain(version: str = "v1") -> None:
             "date": pd.Timestamp(s.match.date),
             "home_team_id": s.match.home_team_id,
             "away_team_id": s.match.away_team_id,
+            "home_score": s.match.home_score,
+            "away_score": s.match.away_score,
             "home_xg": s.home_xg,
             "away_xg": s.away_xg,
+            "home_shots_on_target":  s.home_shots_on_target,
+            "away_shots_on_target":  s.away_shots_on_target,
+            "home_shots_inside_box": s.home_shots_inside_box,
+            "away_shots_inside_box": s.away_shots_inside_box,
+            "home_possession":       s.home_possession,
+            "away_possession":       s.away_possession,
+            "home_corners":          s.home_corners,
+            "away_corners":          s.away_corners,
+            "home_gk_saves":         s.home_gk_saves,
+            "away_gk_saves":         s.away_gk_saves,
+            "home_passes_accurate":  s.home_passes_accurate,
+            "away_passes_accurate":  s.away_passes_accurate,
         } for s in stats])
 
         odds = db.query(Odds).filter_by(market="1x2").all()

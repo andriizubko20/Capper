@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"/>
+  <title>Capper</title>
+
+  <!-- Fonts: Calistoga + Inter + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Calistoga:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    /* ═══════════════════════════════════════════════════════
+       DESIGN TOKENS — Three-layer system
+       Modern Dark Cinema Mobile × Capper
+    ═══════════════════════════════════════════════════════ */
+
+    :root {
+      /* ── Primitive ───────────────────────────────────────── */
+      --p-black-0:  #020203;
+      --p-black-1:  #050506;
+      --p-black-2:  #0a0a0c;
+      --p-black-3:  #111114;
+      --p-white-4:  rgba(255,255,255,0.04);
+      --p-white-6:  rgba(255,255,255,0.06);
+      --p-white-8:  rgba(255,255,255,0.08);
+      --p-white-12: rgba(255,255,255,0.12);
+      --p-white-60: rgba(255,255,255,0.60);
+      --p-indigo:   #5E6AD2;
+      --p-indigo-g: rgba(94,106,210,0.18);
+      --p-cyan:     #22D3EE;
+      --p-cyan-g:   rgba(34,211,238,0.15);
+      --p-green:    #22C55E;
+      --p-green-g:  rgba(34,197,94,0.15);
+      --p-red:      #EF4444;
+      --p-red-g:    rgba(239,68,68,0.15);
+      --p-amber:    #F59E0B;
+      --p-text:     #EDEDEF;
+      --p-muted:    #8A8F98;
+      --p-dim:      #52566A;
+
+      /* ── Semantic ────────────────────────────────────────── */
+      --color-bg:        var(--p-black-0);
+      --color-surface:   var(--p-black-2);
+      --color-card:      var(--p-white-4);
+      --color-card-hi:   var(--p-white-6);
+      --color-border:    var(--p-white-8);
+      --color-border-hi: var(--p-white-12);
+      --color-accent:    var(--p-indigo);
+      --color-accent-g:  var(--p-indigo-g);
+      --color-highlight: var(--p-cyan);
+      --color-hl-g:      var(--p-cyan-g);
+      --color-success:   var(--p-green);
+      --color-success-g: var(--p-green-g);
+      --color-error:     var(--p-red);
+      --color-error-g:   var(--p-red-g);
+      --color-warning:   var(--p-amber);
+      --color-text:      var(--p-text);
+      --color-muted:     var(--p-muted);
+      --color-dim:       var(--p-dim);
+
+      /* ── Component ───────────────────────────────────────── */
+      --card-bg:      var(--color-card);
+      --card-border:  1px solid var(--color-border);
+      --card-radius:  16px;
+      --card-blur:    blur(12px);
+      --nav-bg:       rgba(5,5,6,0.92);
+      --nav-border:   1px solid var(--color-border);
+      --badge-radius: 8px;
+      --chip-radius:  6px;
+      --easing:       cubic-bezier(0.16,1,0.3,1);
+      --dur-fast:     150ms;
+      --dur-mid:      220ms;
+
+      /* Typography */
+      --font-display: 'Calistoga', serif;
+      --font-body:    'Inter', sans-serif;
+      --font-mono:    'JetBrains Mono', monospace;
+    }
+
+    /* ── Reset ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      overflow: hidden;
+      overscroll-behavior: none;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── App shell ───────────────────────────────────────── */
+    #app {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      max-width: 430px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    /* ── Ambient blobs ───────────────────────────────────── */
+    .blobs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.07;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+    .blob-1 { width: 260px; height: 260px; background: var(--p-indigo); top: -60px; left: -60px; animation-delay: 0s; }
+    .blob-2 { width: 200px; height: 200px; background: var(--p-cyan);   top: 40%;  right: -80px; animation-delay: -6s; }
+    .blob-3 { width: 180px; height: 180px; background: var(--p-indigo); bottom: 15%; left: 20%;  animation-delay: -12s; opacity: 0.05; }
+    @keyframes drift {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(30px,20px) scale(1.08); }
+    }
+
+    /* ── Top bar ─────────────────────────────────────────── */
+    .topbar {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px 10px;
+      flex-shrink: 0;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-size: 22px;
+      letter-spacing: 0.02em;
+      color: var(--color-text);
+    }
+    .logo em {
+      font-style: normal;
+      color: var(--color-accent);
+    }
+
+/* ── Shared tab base ───────────────────────────────── */
+    .model-tabs { display: none; }
+    .model-tabs.active-tabs { display: flex; }
+
+    /* Shared pill base */
+    .model-tabs .model-tab {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      user-select: none;
+      padding: 7px 14px;
+      border-radius: 20px;
+      transition: all 200ms cubic-bezier(0.16,1,0.3,1);
+      transform: scale(1);
+    }
+    .model-tabs .model-tab.active  { transform: scale(1.04); }
+    .model-tabs .model-tab:active  { transform: scale(0.96); }
+    @media (prefers-reduced-motion: reduce) {
+      .model-tabs .model-tab { transition: none; transform: none !important; }
+    }
+
+    /* ══ SVG Refract ═════════════════════════════════════
+       backdrop-filter: url(#pill-refract) — SVG turbulence
+       distorts background behind the pill like real glass.
+       Chrome/Edge only; Safari falls back to blur.         */
+    .model-tabs-5 { gap: 5px; align-items: center; }
+    .model-tabs-5 .model-tab {
+      color: rgba(255,255,255,0.35);
+      background: rgba(94,106,210,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: url(#pill-refract) blur(8px) brightness(125%) saturate(180%);
+      -webkit-backdrop-filter: blur(8px) brightness(125%) saturate(180%);
+    }
+    .model-tabs-5 .model-tab.active {
+      color: #fff;
+      background: rgba(94,106,210,0.22);
+      border-color: rgba(94,106,210,0.48);
+      backdrop-filter: url(#pill-refract) blur(6px) brightness(145%) saturate(200%);
+      -webkit-backdrop-filter: blur(6px) brightness(145%) saturate(200%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.28),
+        0 0 16px rgba(94,106,210,0.48),
+        0 4px 16px rgba(0,0,0,0.35);
+    }
+    .model-tabs-5 .model-tab:hover:not(.active) {
+      color: rgba(255,255,255,0.60);
+      background: rgba(94,106,210,0.12);
+    }
+
+    /* ── Screen container ────────────────────────────────── */
+    .screens { flex: 1; position: relative; z-index: 1; overflow: hidden; }
+    .screen {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      padding: 6px 16px 0;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .screen::-webkit-scrollbar { display: none; }
+    .screen.active { display: flex; }
+    .scroll-pad { height: 16px; flex-shrink: 0; }
+
+    /* ── Bottom nav ──────────────────────────────────────── */
+    .bottom-nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      border-top: var(--nav-border);
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      flex-shrink: 0;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .nav-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 0 10px;
+      cursor: pointer;
+      color: var(--color-dim);
+      transition: color var(--dur-fast) var(--easing);
+      min-height: 56px;
+      user-select: none;
+    }
+    .nav-btn.active { color: var(--color-accent); }
+    .nav-btn svg { width: 22px; height: 22px; stroke-width: 1.75; }
+    .nav-label { font-size: 10px; font-weight: 600; letter-spacing: 0.03em; }
+
+    /* ── Glass card base ─────────────────────────────────── */
+    .glass {
+      background: var(--card-bg);
+      border: var(--card-border);
+      border-radius: var(--card-radius);
+      backdrop-filter: var(--card-blur);
+    }
+
+    /* ═══════════════ PICKS SCREEN ═══════════════════════ */
+
+    /* Bankroll card */
+    /* ── Bankroll: Hero Glass + Sparkline ───────────── */
+    .bankroll {
+      border-radius: var(--card-radius);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .bankroll-c {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+      padding: 20px 18px 18px;
+    }
+    .bankroll-c::before {
+      content: '';
+      position: absolute;
+      top: -40px; left: -20px;
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(94,106,210,0.22) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .bk-c-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .bk-c-left { flex: 1; min-width: 0; }
+    .bk-c-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--color-muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .bk-c-amount {
+      font-family: var(--font-mono);
+      font-size: 34px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .bk-c-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .bk-c-from {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-dim);
+    }
+    .bk-c-pnl {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-success);
+    }
+    .bk-c-spark {
+      flex-shrink: 0;
+      opacity: 0.85;
+    }
+
+    /* legacy (keep for fallback) */
+    .bankroll-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+      color: var(--color-muted); text-transform: uppercase; margin-bottom: 8px;
+    }
+    .bankroll-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--color-success-g); border: 1px solid rgba(34,197,94,0.25);
+      border-radius: var(--badge-radius); padding: 5px 11px;
+      font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+      color: var(--color-success);
+    }
+
+    /* Day separator */
+    .day-sep {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 0 2px;
+      flex-shrink: 0;
+    }
+    .day-sep-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--color-dim);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .day-sep-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--color-border), transparent);
+    }
+
+    /* Pick card */
+    .pick {
+      background: var(--card-bg);
+      border: var(--card-border);
+      border-radius: var(--card-radius);
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: border-color var(--dur-fast) var(--easing),
+                  background var(--dur-fast) var(--easing);
+      backdrop-filter: var(--card-blur);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .pick::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent);
+    }
+    .pick:hover { background: var(--card-card-hi, var(--p-white-6)); }
+
+    .pick-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 9px;
+    }
+    .pick-league {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--color-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .pick-time {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-muted);
+    }
+    .pick-time.live { color: var(--color-success); }
+    .pick-time.soon { color: var(--color-highlight); }
+
+    /* ── Pick teams: match-scoreboard style ── */
+    .pick-teams {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 12px;
+    }
+    .team-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      min-width: 0;
+    }
+    .team-logo {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .team-logo-fallback {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--p-white-8);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--color-dim);
+      font-weight: 700;
+    }
+    .team-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-muted);
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+      padding: 0 4px;
+    }
+    .team-block.pick-active .team-name {
+      color: var(--color-text);
+    }
+    .vs-block {
+      display: flex;
+      align-items: center;
+      padding-top: 12px;
+      flex-shrink: 0;
+      width: 28px;
+      justify-content: center;
+    }
+    .vs-sep {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--color-dim);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Pick row: bet info strip ── */
+    .pick-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--color-accent-g);
+      border: 1px solid rgba(94,106,210,0.22);
+      border-radius: 10px;
+      padding: 9px 12px;
+      margin-bottom: 10px;
+    }
+    .pick-direction {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      color: var(--color-accent);
+    }
+    .pick-row-dot {
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--color-dim);
+      flex-shrink: 0;
+    }
+    .pick-odds-val {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+    .pick-ev-val {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-highlight);
+      margin-left: auto;
+    }
+
+    /* legacy chips — keep for fallback */
+    .pick-chips {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: var(--chip-radius);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 9px;
+      letter-spacing: 0.03em;
+    }
+    .chip-side {
+      background: var(--color-accent-g);
+      border: 1px solid rgba(94,106,210,0.3);
+      color: var(--color-accent);
+    }
+    .chip-odds {
+      background: var(--p-white-6);
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+    .chip-ev {
+      background: var(--color-hl-g);
+      border: 1px solid rgba(34,211,238,0.25);
+      color: var(--color-highlight);
+    }
+
+    .pick-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pick-stake {
+      font-size: 12px;
+      color: var(--color-dim);
+    }
+    .pick-stake strong {
+      font-family: var(--font-mono);
+      color: var(--color-muted);
+      font-weight: 500;
+    }
+
+    /* Status badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: var(--badge-radius);
+      letter-spacing: 0.02em;
+    }
+    .badge-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+    .badge.pending {
+      background: var(--p-white-4);
+      border: 1px solid var(--color-border);
+      color: var(--color-dim);
+    }
+    .badge.pending .badge-dot { background: var(--color-dim); }
+
+    /* Live badge */
+    .badge.live {
+      background: var(--p-white-4);
+      border: 1px solid var(--color-border);
+      color: var(--color-dim);
+    }
+    .badge.live .badge-dot {
+      background: var(--color-error);
+      animation: pulse-dot 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    .badge.win {
+      background: var(--color-success-g);
+      border: 1px solid rgba(34,197,94,0.25);
+      color: var(--color-success);
+    }
+    .badge.win .badge-dot { background: var(--color-success); }
+    .badge.loss {
+      background: var(--color-error-g);
+      border: 1px solid rgba(239,68,68,0.25);
+      color: var(--color-error);
+    }
+    .badge.loss .badge-dot { background: var(--color-error); }
+
+    /* ═══════════════ STATISTICS SCREEN ══════════════════ */
+
+    .stat-top {
+      background: var(--card-bg);
+      border: var(--card-border);
+      border-radius: var(--card-radius);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      justify-content: space-between;
+      backdrop-filter: var(--card-blur);
+    }
+    .stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--color-muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: 30px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .stat-sub {
+      margin-top: 5px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-success);
+      font-weight: 500;
+    }
+    .stat-icon {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      background: var(--color-accent-g);
+      border: 1px solid rgba(94,106,210,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Time filter */
+    .time-filters {
+      display: flex;
+      gap: 6px;
+    }
+    .time-btn {
+      flex: 1;
+      text-align: center;
+      padding: 8px 4px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-dim);
+      background: var(--card-bg);
+      border: var(--card-border);
+      cursor: pointer;
+      transition: all var(--dur-fast) var(--easing);
+      backdrop-filter: var(--card-blur);
+      user-select: none;
+    }
+    .time-btn.active {
+      background: var(--color-accent-g);
+      border-color: rgba(94,106,210,0.3);
+      color: var(--color-accent);
+    }
+
+    /* Chart card */
+    .chart-card {
+      background: var(--card-bg);
+      border: var(--card-border);
+      border-radius: var(--card-radius);
+      padding: 16px;
+      backdrop-filter: var(--card-blur);
+    }
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .chart-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+      text-transform: uppercase;
+    }
+    .chart-delta {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-success);
+      letter-spacing: -0.02em;
+    }
+    .chart-wrap { height: 150px; }
+
+    /* Metrics grid */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background: var(--card-bg);
+      border: var(--card-border);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      backdrop-filter: var(--card-blur);
+    }
+    .metric {
+      padding: 14px 6px 12px;
+      text-align: center;
+      border-right: 1px solid var(--color-border);
+    }
+    .metric:last-child { border-right: none; }
+    .metric-val {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .metric-val.pos { color: var(--color-success); }
+    .metric-lbl {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--color-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-top: 5px;
+    }
+
+    /* Streak */
+    .streak-card {
+      background: var(--card-bg);
+      border: var(--card-border);
+      border-radius: var(--card-radius);
+      padding: 14px 16px;
+      backdrop-filter: var(--card-blur);
+      margin-bottom: 4px;
+    }
+    .streak-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .streak-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--color-muted);
+      text-transform: uppercase;
+    }
+    .streak-summary { font-family: var(--font-mono); font-size: 11px; color: var(--color-dim); }
+    .streak-row { display: flex; gap: 5px; }
+    .sq {
+      flex: 1;
+      height: 26px;
+      border-radius: 5px;
+      position: relative;
+    }
+    .sq.win  { background: var(--color-success-g); border: 1px solid rgba(34,197,94,0.3); }
+    .sq.loss { background: var(--color-error-g);   border: 1px solid rgba(239,68,68,0.3); }
+    .sq.pend { background: var(--p-white-4);        border: 1px solid var(--color-border); }
+
+    /* ═══════════════ SCHEDULE SCREEN ════════════════════ */
+
+    .sched-day { margin-bottom: 4px; }
+    .sched-day-hdr {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--color-dim);
+      text-transform: uppercase;
+      padding: 10px 2px 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sched-day-hdr::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--color-border), transparent);
+    }
+
+    .sched-match {
+      display: flex;
+      align-items: center;
+      padding: 12px 14px;
+      background: var(--card-bg);
+      border: var(--card-border);
+      border-radius: var(--card-radius);
+      flex-shrink: 0;
+      margin-bottom: 6px;
+      min-height: 60px;
+      cursor: pointer;
+      transition: border-color var(--dur-fast) var(--easing);
+      backdrop-filter: var(--card-blur);
+    }
+    .sched-match:hover { border-color: var(--color-border-hi); }
+    .sched-left { flex: 1; min-width: 0; }
+    .sched-league {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--color-dim);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .sched-teams {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.02em;
+      overflow: hidden;
+    }
+    .sched-team-names {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .sched-logo-pair {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .sched-logo {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      border-radius: 50%;
+      background: var(--p-white-4);
+      box-shadow: 0 0 0 1.5px var(--color-bg);
+    }
+    .sched-logo:not(:first-child) { margin-left: -6px; }
+    .sched-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+      margin-left: 12px;
+      flex-shrink: 0;
+    }
+    .sched-time {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-muted);
+    }
+    .sched-pick {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: var(--color-accent-g);
+      border: 1px solid rgba(94,106,210,0.3);
+      color: var(--color-accent);
+      font-family: var(--font-mono);
+    }
+    .sched-status {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--color-dim);
+    }
+    .sched-status.final { color: var(--color-success); }
+    .sched-status.early { color: var(--color-highlight); }
+  </style>
+</head>
+<body>
+<!-- SVG filter for Refract tab variant (5·Refract) -->
+<!-- backdrop-filter: url(#pill-refract) distorts the background like real curved glass -->
+<svg xmlns="http://www.w3.org/2000/svg"
+     style="position:absolute;width:0;height:0;overflow:hidden"
+     aria-hidden="true">
+  <defs>
+    <filter id="pill-refract"
+            x="-20%" y="-20%" width="140%" height="140%"
+            color-interpolation-filters="sRGB">
+      <!-- subtle turbulence noise — low frequency = gentle waves, not pixel noise -->
+      <feTurbulence type="fractalNoise"
+                    baseFrequency="0.018 0.022"
+                    numOctaves="2"
+                    seed="12"
+                    stitchTiles="stitch"
+                    result="noise"/>
+      <!-- displacement: scale=5 = 5px max distortion, like slightly curved glass -->
+      <feDisplacementMap in="SourceGraphic"
+                         in2="noise"
+                         scale="5"
+                         xChannelSelector="R"
+                         yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<div class="blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<div id="app">
+
+  <!-- ── Top bar ───────────────────────────────────────── -->
+  <header class="topbar">
+    <div class="logo">Cap<em>per</em></div>
+
+    <!-- Refract — SVG feTurbulence backdrop distortion -->
+    <div class="model-tabs model-tabs-5 active-tabs" role="tablist" id="tabs-5">
+      <div class="model-tab active" role="tab" onclick="setModel(this)">WS Gap</div>
+      <div class="model-tab"        role="tab" onclick="setModel(this)">Monster</div>
+      <div class="model-tab"        role="tab" onclick="setModel(this)">Aqua</div>
+    </div>
+  </header>
+
+
+<!-- ── Screens ───────────────────────────────────────── -->
+  <main class="screens">
+
+    <!-- ════════ PICKS ════════ -->
+    <section class="screen active" id="s-picks" role="tabpanel">
+
+      <!-- Bankroll: Hero Glass + Sparkline -->
+      <div class="bankroll bankroll-c active-variant">
+        <div class="bk-c-inner">
+          <div class="bk-c-left">
+            <div class="bk-c-label">Bankroll</div>
+            <div class="bk-c-amount">$1,243</div>
+            <div class="bk-c-row">
+              <span class="bk-c-from">від $1,000</span>
+              <span class="bk-c-pnl">↑ +24.3%</span>
+            </div>
+          </div>
+          <svg class="bk-c-spark" width="88" height="52" viewBox="0 0 88 52" fill="none">
+            <defs>
+              <linearGradient id="spk-fill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#22C55E" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#22C55E" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0 42 L14 36 L26 39 L38 26 L52 18 L66 12 L88 4 L88 52 L0 52 Z"
+                  fill="url(#spk-fill)"/>
+            <polyline points="0,42 14,36 26,39 38,26 52,18 66,12 88,4"
+                      stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="88" cy="4" r="3.5" fill="#22C55E"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="day-sep">
+        <span class="day-sep-label">Сьогодні</span>
+        <div class="day-sep-line"></div>
+      </div>
+
+      <!-- Pick: pending — Liverpool AWAY -->
+      <div class="pick">
+        <div class="pick-meta">
+          <div class="pick-league">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</div>
+          <div class="pick-time soon">14:00</div>
+        </div>
+        <div class="pick-teams">
+          <div class="team-block">
+            <img class="team-logo" src="https://media.api-sports.io/football/teams/42.png" alt="Arsenal" onerror="this.outerHTML='<div class=\'team-logo-fallback\'>ARS</div>'">
+            <span class="team-name">Arsenal</span>
+          </div>
+          <div class="vs-block"><span class="vs-sep">VS</span></div>
+          <div class="team-block pick-active">
+            <img class="team-logo" src="https://media.api-sports.io/football/teams/40.png" alt="Liverpool" onerror="this.outerHTML='<div class=\'team-logo-fallback\'>LIV</div>'">
+            <span class="team-name">Liverpool</span>
+          </div>
+        </div>
+        <div class="pick-row">
+          <span class="pick-direction">AWAY</span>
+          <span class="pick-row-dot"></span>
+          <span class="pick-odds-val">× 2.45</span>
+          <span class="pick-ev-val">EV +17%</span>
+        </div>
+        <div class="pick-footer">
+          <div class="pick-stake">Стейк: <strong>$47</strong></div>
+          <div class="badge live"><span class="badge-dot"></span> Live</div>
+        </div>
+      </div>
+
+      <!-- Pick: pending — Bayern HOME -->
+      <div class="pick">
+        <div class="pick-meta">
+          <div class="pick-league">🏆 Champions League</div>
+          <div class="pick-time soon">20:00</div>
+        </div>
+        <div class="pick-teams">
+          <div class="team-block pick-active">
+            <img class="team-logo" src="https://media.api-sports.io/football/teams/157.png" alt="Bayern" onerror="this.outerHTML='<div class=\'team-logo-fallback\'>BAY</div>'">
+            <span class="team-name">Bayern</span>
+          </div>
+          <div class="vs-block"><span class="vs-sep">VS</span></div>
+          <div class="team-block">
+            <img class="team-logo" src="https://media.api-sports.io/football/teams/85.png" alt="PSG" onerror="this.outerHTML='<div class=\'team-logo-fallback\'>PSG</div>'">
+            <span class="team-name">PSG</span>
+          </div>
+        </div>
+        <div class="pick-row">
+          <span class="pick-direction">HOME</span>
+          <span class="pick-row-dot"></span>
+          <span class="pick-odds-val">× 1.95</span>
+          <span class="pick-ev-val">EV +22%</span>
+        </div>
+        <div class="pick-footer">
+          <div class="pick-stake">Стейк: <strong>$63</strong></div>
+          <div class="badge live"><span class="badge-dot"></span> Live</div>
+        </div>
+      </div>
+
+      <div class="day-sep">
+        <span class="day-sep-label">Вчора</span>
+        <div class="day-sep-line"></div>
+      </div>
+
+      <!-- Pick: win — OVER -->
+      <div class="pick">
+        <div class="pick-meta">
+          <div class="pick-league">🇪🇸 La Liga</div>
+          <div class="pick-time">Вчора</div>
+        </div>
+        <div class="pick-teams">
+          <div class="team-block">
+            <img class="team-logo" src="https://media.api-sports.io/football/teams/541.png" alt="Real Madrid" onerror="this.outerHTML='<div class=\'team-logo-fallback\'>RMA</div>'">
+            <span class="team-name">Real Madrid</span>
+          </div>
+          <div class="vs-block"><span class="vs-sep">VS</span></div>
+          <div class="team-block">
+            <img class="team-logo" src="https://media.api-sports.io/football/teams/529.png" alt="Barcelona" onerror="this.outerHTML='<div class=\'team-logo-fallback\'>BAR</div>'">
+            <span class="team-name">Barcelona</span>
+          </div>
+        </div>
+        <div class="pick-row" style="background:var(--color-success-g);border-color:rgba(34,197,94,0.22)">
+          <span class="pick-direction" style="color:var(--color-success)">OVER 2.5</span>
+          <span class="pick-row-dot"></span>
+          <span class="pick-odds-val">× 1.85</span>
+          <span class="pick-ev-val">EV +11%</span>
+        </div>
+        <div class="pick-footer">
+          <div class="pick-stake">Стейк: <strong>$50</strong></div>
+          <div class="badge win"><span class="badge-dot"></span> +$42.50</div>
+        </div>
+      </div>
+
+      <!-- Pick: loss — AWAY -->
+      <div class="pick">
+        <div class="pick-meta">
+          <div class="pick-league">🇮🇹 Serie A</div>
+          <div class="pick-time">Вчора</div>
+        </div>
+        <div class="pick-teams">
+          <div class="team-block">
+            <img class="team-logo" src="https://media.api-sports.io/football/teams/496.png" alt="Juventus" onerror="this.outerHTML='<div class=\'team-logo-fallback\'>JUV</div>'">
+            <span class="team-name">Juventus</span>
+          </div>
+          <div class="vs-block"><span class="vs-sep">VS</span></div>
+          <div class="team-block pick-active">
+            <img class="team-logo" src="https://media.api-sports.io/football/teams/489.png" alt="AC Milan" onerror="this.outerHTML='<div class=\'team-logo-fallback\'>MIL</div>'">
+            <span class="team-name">AC Milan</span>
+          </div>
+        </div>
+        <div class="pick-row" style="background:var(--color-error-g);border-color:rgba(239,68,68,0.22)">
+          <span class="pick-direction" style="color:var(--color-error)">AWAY</span>
+          <span class="pick-row-dot"></span>
+          <span class="pick-odds-val">× 3.38</span>
+          <span class="pick-ev-val">EV +9%</span>
+        </div>
+        <div class="pick-footer">
+          <div class="pick-stake">Стейк: <strong>$25</strong></div>
+          <div class="badge loss"><span class="badge-dot"></span> −$25</div>
+        </div>
+      </div>
+
+      <div class="scroll-pad"></div>
+    </section>
+
+    <!-- ════════ STATISTICS ════════ -->
+    <section class="screen" id="s-stats" role="tabpanel">
+
+      <div class="stat-top">
+        <div>
+          <div class="stat-label">Current Bankroll</div>
+          <div class="stat-value">$1,450</div>
+          <div class="stat-sub">↑ +$450 &nbsp;·&nbsp; +12.4%</div>
+        </div>
+        <div class="stat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5E6AD2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="time-filters">
+        <div class="time-btn active" onclick="setTime(this)">All time</div>
+        <div class="time-btn" onclick="setTime(this)">30d</div>
+        <div class="time-btn" onclick="setTime(this)">7d</div>
+        <div class="time-btn" onclick="setTime(this)">24h</div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div class="chart-title">Profit Progression</div>
+          <div class="chart-delta">+$450</div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="chart"></canvas>
+        </div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-val pos">14.2%</div>
+          <div class="metric-lbl">ROI</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">58%</div>
+          <div class="metric-lbl">Win Rate</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">124</div>
+          <div class="metric-lbl">Bets</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">2.15</div>
+          <div class="metric-lbl">Avg Odds</div>
+        </div>
+      </div>
+
+      <div class="streak-card">
+        <div class="streak-header">
+          <div class="streak-title">Last 10</div>
+          <div class="streak-summary">7W · 3L</div>
+        </div>
+        <div class="streak-row" id="streakRow"></div>
+      </div>
+
+      <div class="scroll-pad"></div>
+    </section>
+
+    <!-- ════════ SCHEDULE ════════ -->
+    <section class="screen" id="s-sched" role="tabpanel">
+
+      <div class="sched-day">
+        <div class="sched-day-hdr">Пт · 18 Квіт</div>
+
+        <div class="sched-match">
+          <div class="sched-left">
+            <div class="sched-league">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</div>
+            <div class="sched-teams">
+              <div class="sched-logo-pair">
+                <img class="sched-logo" src="https://media.api-sports.io/football/teams/42.png" alt="Arsenal" onerror="this.style.display='none'">
+                <img class="sched-logo" src="https://media.api-sports.io/football/teams/40.png" alt="Liverpool" onerror="this.style.display='none'">
+              </div>
+              <span class="sched-team-names">Arsenal vs Liverpool</span>
+            </div>
+          </div>
+          <div class="sched-right">
+            <div class="sched-time">14:00</div>
+            <div class="sched-pick">AWAY · 2.45</div>
+            <div class="sched-status final">🔒 Final</div>
+          </div>
+        </div>
+
+        <div class="sched-match">
+          <div class="sched-left">
+            <div class="sched-league">🏆 Champions League</div>
+            <div class="sched-teams">
+              <div class="sched-logo-pair">
+                <img class="sched-logo" src="https://media.api-sports.io/football/teams/157.png" alt="Bayern" onerror="this.style.display='none'">
+                <img class="sched-logo" src="https://media.api-sports.io/football/teams/85.png" alt="PSG" onerror="this.style.display='none'">
+              </div>
+              <span class="sched-team-names">Bayern vs PSG</span>
+            </div>
+          </div>
+          <div class="sched-right">
+            <div class="sched-time">20:00</div>
+            <div class="sched-pick">HOME · 1.95</div>
+            <div class="sched-status final">🔒 Final</div>
+          </div>
+        </div>
+
+        <div class="sched-match">
+          <div class="sched-left">
+            <div class="sched-league">🇩🇪 Bundesliga</div>
+            <div class="sched-teams">
+              <div class="sched-logo-pair">
+                <img class="sched-logo" src="https://media.api-sports.io/football/teams/165.png" alt="Dortmund" onerror="this.style.display='none'">
+                <img class="sched-logo" src="https://media.api-sports.io/football/teams/173.png" alt="Leipzig" onerror="this.style.display='none'">
+              </div>
+              <span class="sched-team-names">Dortmund vs Leipzig</span>
+            </div>
+          </div>
+          <div class="sched-right">
+            <div class="sched-time">17:30</div>
+            <div class="sched-status" style="color:var(--color-dim)">— no pick</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched-day">
+        <div class="sched-day-hdr">Сб · 19 Квіт</div>
+
+        <div class="sched-match">
+          <div class="sched-left">
+            <div class="sched-league">🇪🇸 La Liga</div>
+            <div class="sched-teams">
+              <div class="sched-logo-pair">
+                <img class="sched-logo" src="https://media.api-sports.io/football/teams/530.png" alt="Atletico" onerror="this.style.display='none'">
+                <img class="sched-logo" src="https://media.api-sports.io/football/teams/532.png" alt="Valencia" onerror="this.style.display='none'">
+              </div>
+              <span class="sched-team-names">Atletico vs Valencia</span>
+            </div>
+          </div>
+          <div class="sched-right">
+            <div class="sched-time">16:15</div>
+            <div class="sched-pick">HOME · 2.10</div>
+            <div class="sched-status early">⏳ Early</div>
+          </div>
+        </div>
+
+        <div class="sched-match">
+          <div class="sched-left">
+            <div class="sched-league">🇮🇹 Serie A</div>
+            <div class="sched-teams">
+              <div class="sched-logo-pair">
+                <img class="sched-logo" src="https://media.api-sports.io/football/teams/505.png" alt="Inter" onerror="this.style.display='none'">
+                <img class="sched-logo" src="https://media.api-sports.io/football/teams/497.png" alt="Roma" onerror="this.style.display='none'">
+              </div>
+              <span class="sched-team-names">Inter vs Roma</span>
+            </div>
+          </div>
+          <div class="sched-right">
+            <div class="sched-time">19:45</div>
+            <div class="sched-status early">⏳ Early</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched-day">
+        <div class="sched-day-hdr">Нд · 20 Квіт</div>
+        <div class="sched-match">
+          <div class="sched-left">
+            <div class="sched-league">🇫🇷 Ligue 1</div>
+            <div class="sched-teams">
+              <div class="sched-logo-pair">
+                <img class="sched-logo" src="https://media.api-sports.io/football/teams/85.png" alt="PSG" onerror="this.style.display='none'">
+                <img class="sched-logo" src="https://media.api-sports.io/football/teams/81.png" alt="Marseille" onerror="this.style.display='none'">
+              </div>
+              <span class="sched-team-names">PSG vs Marseille</span>
+            </div>
+          </div>
+          <div class="sched-right">
+            <div class="sched-time">20:45</div>
+            <div class="sched-pick">AWAY · 3.20</div>
+            <div class="sched-status early">⏳ Early</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-pad"></div>
+    </section>
+
+  </main>
+
+  <!-- ── Bottom nav ─────────────────────────────────────── -->
+  <nav class="bottom-nav">
+    <div class="nav-btn active" onclick="showScreen('picks',this)" role="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+      <span class="nav-label">Picks</span>
+    </div>
+    <div class="nav-btn" onclick="showScreen('stats',this)" role="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+      </svg>
+      <span class="nav-label">Stats</span>
+    </div>
+    <div class="nav-btn" onclick="showScreen('sched',this)" role="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      <span class="nav-label">Schedule</span>
+    </div>
+  </nav>
+
+</div><!-- /app -->
+
+<script>
+  /* ── Tab style switcher ─────────────────────────────── */
+  function switchTabStyle(v, btn) {
+    document.querySelectorAll('.model-tabs').forEach(el => el.classList.remove('active-tabs'));
+    document.querySelectorAll('.tab-style-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tabs-' + v).classList.add('active-tabs');
+    btn.classList.add('active');
+  }
+
+  /* ── Bankroll variant switcher ──────────────────────── */
+  function switchVariant(v, btn) {
+    document.querySelectorAll('.bankroll').forEach(el => el.classList.remove('active-variant'));
+    document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.bankroll-' + v).classList.add('active-variant');
+    btn.classList.add('active');
+  }
+
+  /* ── Navigation ─────────────────────────────────────── */
+  function showScreen(id, el) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('s-' + id).classList.add('active');
+    el.classList.add('active');
+  }
+  function setModel(el) {
+    // Find which index was clicked
+    const idx = [...el.parentElement.children].indexOf(el);
+    // Sync all tab groups
+    document.querySelectorAll('.model-tabs').forEach(tabs => {
+      [...tabs.children].forEach((t, i) => t.classList.toggle('active', i === idx));
+    });
+  }
+  function setTime(el) {
+    document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  /* ── Streak ─────────────────────────────────────────── */
+  ['win','win','loss','win','win','win','loss','win','loss','pend'].forEach(s => {
+    const el = document.createElement('div');
+    el.className = 'sq ' + s;
+    document.getElementById('streakRow').appendChild(el);
+  });
+
+  /* ── Chart ──────────────────────────────────────────── */
+  const ctx = document.getElementById('chart').getContext('2d');
+  const grad = ctx.createLinearGradient(0, 0, 0, 150);
+  grad.addColorStop(0,   'rgba(34,197,94,0.22)');
+  grad.addColorStop(0.6, 'rgba(34,197,94,0.06)');
+  grad.addColorStop(1,   'rgba(34,197,94,0.00)');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Oct 1','Oct 8','Oct 15','Oct 22','Nov 1','Nov 8','Nov 15','Nov 22','Dec 1'],
+      datasets: [{
+        data: [1000, 1035, 990, 1110, 1190, 1160, 1290, 1380, 1450],
+        borderColor: '#22C55E',
+        borderWidth: 2,
+        pointRadius: 4,
+        pointBackgroundColor: '#22C55E',
+        pointBorderColor: '#020203',
+        pointBorderWidth: 2,
+        pointHoverRadius: 6,
+        fill: true,
+        backgroundColor: grad,
+        tension: 0.45,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'nearest', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#111114',
+          borderColor: 'rgba(255,255,255,0.08)',
+          borderWidth: 1,
+          titleColor: '#52566A',
+          titleFont: { family: 'JetBrains Mono', size: 10 },
+          bodyColor: '#EDEDEF',
+          bodyFont: { family: 'JetBrains Mono', weight: '500', size: 13 },
+          padding: 10,
+          callbacks: { label: c => ' $' + c.parsed.y.toLocaleString() }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#52566A', font: { family: 'JetBrains Mono', size: 9 }, maxRotation: 0, maxTicksLimit: 5 }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: {
+            color: '#52566A',
+            font: { family: 'JetBrains Mono', size: 9 },
+            callback: v => '$' + (v >= 1000 ? (v/1000).toFixed(1)+'k' : v)
+          }
+        }
+      }
+    }
+  });
+</script>
+</body>
+</html>

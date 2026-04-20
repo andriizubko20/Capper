@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "capper-miniapp (Vite/React)",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "/Users/andrii.zubko/Desktop/projects/Capper/capper-miniapp", "run", "dev"],
+      "port": 8765
+    },
+    {
+      "name": "miniapp (static HTML)",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "3000", "--directory", "/Users/andrii.zubko/Desktop/projects/Capper/miniapp"],
+      "port": 3000
+    },
+    {
+      "name": "Telegram Bot",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "bot.main"],
+      "port": 8080
+    },
+    {
+      "name": "Scheduler",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "scheduler.main"],
+      "port": 8081
+    }
+  ]
+}

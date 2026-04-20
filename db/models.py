@@ -1,6 +1,6 @@
-from datetime import datetime
+from datetime import date, datetime
 from sqlalchemy import (
-    BigInteger, Boolean, DateTime, Float, ForeignKey,
+    BigInteger, Boolean, Date, DateTime, Float, ForeignKey,
     Integer, String, Text, UniqueConstraint
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -45,7 +45,7 @@ class Match(Base):
     home_team_id: Mapped[int] = mapped_column(ForeignKey("teams.id"))
     away_team_id: Mapped[int] = mapped_column(ForeignKey("teams.id"))
     date: Mapped[datetime] = mapped_column(DateTime)
-    status: Mapped[str] = mapped_column(String(50))  # scheduled, live, finished
+    status: Mapped[str] = mapped_column(String(50))
     home_score: Mapped[int | None] = mapped_column(Integer, nullable=True)
     away_score: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
@@ -64,30 +64,46 @@ class MatchStats(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     match_id: Mapped[int] = mapped_column(ForeignKey("matches.id"), unique=True)
 
-    # xG
     home_xg: Mapped[float | None] = mapped_column(Float, nullable=True)
     away_xg: Mapped[float | None] = mapped_column(Float, nullable=True)
 
-    # Glicko-2
     home_glicko: Mapped[float | None] = mapped_column(Float, nullable=True)
     away_glicko: Mapped[float | None] = mapped_column(Float, nullable=True)
     home_win_prob: Mapped[float | None] = mapped_column(Float, nullable=True)
     draw_prob: Mapped[float | None] = mapped_column(Float, nullable=True)
     away_win_prob: Mapped[float | None] = mapped_column(Float, nullable=True)
 
-    # Shots
     home_shots: Mapped[int | None] = mapped_column(Integer, nullable=True)
     away_shots: Mapped[int | None] = mapped_column(Integer, nullable=True)
     home_shots_on_target: Mapped[int | None] = mapped_column(Integer, nullable=True)
     away_shots_on_target: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    home_shots_inside_box: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    away_shots_inside_box: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
-    # Possession
     home_possession: Mapped[float | None] = mapped_column(Float, nullable=True)
     away_possession: Mapped[float | None] = mapped_column(Float, nullable=True)
 
-    # Corners, fouls
     home_corners: Mapped[int | None] = mapped_column(Integer, nullable=True)
     away_corners: Mapped[int | None] = mapped_column(Integer, nullable=True)
+
+    home_passes_accurate: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    away_passes_accurate: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    home_passes_total: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    away_passes_total: Mapped[int | None] = mapped_column(Integer, nullable=True)
+
+    home_gk_saves: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    away_gk_saves: Mapped[int | None] = mapped_column(Integer, nullable=True)
+
+    home_yellow_cards: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    away_yellow_cards: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    home_red_cards: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    away_red_cards: Mapped[int | None] = mapped_column(Integer, nullable=True)
+
+    home_fouls: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    away_fouls: Mapped[int | None] = mapped_column(Integer, nullable=True)
+
+    home_offsides: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    away_offsides: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
     match: Mapped["Match"] = relationship(back_populates="stats")
 
@@ -115,9 +131,9 @@ class Odds(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     match_id: Mapped[int] = mapped_column(ForeignKey("matches.id"))
-    market: Mapped[str] = mapped_column(String(50))  # 1x2, total, btts, handicap
+    market: Mapped[str] = mapped_column(String(50))
     bookmaker: Mapped[str] = mapped_column(String(100))
-    outcome: Mapped[str] = mapped_column(Text)  # home, draw, away, over, under, yes, no
+    outcome: Mapped[str] = mapped_column(Text)
     value: Mapped[float] = mapped_column(Float)
     opening_value: Mapped[float | None] = mapped_column(Float, nullable=True)
     recorded_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
@@ -134,19 +150,43 @@ class Prediction(Base):
     __tablename__ = "predictions"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    match_id: Mapped[int] = mapped_column(ForeignKey("matches.id"))
+    match_id: Mapped[int | None] = mapped_column(ForeignKey("matches.id"), nullable=True)
     market: Mapped[str] = mapped_column(String(50))
     outcome: Mapped[str] = mapped_column(Text)
     probability: Mapped[float] = mapped_column(Float)
     odds_used: Mapped[float] = mapped_column(Float)
     ev: Mapped[float] = mapped_column(Float)
     kelly_fraction: Mapped[float] = mapped_column(Float)
-    clv: Mapped[float | None] = mapped_column(Float, nullable=True)  # filled after match closes
+    stake: Mapped[float | None] = mapped_column(Float, nullable=True)
+    weighted_score: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    clv: Mapped[float | None] = mapped_column(Float, nullable=True)
     model_version: Mapped[str] = mapped_column(String(50))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    # result tracking
+    result: Mapped[str | None] = mapped_column(Text, nullable=True)       # 'win' | 'loss'
+    pnl: Mapped[float | None] = mapped_column(Float, nullable=True)        # profit/loss in $
+    timing: Mapped[str | None] = mapped_column(String(10), nullable=True)  # 'early' | 'final'
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    # denormalized fields for historical / imported predictions (match_id=None)
+    match_date:  Mapped[date | None] = mapped_column(Date,        nullable=True)
+    home_name:   Mapped[str | None]  = mapped_column(String(100), nullable=True)
+    away_name:   Mapped[str | None]  = mapped_column(String(100), nullable=True)
+    league_name: Mapped[str | None]  = mapped_column(String(100), nullable=True)
 
-    match: Mapped["Match"] = relationship(back_populates="predictions")
-    user_picks: Mapped[list["UserPick"]] = relationship(back_populates="prediction")
+    match: Mapped["Match | None"] = relationship(back_populates="predictions")
+
+
+class MonsterPIs(Base):
+    __tablename__ = "monster_p_is"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    league: Mapped[str] = mapped_column(String(100))
+    niche_str: Mapped[str] = mapped_column(String(255))
+    p_is: Mapped[float] = mapped_column(Float)
+    n_samples: Mapped[int] = mapped_column(Integer)
+    computed_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (UniqueConstraint("league", "niche_str"),)
 
 
 class User(Base):
@@ -155,21 +195,21 @@ class User(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     telegram_id: Mapped[int] = mapped_column(BigInteger, unique=True)
     username: Mapped[str | None] = mapped_column(String(100), nullable=True)
-    bankroll: Mapped[float] = mapped_column(Float, default=0.0)
+    bankroll: Mapped[float] = mapped_column(Float, default=1000.0)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
-    picks: Mapped[list["UserPick"]] = relationship(back_populates="user")
+    snapshots: Mapped[list["BankrollSnapshot"]] = relationship(
+        back_populates="user", order_by="BankrollSnapshot.created_at"
+    )
 
 
-class UserPick(Base):
-    __tablename__ = "user_picks"
+class BankrollSnapshot(Base):
+    __tablename__ = "bankroll_snapshots"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    prediction_id: Mapped[int] = mapped_column(ForeignKey("predictions.id"))
-    stake_recommended: Mapped[float] = mapped_column(Float)
-    sent_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    balance: Mapped[float] = mapped_column(Float)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
-    user: Mapped["User"] = relationship(back_populates="picks")
-    prediction: Mapped["Prediction"] = relationship(back_populates="user_picks")
+    user: Mapped["User"] = relationship(back_populates="snapshots")
