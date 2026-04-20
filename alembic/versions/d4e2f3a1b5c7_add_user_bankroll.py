@@ -18,10 +18,15 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.add_column(
-        'users',
-        sa.Column('bankroll', sa.Float(), nullable=False, server_default='1000.0'),
-    )
+    conn = op.get_bind()
+    result = conn.execute(sa.text(
+        "SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='bankroll'"
+    ))
+    if not result.fetchone():
+        op.add_column(
+            'users',
+            sa.Column('bankroll', sa.Float(), nullable=False, server_default='1000.0'),
+        )
 
 
 def downgrade() -> None:
