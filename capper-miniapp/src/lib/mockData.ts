@@ -49,7 +49,7 @@ function makeCurvePoints(
   labels: string[],
   totalBets: number,
   totalProfit: number,
-  roiData: number[],
+  _roiData: number[],
 ): CurvePoint[] {
   const n = labels.length
   return labels.map((label, i) => ({
