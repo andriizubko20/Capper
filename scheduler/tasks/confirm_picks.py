@@ -10,7 +10,7 @@
 
 TODO: додати model-specific threshold check після ресьорчу моделей.
 """
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 
 from loguru import logger
 from sqlalchemy import desc
@@ -26,7 +26,7 @@ def run_confirm_picks() -> None:
     """Перевіряє та оновлює статус ранніх пікс."""
     logger.info("Running daily confirm_picks (10:00 Kyiv)")
     db = SessionLocal()
-    today = date.today()
+    today = datetime.now(timezone.utc).date()
     cutoff = today + timedelta(days=LOOKAHEAD_DAYS)
 
     try:

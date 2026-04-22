@@ -9,8 +9,10 @@ const MONTHS_UK = [
 ]
 
 function formatDate(iso: string) {
-  const d = new Date(iso)
-  return `${DOW_UK[d.getDay()]}, ${d.getDate()} ${MONTHS_UK[d.getMonth()]}`
+  // Parse as UTC noon — "2026-04-22" becomes UTC midnight, getDay()/getDate() would
+  // return the wrong value for UTC− timezones; UTC methods with noon anchor are safe
+  const d = new Date(iso + 'T12:00:00Z')
+  return `${DOW_UK[d.getUTCDay()]}, ${d.getUTCDate()} ${MONTHS_UK[d.getUTCMonth()]}`
 }
 
 function pnlOf(day: HistoryDay) {
@@ -44,7 +46,7 @@ function HistoryRow({ pick }: { pick: Pick }) {
       {/* P&L */}
       <div className={`hist-pnl${isWin ? ' win' : isLoss ? ' loss' : ''}`}>
         {isWin  ? `+${profit.toFixed(0)}$` :
-         isLoss ? `-${pick.stake}$` : '—'}
+         isLoss ? (pick.stake != null ? `-${pick.stake}$` : '—') : '—'}
       </div>
     </div>
   )

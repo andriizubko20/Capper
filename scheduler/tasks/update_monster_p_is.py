@@ -110,8 +110,8 @@ def _count_niche_samples(hist_matches, hist_stats, hist_odds, league, niche, nic
         a_xgf5 = np.nanmean(team_xgf[a_id][-5:]) if team_xgf[a_id] else np.nan
         a_xga5 = np.nanmean(team_xga[a_id][-5:]) if team_xga[a_id] else np.nan
 
-        h_xg_ratio = h_xgf5 / max(h_xga5, 0.1) if not np.isnan(h_xgf5 or np.nan) else np.nan
-        a_xg_ratio = a_xgf5 / max(a_xga5, 0.1) if not np.isnan(a_xgf5 or np.nan) else np.nan
+        h_xg_ratio = h_xgf5 / max(h_xga5, 0.1) if not np.isnan(h_xgf5) else np.nan
+        a_xg_ratio = a_xgf5 / max(a_xga5, 0.1) if not np.isnan(a_xgf5) else np.nan
 
         h_odds = row.get('home_odds')
         a_odds = row.get('away_odds')

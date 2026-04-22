@@ -60,7 +60,7 @@ const CombinedCurves = memo(function CombinedCurves({ models }: { models: ModelD
       {models.map(m => {
         const len = m.curve.length
         const pts = m.curve.map((v, i) => [
-          (i / (len - 1)) * w,
+          (i / Math.max(len - 1, 1)) * w,
           h - ((v - min) / range) * (h - 24) - 12,
         ])
         const d = pts.map((p, i) => (i === 0 ? `M${p[0]},${p[1]}` : `L${p[0]},${p[1]}`)).join(' ')

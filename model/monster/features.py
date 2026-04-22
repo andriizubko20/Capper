@@ -98,15 +98,17 @@ def build_team_state(matches: pd.DataFrame, stats: pd.DataFrame,
         pts_h = 3 if row.result == 'H' else (1 if row.result == 'D' else 0)
         pts_a = 3 if row.result == 'A' else (1 if row.result == 'D' else 0)
 
+        _hxg = row.get('home_xg')
+        _axg = row.get('away_xg')
         team_history[h].append({
             'pts': pts_h,
-            'xgf': row.get('home_xg') or np.nan,
-            'xga': row.get('away_xg') or np.nan,
+            'xgf': _hxg if _hxg is not None else np.nan,
+            'xga': _axg if _axg is not None else np.nan,
         })
         team_history[a].append({
             'pts': pts_a,
-            'xgf': row.get('away_xg') or np.nan,
-            'xga': row.get('home_xg') or np.nan,
+            'xgf': _axg if _axg is not None else np.nan,
+            'xga': _hxg if _hxg is not None else np.nan,
         })
 
     result = {}
@@ -210,8 +212,8 @@ def compute_p_is(matches: pd.DataFrame, stats: pd.DataFrame,
         a_xgf5 = np.nanmean(team_xgf[a_id][-5:]) if team_xgf[a_id] else np.nan
         a_xga5 = np.nanmean(team_xga[a_id][-5:]) if team_xga[a_id] else np.nan
 
-        h_xg_ratio = h_xgf5 / max(h_xga5, 0.1) if not np.isnan(h_xgf5 or np.nan) else np.nan
-        a_xg_ratio = a_xgf5 / max(a_xga5, 0.1) if not np.isnan(a_xgf5 or np.nan) else np.nan
+        h_xg_ratio = h_xgf5 / max(h_xga5, 0.1) if not np.isnan(h_xgf5) else np.nan
+        a_xg_ratio = a_xgf5 / max(a_xga5, 0.1) if not np.isnan(a_xgf5) else np.nan
 
         h_odds = row.get('home_odds')
         a_odds = row.get('away_odds')

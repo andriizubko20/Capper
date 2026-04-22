@@ -141,6 +141,9 @@ def run_live_tracker() -> None:
             _update_bankrolls(db, newly_settled)
             logger.info(f"Live tracker: settled {len(newly_settled)} predictions across {len(newly_finished)} matches")
 
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Live tracker failed [{type(e).__name__}]: {e}")
     finally:
         db.close()
 

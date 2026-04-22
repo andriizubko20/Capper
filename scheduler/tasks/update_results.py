@@ -124,6 +124,9 @@ def run_update_results() -> None:
         _update_bankrolls(db, newly_settled)
 
         logger.info(f"Results updated: {len(finished_map)} matches, {len(newly_settled)} predictions")
+    except Exception as e:
+        db.rollback()
+        logger.error(f"update_results failed [{type(e).__name__}]: {e}")
     finally:
         db.close()
 

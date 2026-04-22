@@ -6,6 +6,7 @@ Monster model — niche-based picks.
 model_version = "monster_v1"     (4% cap)
 model_version = "monster_v1_kelly" (no cap)
 """
+import time as _time
 from datetime import datetime, timedelta, timezone
 
 import numpy as np
@@ -28,20 +29,26 @@ KELLY_CAP   = 0.10
 # Leagues allowed for Monster
 MONSTER_LEAGUE_NAMES = set(MODELS.keys())
 
-# In-memory cache (cleared on container restart)
-_P_IS_CACHE: dict[tuple, float] = {}
+# In-memory cache: key → (value, cached_at_timestamp). TTL = 24h so weekly
+# update_monster_p_is re-calculation is reflected the same day.
+_P_IS_CACHE: dict[tuple, tuple[float, float]] = {}
+_P_IS_CACHE_TTL = 86400  # 24 hours
 
 
 def _get_p_is(db, matches, stats, odds_df, league, niche_str) -> float | None:
     """Read p_is from DB first; fallback to computing from scratch if missing."""
     key = (league, niche_str)
-    if key in _P_IS_CACHE:
-        return _P_IS_CACHE[key]
+    cached = _P_IS_CACHE.get(key)
+    if cached is not None:
+        value, ts = cached
+        if _time.time() - ts < _P_IS_CACHE_TTL:
+            return value
+        del _P_IS_CACHE[key]  # expired
 
     # Try DB
     row = db.query(MonsterPIs).filter_by(league=league, niche_str=niche_str).first()
     if row is not None:
-        _P_IS_CACHE[key] = row.p_is
+        _P_IS_CACHE[key] = (row.p_is, _time.time())
         return row.p_is
 
     # Fallback: compute on the fly with fixed OOS_START cutoff
@@ -49,7 +56,7 @@ def _get_p_is(db, matches, stats, odds_df, league, niche_str) -> float | None:
     niche = parse_niche(niche_str)
     p = compute_p_is(matches, stats, odds_df, league, niche, OOS_START)
     if p is not None:
-        _P_IS_CACHE[key] = p
+        _P_IS_CACHE[key] = (p, _time.time())
     return p
 
 
@@ -304,6 +311,17 @@ def _send_picks_to_telegram(picks: list, db, bankroll: float) -> None:
 
     last10 = _last10_stats(db, MODEL_VERSION)
 
+    # Pre-extract all ORM-dependent fields while session is open and attached
+    pick_meta = [
+        (
+            match.home_team.name if match.home_team else '?',
+            match.away_team.name if match.away_team else '?',
+            match.date.strftime('%d.%m %H:%M'),
+            pick,
+        )
+        for match, pick in picks
+    ]
+
     async def _send():
         if not settings.telegram_bot_token:
             return
@@ -315,10 +333,7 @@ def _send_picks_to_telegram(picks: list, db, bankroll: float) -> None:
                 return
 
             lines = []
-            for match, pick in picks:
-                home = match.home_team.name if match.home_team else '?'
-                away = match.away_team.name if match.away_team else '?'
-                time_str = match.date.strftime('%d.%m %H:%M')
+            for home, away, time_str, pick in pick_meta:
                 side = pick['outcome']
                 side_label = f"П1 ({home})" if side == 'home' else f"П2 ({away})"
                 high_risk = pick['odds'] >= HIGH_RISK_ODDS

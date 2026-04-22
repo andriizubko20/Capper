@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 DEFAULT_ELO = 1500.0
@@ -81,7 +82,7 @@ def compute_elo_momentum(
     ].sort_values("date", ascending=False)
 
     if len(team_matches) < n:
-        return 0.0
+        return np.nan
 
     recent_id = int(team_matches.iloc[0]["id"])
     old_id    = int(team_matches.iloc[n - 1]["id"])

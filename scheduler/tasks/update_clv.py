@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 
 from loguru import logger
 
@@ -14,13 +14,16 @@ def run_clv_update() -> None:
     оновлює CLV в таблиці predictions.
     """
     logger.info("Starting CLV update")
-    yesterday = date.today() - timedelta(days=1)
+    today_utc = datetime.now(timezone.utc).date()
+    yesterday = today_utc - timedelta(days=1)
+    window_start = datetime(yesterday.year, yesterday.month, yesterday.day, tzinfo=timezone.utc)
+    window_end   = datetime(today_utc.year, today_utc.month, today_utc.day, tzinfo=timezone.utc)
 
     db = SessionLocal()
     try:
         matches = db.query(Match).filter(
-            Match.date >= str(yesterday),
-            Match.date < str(date.today()),
+            Match.date >= window_start,
+            Match.date < window_end,
             Match.status == "FT",
         ).all()
 
@@ -54,5 +57,8 @@ def run_clv_update() -> None:
 
         db.commit()
         logger.info(f"CLV updated for {updated}/{len(matches)} matches")
+    except Exception as e:
+        db.rollback()
+        logger.error(f"CLV update failed [{type(e).__name__}]: {e}")
     finally:
         db.close()

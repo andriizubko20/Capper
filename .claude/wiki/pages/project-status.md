@@ -2,7 +2,7 @@
 
 **Category:** Tools & Tech
 **Created:** 2026-04-19
-**Updated:** 2026-04-20
+**Updated:** 2026-04-22
 
 Поточний стан розробки Capper станом на квітень 2026.
 
@@ -50,12 +50,34 @@
 
 Деталі: [Bug Audit 2026-04-22](bug-audit-2026-04-22.md)
 
+### Model-level bugs (2026-04-22)
+
+Глибокий ресерч трьох ML-моделей — знайдено і виправлено 5 model-level багів:
+- **Early scan Kelly no cap** — `stake_kelly` в ранніх пікфах не мав обмеження `KELLY_CAP`
+- **No ODDS_MAX** — аутсайдери (odds > 4.0) проходили фільтр без верхнього порогу
+- **ELO momentum завжди 0** — `build_match_features` викликався без `elo_snapshots`, 2 фічі були мертві
+- **XG false NaN** — `0.0 or np.nan = np.nan` у Monster/Aqua features та `update_monster_p_is`; команди з реальним xGF=0.0 трактувались як missing data
+
+### Deep Audit Pass 2 (2026-04-22)
+
+Другий аудит — знайдено і виправлено ще 19 багів (items 26–44 у [Bug Audit](bug-audit-2026-04-22.md)):
+- UTC vs local date у 3 файлах (`api/main.py`, `confirm_picks.py`, `update_clv.py`)
+- Monster `_P_IS_CACHE` без TTL → стейлі p_is тиждень після recalculation
+- Lazy load в async `_send_picks_to_telegram` → potential DetachedInstanceError
+- `isoDate` UTC помилка у PicksScreen → неправильна дата для UTC± юзерів
+- `db.rollback()` відсутній у 3 scheduler тасках
+- `collect_data.py` commit per-day → часткові втрати при збої
+- `/api/history` без обмеження `days` → potential OOM
+- `auth_date` не перевірявся в Telegram initData verification
+- `ELO momentum` повертав `0.0` замість `np.nan` при < N матчів
+- Ще 9 medium/low (div0 CombinedCurves, TODAY stale, formatDate UTC, error states, etc.)
+
 ## Що залишилось
 
-- [ ] Medium баги: null checks в API, missing DB index, CompareScreen useMemo (деталі в [Bug Audit](bug-audit-2026-04-22.md))
-- [ ] `confirm_picks.py` — порогові значення EV по моделях (потребує ресерчу)
-- [ ] Deploy на VPS (після тестування)
-- [ ] openpyxl додати в requirements.txt (потрібен для import_historical)
+- [ ] `openpyxl` в `requirements.txt` (потрібен для `import_historical`)
+- [ ] `confirm_picks.py` — порогові значення EV по моделях (потребує аналізу production даних)
+- [ ] Deploy на VPS
+- [ ] Нова модель: Variant A/B/C (experiments, не prod)
 
 ## MODEL_VERSIONS (поточні)
 

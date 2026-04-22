@@ -1,5 +1,5 @@
 import time
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 
 from loguru import logger
 
@@ -14,13 +14,15 @@ DELAY = 1.5
 
 def collect_odds_for_upcoming(db, client) -> None:
     """Збирає та оновлює odds для майбутніх матчів на DAYS_AHEAD днів вперед."""
-    today = date.today()
+    today = datetime.now(timezone.utc).date()
 
     for delta in range(0, DAYS_AHEAD + 1):
         target = today + timedelta(days=delta)
+        window_start = datetime(target.year, target.month, target.day, tzinfo=timezone.utc)
+        window_end   = window_start + timedelta(days=1)
         matches = db.query(Match).filter(
-            Match.date >= str(target),
-            Match.date < str(target + timedelta(days=1)),
+            Match.date >= window_start,
+            Match.date < window_end,
         ).all()
 
         new_odds = updated_odds = 0
@@ -52,10 +54,10 @@ def collect_odds_for_upcoming(db, client) -> None:
                             is_closing=False,
                         ))
                         new_odds += 1
+                db.commit()
             except Exception as e:
+                db.rollback()
                 logger.warning(f"Odds fetch failed for {match.api_id}: {e}")
-
-        db.commit()
         if matches:
             logger.info(f"  {target}: {len(matches)} matches, {new_odds} new / {updated_odds} updated odds")
 

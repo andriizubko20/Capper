@@ -15,7 +15,7 @@ from config.settings import settings
 from db.models import Match, Odds, Prediction, Team
 from db.session import SessionLocal
 from model.features.builder import build_match_features
-from model.features.elo import compute_dynamic_elo
+from model.features.elo import compute_dynamic_elo, build_elo_snapshots
 from model.weighted_score import compute_weighted_score
 
 MODEL_VERSION             = "ws_gap_v1"         # фінальний, 4% cap
@@ -42,6 +42,7 @@ def _league_flag(match) -> str:
     return "🌍"
 WS_GAP_MIN    = 70   # оновлено з ablation (DOM видалено — не додає цінності)
 ODDS_MIN      = 2.0  # оновлено: odds 2.0-2.5 стабільно прибуткові
+ODDS_MAX      = 4.0  # відсіваємо аутсайдерів з нестабільною ймовірністю
 KELLY_CAP     = 0.10
 FRACTIONAL    = 0.25
 
@@ -153,6 +154,9 @@ def _ws_gap_pick(features: dict, odds: dict, bankroll: float) -> dict | None:
     if odds_val < ODDS_MIN:
         logger.debug(f"Odds {odds_val:.2f} < {ODDS_MIN}, skip")
         return None
+    if odds_val > ODDS_MAX:
+        logger.debug(f"Odds {odds_val:.2f} > {ODDS_MAX}, skip")
+        return None
 
     # Kelly sizing через Elo
     b = odds_val - 1
@@ -259,9 +263,10 @@ def run_generate_picks_ws_gap(
 
         logger.info(f"[WS Gap] Found {len(matches)} matches")
 
-        matches_df  = _load_matches_df(db)
-        stats_df    = _load_stats_df(db)
-        teams       = _load_teams_elo(matches_df)
+        matches_df    = _load_matches_df(db)
+        stats_df      = _load_stats_df(db)
+        teams         = _load_teams_elo(matches_df)
+        elo_snapshots = build_elo_snapshots(matches_df)
 
         from db.models import InjuryReport
         inj_rows = db.query(InjuryReport).all()
@@ -327,6 +332,7 @@ def run_generate_picks_ws_gap(
                 teams=teams,
                 odds=odds,
                 injuries_df=injuries_df,
+                elo_snapshots=elo_snapshots,
             )
 
             # Генеруємо пік (stake = pure Kelly)
@@ -476,9 +482,10 @@ def run_early_picks_scan() -> None:
 
         logger.info(f"[WS Gap Early] Found {len(matches)} matches")
 
-        matches_df  = _load_matches_df(db)
-        stats_df    = _load_stats_df(db)
-        teams       = _load_teams_elo(matches_df)
+        matches_df    = _load_matches_df(db)
+        stats_df      = _load_stats_df(db)
+        teams         = _load_teams_elo(matches_df)
+        elo_snapshots = build_elo_snapshots(matches_df)
 
         from db.models import InjuryReport
         inj_rows = db.query(InjuryReport).all()
@@ -539,14 +546,15 @@ def run_early_picks_scan() -> None:
                 teams=teams,
                 odds=odds,
                 injuries_df=injuries_df,
+                elo_snapshots=elo_snapshots,
             )
 
             pick = _ws_gap_pick(features, odds, max(bankroll_cap, bankroll_kelly))
             if pick is None:
                 continue
 
-            stake_cap   = round(min(bankroll_cap * pick["kelly_fraction"], bankroll_cap * KELLY_CAP), 2)
-            stake_kelly = round(bankroll_kelly * pick["kelly_fraction"], 2)
+            stake_cap   = round(min(bankroll_cap   * pick["kelly_fraction"], bankroll_cap   * KELLY_CAP), 2)
+            stake_kelly = round(min(bankroll_kelly * pick["kelly_fraction"], bankroll_kelly * KELLY_CAP), 2)
 
             db.add(Prediction(
                 match_id=match.id, market="1x2",

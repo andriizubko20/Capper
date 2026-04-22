@@ -8,27 +8,26 @@ import type { StatsData, DailyPnl } from '@/lib/mockData'
 import type { Pick, Model } from '@/lib/types'
 import { getPicks, getStats } from '@/lib/api'
 
-const TODAY = new Date()
-
-function isoDate(d: Date) { return d.toISOString().slice(0, 10) }
+// Use local date parts — toISOString() returns UTC, wrong for UTC± users
+function isoDate(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
 function addDays(d: Date, n: number) { const r = new Date(d); r.setDate(r.getDate() + n); return r }
 
 const DAYS_BACK = 5
 const DAYS_FORWARD = 5
 const TOTAL = DAYS_BACK + 1 + DAYS_FORWARD
-const TODAY_ISO = isoDate(TODAY)
 const DOW_UK = ['НД', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ']
 
-function buildDays() {
+// Accepts today so it can be called inside the component and refreshed on mount
+function buildDays(today: Date) {
   return Array.from({ length: TOTAL }, (_, i) => {
-    const d = addDays(TODAY, i - DAYS_BACK)
+    const d = addDays(today, i - DAYS_BACK)
     const diff = i - DAYS_BACK
     const narrow = diff === -1 ? 'ВЧОРА' : diff === 0 ? 'СЬОГОДНІ' : diff === 1 ? 'ЗАВТРА' : null
     return { iso: isoDate(d), num: d.getDate(), dow: DOW_UK[d.getDay()], narrow }
   })
 }
-
-const DAYS = buildDays()
 
 // ─── Swipeable hero card ──────────────────────────────────────────────────────
 
@@ -131,13 +130,19 @@ function SwipeableCards({ card0, card1 }: SwipeableProps) {
 interface Props { model: Model }
 
 export function PicksScreen({ model }: Props) {
-  const [activeDay, setActiveDay] = useState(TODAY_ISO)
+  // today computed at mount — avoids stale module-level date after midnight
+  const today    = useMemo(() => new Date(), [])
+  const todayIso = useMemo(() => isoDate(today), [today])
+  const DAYS     = useMemo(() => buildDays(today), [today])
+
+  const [activeDay, setActiveDay] = useState(() => isoDate(new Date()))
   const [showTop, setShowTop] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const dayPickerRef = useRef<HTMLDivElement>(null)
   const [picks, setPicks] = useState<Pick[]>([])
   const [picksLoading, setPicksLoading] = useState(false)
+  const [picksError, setPicksError] = useState(false)
   const [modelStats, setModelStats] = useState<StatsData>(STATS_BY_MODEL_PERIOD[model]['30D'])
 
   useEffect(() => {
@@ -170,10 +175,11 @@ export function PicksScreen({ model }: Props) {
   useEffect(() => {
     let cancelled = false
     setPicksLoading(true)
+    setPicksError(false)
     getPicks(activeDay, model).then(p => {
       if (!cancelled) { setPicks(p); setPicksLoading(false) }
     }).catch(() => {
-      if (!cancelled) setPicksLoading(false)
+      if (!cancelled) { setPicksLoading(false); setPicksError(true) }
     })
     return () => { cancelled = true }
   }, [activeDay, model])
@@ -209,7 +215,7 @@ export function PicksScreen({ model }: Props) {
               sparkline={modelStats.curveData}
             />
           }
-          card1={<DailyPnlCard date={activeDay} todayIso={TODAY_ISO} data={daily}/>}
+          card1={<DailyPnlCard date={activeDay} todayIso={todayIso} data={daily}/>}
         />
 
         <div className="eyebrow" style={{ marginTop: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -240,7 +246,7 @@ export function PicksScreen({ model }: Props) {
               >
                 <div className="dp-dow">{d.narrow || d.dow}</div>
                 <div className="dp-num">{d.num}</div>
-                {d.iso === TODAY_ISO && <div className="dp-dot"/>}
+                {d.iso === todayIso && <div className="dp-dot"/>}
               </div>
             )
           })}
@@ -291,8 +297,16 @@ export function PicksScreen({ model }: Props) {
           </div>
         )}
 
+        {/* Error state */}
+        {!picksLoading && picksError && (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, padding: '48px 0', color: 'var(--text-mute)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>
+            <span style={{ fontSize: 32 }}>⚠️</span>
+            Не вдалося завантажити піки
+          </div>
+        )}
+
         {/* Empty state */}
-        {!picksLoading && picks.length === 0 && (
+        {!picksLoading && !picksError && picks.length === 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '48px 0', color: 'var(--text-mute)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>
             <span style={{ fontSize: 32 }}>📭</span>
             Немає пікс на цей день

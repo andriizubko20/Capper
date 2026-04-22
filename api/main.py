@@ -50,6 +50,12 @@ def verify_telegram_init_data(init_data: str) -> int | None:
         received_hash = params.pop("hash", None)
         if not received_hash:
             return None
+        # Verify auth_date is within 5 minutes to reject stale tokens
+        auth_date = params.get("auth_date")
+        if auth_date:
+            age = int(datetime.now(timezone.utc).timestamp()) - int(auth_date)
+            if age > 300:
+                return None
         data_check_string = "\n".join(f"{k}={v}" for k, v in sorted(params.items()))
         secret_key = hmac.new(b"WebAppData", bot_token.encode(), hashlib.sha256).digest()
         computed_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
@@ -68,9 +74,15 @@ def get_user_or_404(db, telegram_id: int) -> User:
     return user
 
 
+STARTING_BALANCE = 1000.0
+VALID_PERIODS = {"7d": 7, "30d": 30, "90d": 90, "all": 3650}
+
+
 def period_to_days(period: str) -> int:
-    mapping = {"7d": 7, "30d": 30, "90d": 90, "all": 3650}
-    return mapping.get(period, 30)
+    days = VALID_PERIODS.get(period.lower())
+    if days is None:
+        raise ValueError(f"Unknown period '{period}'. Valid: {list(VALID_PERIODS)}")
+    return days
 
 
 def prediction_to_pick(pred: Prediction, match: Match) -> dict[str, Any]:
@@ -132,7 +144,7 @@ def prediction_to_pick(pred: Prediction, match: Match) -> dict[str, Any]:
 
     # Derive timing from current date rather than DB field — confirm_picks only
     # runs once daily at 07:00 UTC, so DB timing lags for early-morning matches
-    match_today = match.date.date() == date.today()
+    match_today = match.date.date() == datetime.now(timezone.utc).date()
     timing = "final" if match_today else (pred.timing or "early")
 
     return {
@@ -161,7 +173,7 @@ def prediction_to_pick(pred: Prediction, match: Match) -> dict[str, Any]:
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "timestamp": datetime.utcnow().isoformat()}
+    return {"status": "ok", "timestamp": datetime.now(timezone.utc).isoformat()}
 
 
 @app.get("/api/picks")
@@ -216,8 +228,11 @@ def get_stats(
     if not versions:
         raise HTTPException(status_code=400, detail=f"Unknown model: {model}")
 
-    days = period_to_days(period)
-    since = datetime.utcnow() - timedelta(days=days)
+    try:
+        days = period_to_days(period)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    since = datetime.now(timezone.utc) - timedelta(days=days)
 
     db = SessionLocal()
     try:
@@ -277,8 +292,7 @@ def get_stats(
             for lg, v in sorted(league_map.items(), key=lambda x: -x[1]["bets"])
         ]
 
-        # Bankroll curve: стартує з $1000, кожна ставка додає pnl
-        STARTING_BALANCE = 1000.0
+        # Bankroll curve: стартує з STARTING_BALANCE, кожна ставка додає pnl
         curve = []
         balance = STARTING_BALANCE
         for p in preds:
@@ -359,7 +373,7 @@ def get_bankroll(
 @app.get("/api/history")
 def get_history(
     model: str = Query("Monster"),
-    days: int = Query(90),
+    days: int = Query(90, ge=1, le=365),
 ):
     """
     Завершені picks (win/loss) згруповані по даті, найновіші спочатку.
@@ -369,7 +383,7 @@ def get_history(
     if not versions:
         raise HTTPException(status_code=400, detail=f"Unknown model: {model}")
 
-    since = datetime.utcnow() - timedelta(days=days)
+    since = datetime.now(timezone.utc) - timedelta(days=days)
 
     db = SessionLocal()
     try:
@@ -384,6 +398,7 @@ def get_history(
                 Match.date >= since,
             )
             .order_by(Match.date.desc())
+            .limit(2000)
             .all()
         )
 
@@ -409,8 +424,11 @@ def get_history(
 @app.get("/api/compare")
 def get_compare(period: str = Query("30d")):
     """Порівняння всіх трьох моделей за period."""
-    days = period_to_days(period)
-    since = datetime.utcnow() - timedelta(days=days)
+    try:
+        days = period_to_days(period)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    since = datetime.now(timezone.utc) - timedelta(days=days)
 
     db = SessionLocal()
     try:
@@ -441,7 +459,6 @@ def get_compare(period: str = Query("30d")):
             win_rate = round(wins / total * 100, 1) if total else 0
             avg_odds = round(sum(p.odds_used for p in preds) / total, 2) if total else 0
 
-            STARTING_BALANCE = 1000.0
             curve = []
             bal = STARTING_BALANCE
             for p in preds:

@@ -27,6 +27,7 @@ pydantic-settings==2.7.0
 
 # Utils
 loguru==0.7.3
+openpyxl>=3.1
 
 # Testing
 pytest==8.3.4
