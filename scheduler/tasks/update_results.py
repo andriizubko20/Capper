@@ -100,7 +100,7 @@ def run_update_results() -> None:
         for p in open_predictions:
             preds_by_match.setdefault(p.match_id, []).append(p)
 
-        updated_preds = 0
+        newly_settled = []
         for match_id, scores in finished_map.items():
             preds = preds_by_match.get(match_id, [])
             hs, as_ = scores["home_score"], scores["away_score"]
@@ -109,36 +109,35 @@ def run_update_results() -> None:
             for pred in preds:
                 if pred.stake is None:
                     continue
+                # Refresh from DB — live_tracker may have already settled this prediction
+                db.refresh(pred)
+                if pred.result is not None:
+                    continue  # already settled, skip to avoid double bankroll
                 result = calculate_result(pred.market, pred.outcome, hs, as_)
                 if result:
                     pred.result = result
                     pred.pnl = calculate_pnl(result, pred.stake, pred.odds_used)
-                    updated_preds += 1
+                    newly_settled.append(pred)
 
         db.commit()
 
-        # Оновлюємо bankroll для всіх активних users + snapshot
-        _update_bankrolls(db, finished_map, preds_by_match)
+        _update_bankrolls(db, newly_settled)
 
-        logger.info(f"Results updated: {len(finished_map)} matches, {updated_preds} predictions")
+        logger.info(f"Results updated: {len(finished_map)} matches, {len(newly_settled)} predictions")
     finally:
         db.close()
 
 
-def _update_bankrolls(db, finished_map: dict, preds_by_match: dict) -> None:
-    """Оновлює bankroll та створює snapshot для кожного активного user."""
-    # Для простоти — оновлюємо bankroll глобально (sum pnl всіх нових bet)
-    # TODO: коли буде per-user пікси — фільтрувати по user_id
+def _update_bankrolls(db, newly_settled: list) -> None:
+    """Оновлює bankroll та створює snapshot тільки для щойно settled predictions."""
+    if not newly_settled:
+        return
+
     users = db.query(User).filter(User.is_active.is_(True)).all()
     if not users:
         return
 
-    total_pnl = 0.0
-    for match_id in finished_map:
-        for pred in preds_by_match.get(match_id, []):
-            if pred.pnl is not None:
-                total_pnl += pred.pnl
-
+    total_pnl = sum(p.pnl for p in newly_settled if p.pnl is not None)
     if total_pnl == 0:
         return
 

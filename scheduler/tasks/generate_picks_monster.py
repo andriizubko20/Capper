@@ -53,11 +53,17 @@ def _get_p_is(db, matches, stats, odds_df, league, niche_str) -> float | None:
     return p
 
 
-def _get_odds(match_id: int, db) -> dict | None:
-    rows = db.query(Odds).filter_by(match_id=match_id, market='1x2', is_closing=False).all()
-    if not rows:
-        return None
-    return {o.outcome: o.value for o in rows}
+def _load_odds_batch(match_ids: list[int], db) -> dict[int, dict]:
+    """Load odds for all matches in one query instead of N separate queries."""
+    rows = db.query(Odds).filter(
+        Odds.match_id.in_(match_ids),
+        Odds.market == '1x2',
+        Odds.is_closing == False,
+    ).all()
+    result: dict[int, dict] = {}
+    for o in rows:
+        result.setdefault(o.match_id, {})[o.outcome] = o.value
+    return result
 
 
 def _compute_bankroll(db, initial: float, model_ver: str) -> float:
@@ -155,15 +161,26 @@ def run_generate_picks_monster(
         bankroll_kelly = _compute_bankroll(db, settings.bankroll, MODEL_VERSION_KELLY)
         logger.info(f'[Monster] Bankroll cap=${bankroll_cap:.0f} kelly=${bankroll_kelly:.0f}')
 
+        # Batch-load odds and existing predictions for all matches in one query
+        match_ids = [m.id for m in matches_db]
+        odds_by_match = _load_odds_batch(match_ids, db)
+
+        existing_preds = db.query(Prediction).filter(
+            Prediction.match_id.in_(match_ids),
+            Prediction.model_version.in_([MODEL_VERSION, MODEL_VERSION_KELLY]),
+        ).all()
+        existing_cap   = {p.match_id for p in existing_preds if p.model_version == MODEL_VERSION}
+        existing_kelly = {p.match_id for p in existing_preds if p.model_version == MODEL_VERSION_KELLY}
+
         new_picks = []
 
         for match in matches_db:
-            has_cap   = db.query(Prediction).filter_by(match_id=match.id, model_version=MODEL_VERSION).first()
-            has_kelly = db.query(Prediction).filter_by(match_id=match.id, model_version=MODEL_VERSION_KELLY).first()
+            has_cap   = match.id in existing_cap
+            has_kelly = match.id in existing_kelly
             if has_cap and has_kelly:
                 continue
 
-            odds_raw = _get_odds(match.id, db)
+            odds_raw = odds_by_match.get(match.id)
             if not odds_raw:
                 logger.debug(f'[Monster] No odds for match {match.id}, skip')
                 continue

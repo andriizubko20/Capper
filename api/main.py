@@ -47,7 +47,11 @@ def period_to_days(period: str) -> int:
 def prediction_to_pick(pred: Prediction, match: Match) -> dict[str, Any]:
     """Серіалізує Prediction + Match у dict для фронту."""
     league_name = match.league.name if match.league else ""
+    league_country = match.league.country if match.league else ""
     flag = LEAGUE_FLAGS.get(league_name, "🏟")
+    # Resolve "Premier League" collision: Ukraine vs England
+    if league_name == "Premier League" and league_country == "Ukraine":
+        flag = "🇺🇦"
     home = match.home_team.name if match.home_team else ""
     away = match.away_team.name if match.away_team else ""
     home_id = match.home_team.api_id if match.home_team else 0
@@ -64,11 +68,36 @@ def prediction_to_pick(pred: Prediction, match: Match) -> dict[str, Any]:
     if match.home_score is not None and match.away_score is not None:
         score = f"{match.home_score}-{match.away_score}"
 
-    time_str = match.date.strftime("%H:%M")
-    if status == "live":
-        # elapsed зберігається як match.status = "First Half" etc — без хвилин
-        # для точної хвилини треба live_tracker; тут даємо час матчу
-        time_str = match.date.strftime("%H:%M")
+    # match.date зберігається як UTC — віддаємо ISO рядок, фронт конвертує в локальний TZ
+    match_dt_utc = match.date.replace(tzinfo=timezone.utc)
+    datetime_utc = match_dt_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+    # fallback time_str (UTC) — для pending/finished; live замінюємо на хвилину матчу
+    time_str = match_dt_utc.strftime("%H:%M")
+
+    # Для live матчів — показуємо хвилину матчу замість часу початку
+    if status_raw == "live":
+        s = (match.status or "").strip().lower()
+
+        if "half time" in s or "halftime" in s or "break" in s:
+            time_str = "HT"
+        elif "extra time" in s or "extra" in s:
+            time_str = "ET"
+        elif "penalty" in s or "penalties" in s:
+            time_str = "PKS"
+        elif match.elapsed is not None:
+            # Точна хвилина від SStats (оновлюється live_tracker кожні 3хв)
+            time_str = f"{match.elapsed}'"
+        else:
+            # Fallback: математика від часу початку
+            now_utc = datetime.now(timezone.utc)
+            elapsed_total = (now_utc - match_dt_utc).total_seconds() / 60
+            if "second half" in s:
+                second_half_min = int(elapsed_total - 60) + 45
+                second_half_min = max(45, min(second_half_min, 99))
+                time_str = f"{second_half_min}'"
+            else:
+                first_half_min = int(min(elapsed_total, 50))
+                time_str = f"{max(1, first_half_min)}'"
 
     profit = round(pred.stake * (pred.odds_used - 1), 0) if pred.stake else 0
 
@@ -81,6 +110,7 @@ def prediction_to_pick(pred: Prediction, match: Match) -> dict[str, Any]:
         "homeTeamId": home_id,
         "awayTeamId": away_id,
         "time": time_str,
+        "datetime_utc": datetime_utc,
         "side": format_side(pred.market, pred.outcome),
         "odds": round(pred.odds_used, 2),
         "ev": round(pred.ev * 100, 1),         # у відсотках

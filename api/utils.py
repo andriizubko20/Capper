@@ -14,19 +14,23 @@ MODEL_META = {
 
 # model query param → list of model_version values
 MODEL_VERSIONS: dict[str, list[str]] = {
-    "WS Gap":  ["ws_gap_kelly_v1"],
+    "WS Gap":  ["ws_gap_kelly_v1", "ws_gap_kelly_v1_early"],
     "Monster": ["monster_v1_kelly"],
     "Aqua":    ["aquamarine_v1_kelly"],
 }
 
 LEAGUE_FLAGS: dict[str, str] = {
-    "Premier League":    "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-    "La Liga":           "🇪🇸",
-    "Bundesliga":        "🇩🇪",
-    "Serie A":           "🇮🇹",
-    "Ligue 1":           "🇫🇷",
-    "Champions League":  "🏆",
+    "Premier League":        "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "La Liga":               "🇪🇸",
+    "Bundesliga":            "🇩🇪",
+    "Serie A":               "🇮🇹",
+    "Ligue 1":               "🇫🇷",
+    "Champions League":      "🏆",
     "UEFA Champions League": "🏆",
+    "Eredivisie":            "🇳🇱",
+    "Jupiler Pro League":    "🇧🇪",
+    "Premier League (UA)":   "🇺🇦",
+    "Ukrainian Premier League": "🇺🇦",
 }
 
 # SStats status codes that mean "live"

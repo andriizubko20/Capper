@@ -197,8 +197,11 @@
   left: 0; right: 0;
   height: calc(100% - 50px);
   overflow-y: auto;
-  padding: 16px 16px 140px;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 16px calc(200px + env(safe-area-inset-bottom, 0px));
   scroll-behavior: smooth;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 .scroll-area::-webkit-scrollbar { width: 0; display: none; }
 
@@ -212,15 +215,20 @@
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
 
 /* ── Bottom nav (floating pill) ─────────────────────────── */
 .bottom-nav {
-  position: absolute;
-  bottom: 22px; left: 16px; right: 16px;
+  position: fixed;
+  bottom: max(22px, env(safe-area-inset-bottom, 22px));
+  left: 16px; right: 16px;
   height: 64px;
   border-radius: 22px;
   display: flex;
-  z-index: 40;
+  z-index: 100;
   padding: 6px;
   gap: 4px;
   background: rgba(10,10,14,0.65);

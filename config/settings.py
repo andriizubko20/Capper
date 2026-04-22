@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     picks_hours_before: int = 5        # фінальний пік за N годин до старту матчу
     early_picks_days_ahead: int = 4    # ранній пік — матчі до N днів вперед
 
+    # Mini App URL
+    miniapp_url: str = "https://aqua-traders.online"
+
     # Access control: comma-separated Telegram user IDs, empty = open for all
     allowed_telegram_ids: str = ""
 

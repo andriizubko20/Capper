@@ -48,6 +48,7 @@ class Match(Base):
     status: Mapped[str] = mapped_column(String(50))
     home_score: Mapped[int | None] = mapped_column(Integer, nullable=True)
     away_score: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    elapsed: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
     league: Mapped["League"] = relationship(back_populates="matches")
     home_team: Mapped["Team"] = relationship(foreign_keys=[home_team_id])

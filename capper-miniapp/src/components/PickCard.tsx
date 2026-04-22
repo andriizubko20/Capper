@@ -20,7 +20,7 @@ export function PickCard({ pick }: { pick: Pick }) {
   const isFinished = isSettled || pick.status === 'finished'
   const isWin      = pick.status === 'win'
   const showScore  = (isLive || isFinished) && pick.score
-  const profit = (pick.stake * (pick.odds - 1)).toFixed(0)
+  const profit = pick.stake != null ? (pick.stake * (pick.odds - 1)).toFixed(0) : null
 
   return (
     <div className={`match-card glass${isSettled ? ` card-${pick.status}` : ''}`}>
@@ -111,14 +111,16 @@ export function PickCard({ pick }: { pick: Pick }) {
       <div className="money-row">
         <div className="money-side">
           <div className="money-label">Ставка</div>
-          <div className="money-value">${pick.stake}</div>
+          <div className="money-value">{pick.stake != null ? `$${pick.stake}` : '—'}</div>
         </div>
         <div className="money-side right">
           {isSettled ? (
             <>
               <div className="money-label">{isWin ? 'Виграш' : 'Програш'}</div>
               <div className={`money-value ${pick.status}`}>
-                {isWin ? `+$${profit}` : `-$${pick.stake}`}
+                {isWin
+                  ? (profit != null ? `+$${profit}` : '—')
+                  : (pick.stake != null ? `-$${pick.stake}` : '—')}
               </div>
             </>
           ) : pick.status === 'finished' ? (
@@ -129,7 +131,7 @@ export function PickCard({ pick }: { pick: Pick }) {
           ) : (
             <>
               <div className="money-label">Виграш</div>
-              <div className="money-value win">+${profit}</div>
+              <div className="money-value win">{profit != null ? `+$${profit}` : '—'}</div>
             </>
           )}
         </div>

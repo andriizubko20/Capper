@@ -71,7 +71,7 @@ function MatchRow({ m }: { m: Match }) {
 
 export function ScheduleScreen() {
   return (
-    <div className="flex flex-col h-full overflow-y-auto scrollbar-none px-4 pt-2 pb-4">
+    <div className="flex flex-col h-full overflow-y-auto scrollbar-none px-4 pt-2 pb-[180px]">
       {SCHEDULE.map(day => (
         <div key={day.label} className="mb-1">
           <div className="flex items-center gap-2 py-2.5 flex-shrink-0">

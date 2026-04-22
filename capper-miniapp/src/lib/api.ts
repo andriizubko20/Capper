@@ -31,13 +31,29 @@ async function apiFetch<T>(path: string): Promise<T> {
 // ─── Picks ────────────────────────────────────────────────────────────────────
 // GET /api/picks?date=YYYY-MM-DD&model=Monster → { picks: Pick[] }
 
+// Конвертує UTC ISO рядок у локальний час телефону: "14:30"
+function utcIsoToLocalTime(iso: string): string {
+  try {
+    return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
+  } catch {
+    return iso.slice(11, 16) // fallback: просто обрізаємо
+  }
+}
+
 export async function getPicks(date: string, model: Model): Promise<Pick[]> {
   if (!BASE) return []
   try {
-    const data = await apiFetch<{ picks: Pick[] }>(
+    const data = await apiFetch<{ picks: (Pick & { datetime_utc?: string })[] }>(
       `/api/picks?date=${date}&model=${encodeURIComponent(model)}`
     )
-    return data.picks ?? []
+    const picks = data.picks ?? []
+    // Якщо бекенд повернув datetime_utc — конвертуємо в локальний час
+    return picks.map(p =>
+      // Для live матчів time вже містить хвилину ('42\'') — не перезаписуємо
+      p.datetime_utc && p.status !== 'live'
+        ? { ...p, time: utcIsoToLocalTime(p.datetime_utc) }
+        : p
+    )
   } catch {
     return []
   }

@@ -1,3 +1,21 @@
+## Wiki
+
+Project knowledge base lives in `.claude/wiki/`. Claude maintains it; you read it.
+
+**Structure:**
+- `index.md` — catalog of all pages; read this first on every session start
+- `log.md` — append-only log of operations
+- `pages/` — wiki pages (concepts, architecture decisions, status, research, etc.)
+
+**Ingest** — when something new is worth preserving:
+1. Write or update relevant page(s) in `pages/`
+2. Update `index.md` if new pages were added
+3. Append to `log.md`: `## [YYYY-MM-DD] ingest | <title>`
+
+**Query** — read `index.md` first, then drill into relevant pages. Good answers can be saved back as new pages.
+
+**Lint** (on request) — check for stale facts, orphan pages, missing cross-links, contradictions.
+
 # Capper
 
 ## Project Overview

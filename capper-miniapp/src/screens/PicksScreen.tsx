@@ -13,8 +13,8 @@ const TODAY = new Date()
 function isoDate(d: Date) { return d.toISOString().slice(0, 10) }
 function addDays(d: Date, n: number) { const r = new Date(d); r.setDate(r.getDate() + n); return r }
 
-const DAYS_BACK = 2
-const DAYS_FORWARD = 4
+const DAYS_BACK = 5
+const DAYS_FORWARD = 5
 const TOTAL = DAYS_BACK + 1 + DAYS_FORWARD
 const TODAY_ISO = isoDate(TODAY)
 const DOW_UK = ['НД', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ']
@@ -135,6 +135,7 @@ export function PicksScreen({ model }: Props) {
   const [showTop, setShowTop] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const dayPickerRef = useRef<HTMLDivElement>(null)
   const [picks, setPicks] = useState<Pick[]>([])
   const [picksLoading, setPicksLoading] = useState(false)
   const [modelStats, setModelStats] = useState<StatsData>(STATS_BY_MODEL_PERIOD[model]['30D'])
@@ -147,18 +148,43 @@ export function PicksScreen({ model }: Props) {
     return () => el.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Scroll day picker to active chip
+  useEffect(() => {
+    const picker = dayPickerRef.current
+    if (!picker) return
+    const active = picker.querySelector('.day-chip.active') as HTMLElement | null
+    if (!active) return
+    const chipCenter = active.offsetLeft + active.offsetWidth / 2
+    picker.scrollTo({ left: chipCenter - picker.offsetWidth / 2, behavior: 'smooth' })
+  }, [activeDay])
+
   // Fetch model stats for bankroll card when model changes
   useEffect(() => {
-    getStats(model, '30D').then(setModelStats)
+    let cancelled = false
+    getStats(model, '30D').then(s => { if (!cancelled) setModelStats(s) })
+    return () => { cancelled = true }
   }, [model])
 
   // Fetch picks when day or model changes
+  // cancelled flag prevents stale responses from overwriting newer data
   useEffect(() => {
+    let cancelled = false
     setPicksLoading(true)
-    getPicks(activeDay, model).then(p => { setPicks(p); setPicksLoading(false) })
+    getPicks(activeDay, model).then(p => {
+      if (!cancelled) { setPicks(p); setPicksLoading(false) }
+    }).catch(() => {
+      if (!cancelled) setPicksLoading(false)
+    })
+    return () => { cancelled = true }
   }, [activeDay, model])
 
   const scrollTop = () => scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+
+  const refresh = () => {
+    setPicksLoading(true)
+    getPicks(activeDay, model).then(p => { setPicks(p); setPicksLoading(false) })
+    getStats(model, '30D').then(setModelStats)
+  }
 
   // Рахуємо daily P&L з завантажених picks
   const daily: DailyPnl | null = picks.length === 0 ? null : {
@@ -182,15 +208,7 @@ export function PicksScreen({ model }: Props) {
               sparkline={modelStats.curveData}
             />
           }
-          card1={
-            daily
-              ? <DailyPnlCard date={activeDay} todayIso={TODAY_ISO} data={daily}/>
-              : <BankrollCard
-                  amount={modelStats.curveData.length ? modelStats.curveData[modelStats.curveData.length - 1] : 1000}
-                  roi={modelStats.roi}
-                  sparkline={modelStats.curveData}
-                />
-          }
+          card1={<DailyPnlCard date={activeDay} todayIso={TODAY_ISO} data={daily}/>}
         />
 
         <div className="eyebrow" style={{ marginTop: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -209,7 +227,7 @@ export function PicksScreen({ model }: Props) {
             ІСТОРІЯ
           </button>
         </div>
-        <div className="day-picker" style={{ marginBottom: 14 }}>
+        <div className="day-picker" style={{ marginBottom: 14 }} ref={dayPickerRef}>
           {DAYS.map(d => {
             const isActive = d.iso === activeDay
             const isNamed = !!d.narrow
@@ -227,25 +245,56 @@ export function PicksScreen({ model }: Props) {
           })}
         </div>
 
-        <div className="eyebrow" style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div className="eyebrow" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span>Матчі</span>
-          <span style={{ color: 'var(--indigo-2)' }}>{picksLoading ? '…' : `${picks.length} PICKS`}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{ color: 'var(--indigo-2)' }}>{picksLoading ? '…' : `${picks.length} PICKS`}</span>
+            <button
+              onClick={refresh}
+              disabled={picksLoading}
+              style={{
+                background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+                color: picksLoading ? 'var(--text-mute)' : 'var(--text-dim)',
+                display: 'flex', alignItems: 'center',
+                transition: 'color 0.2s',
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                style={{ animation: picksLoading ? 'spin 0.8s linear infinite' : 'none' }}>
+                <path d="M4 12a8 8 0 0 1 14.93-4M20 12a8 8 0 0 1-14.93 4"
+                  stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
+                <path d="M19 4v4h-4M5 20v-4h4" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
         </div>
 
-        {picksLoading ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, opacity: 0.4 }}>
+        {/* Initial load — show skeleton */}
+        {picksLoading && picks.length === 0 && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {[1, 2, 3].map(i => (
               <div key={i} style={{ height: 110, borderRadius: 16, background: 'rgba(255,255,255,0.05)' }}/>
             ))}
           </div>
-        ) : picks.length === 0 ? (
+        )}
+
+        {/* Has picks — keep them visible while loading new ones */}
+        {picks.length > 0 && (
+          <div style={{
+            display: 'flex', flexDirection: 'column', gap: 10,
+            opacity: picksLoading ? 0.5 : 1,
+            transition: 'opacity 0.25s',
+            pointerEvents: picksLoading ? 'none' : 'auto',
+          }}>
+            {picks.map(p => <PickCard key={p.id} pick={p}/>)}
+          </div>
+        )}
+
+        {/* Empty state */}
+        {!picksLoading && picks.length === 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '48px 0', color: 'var(--text-mute)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>
             <span style={{ fontSize: 32 }}>📭</span>
             Немає пікс на цей день
-          </div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {picks.map(p => <PickCard key={p.id} pick={p}/>)}
           </div>
         )}
       </div>

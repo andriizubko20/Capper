@@ -3,7 +3,7 @@ import type { DailyPnl } from '@/lib/mockData'
 interface Props {
   date: string
   todayIso: string
-  data: DailyPnl
+  data: DailyPnl | null
 }
 
 function pnlColor(pnl: number) {
@@ -20,11 +20,13 @@ function dateLabel(date: string, todayIso: string) {
 }
 
 export function DailyPnlCard({ date, todayIso, data }: Props) {
-  const settled = data.wins + data.losses
-  const total   = settled + data.pending
-  const pnlStr  = data.pnl === 0
+  const settled = data ? data.wins + data.losses : 0
+  const total   = data ? settled + data.pending : 0
+  const pnlStr  = !data
     ? '—'
-    : `${data.pnl > 0 ? '+' : '-'}$${Math.abs(data.pnl).toFixed(1)}`
+    : data.pnl === 0
+      ? '—'
+      : `${data.pnl > 0 ? '+' : '-'}$${Math.abs(data.pnl).toFixed(1)}`
 
   return (
     <div className="bankroll glass-strong" style={{ marginBottom: 14 }}>
@@ -34,7 +36,7 @@ export function DailyPnlCard({ date, todayIso, data }: Props) {
           <div className="bankroll-label" style={{ marginBottom: 6 }}>
             Профіт · {dateLabel(date, todayIso)}
           </div>
-          <div className="bankroll-amount" style={{ color: pnlColor(data.pnl) }}>
+          <div className="bankroll-amount" style={{ color: data ? pnlColor(data.pnl) : 'var(--text-dim)' }}>
             {pnlStr}
           </div>
         </div>
@@ -42,21 +44,21 @@ export function DailyPnlCard({ date, todayIso, data }: Props) {
         {/* Right — W / L / pending */}
         <div className="bankroll-meta" style={{ alignItems: 'flex-end', gap: 6 }}>
           <div style={{ display: 'flex', gap: 5 }}>
-            {data.wins > 0 && (
+            {data && data.wins > 0 && (
               <span style={{
                 fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700,
                 color: 'var(--green)', background: 'rgba(34,197,94,0.14)',
                 borderRadius: 999, padding: '3px 9px',
               }}>{data.wins}W</span>
             )}
-            {data.losses > 0 && (
+            {data && data.losses > 0 && (
               <span style={{
                 fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700,
                 color: 'var(--red)', background: 'rgba(239,68,68,0.14)',
                 borderRadius: 999, padding: '3px 9px',
               }}>{data.losses}L</span>
             )}
-            {data.pending > 0 && (
+            {data && data.pending > 0 && (
               <span style={{
                 fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 600,
                 color: 'var(--text-dim)', background: 'rgba(255,255,255,0.08)',
@@ -64,7 +66,7 @@ export function DailyPnlCard({ date, todayIso, data }: Props) {
               }}>{data.pending}P</span>
             )}
           </div>
-          <div className="bankroll-label">${data.invested} INVESTED</div>
+          <div className="bankroll-label">{data ? `$${data.invested} INVESTED` : 'НЕМАЄ ПІКС'}</div>
         </div>
       </div>
 
@@ -76,14 +78,14 @@ export function DailyPnlCard({ date, todayIso, data }: Props) {
             <>
               <div style={{
                 position: 'absolute', left: 0, top: 0, bottom: 0,
-                width: `${(data.wins / total) * 100}%`,
+                width: `${((data?.wins ?? 0) / total) * 100}%`,
                 background: 'var(--green)', transition: 'width 0.4s ease',
               }}/>
               <div style={{
                 position: 'absolute',
-                left: `${(data.wins / total) * 100}%`,
+                left: `${((data?.wins ?? 0) / total) * 100}%`,
                 top: 0, bottom: 0,
-                width: `${(data.losses / total) * 100}%`,
+                width: `${((data?.losses ?? 0) / total) * 100}%`,
                 background: 'var(--red)', transition: 'all 0.4s ease',
               }}/>
             </>
@@ -93,10 +95,10 @@ export function DailyPnlCard({ date, todayIso, data }: Props) {
         {/* Stats row */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-mute)', letterSpacing: '0.07em' }}>
-            {settled} ЗАВЕРШЕНО · {data.pending} В ОЧІКУВАННІ
+            {data ? `${settled} ЗАВЕРШЕНО · ${data.pending} В ОЧІКУВАННІ` : 'ПІКС НА ЦДЕНЬ ВІДСУТНІ'}
           </span>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-mute)', fontWeight: 600 }}>
-            {settled > 0 ? Math.round((data.wins / settled) * 100) : 0}% WR
+            {settled > 0 ? Math.round(((data?.wins ?? 0) / settled) * 100) : 0}% WR
           </span>
         </div>
       </div>

@@ -178,7 +178,7 @@ export function StatsScreen({ model }: Props) {
     getStats(model, period).then(d => { setData(d); setLoading(false) })
   }, [model, period])
 
-  const finished = data.streak.filter(s => s !== 'P')
+  const finished = data.streak.filter(s => s !== 'P').slice(-15)
   const wins     = finished.filter(s => s === 'W').length
   const losses   = finished.filter(s => s === 'L').length
   const winRate  = Math.round((wins / (wins + losses)) * 100)
@@ -234,7 +234,7 @@ export function StatsScreen({ model }: Props) {
           <div>
             <div className="eyebrow" style={{ marginBottom: 4 }}>Streak</div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, color: 'var(--text)' }}>
-              Останні {finished.length}
+              Last {finished.length}
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>

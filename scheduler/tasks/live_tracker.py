@@ -98,6 +98,8 @@ def run_live_tracker() -> None:
                             m.home_score = home_cur
                             m.away_score = away_cur
                             m.status = status_name or str(status_code)
+                            if elapsed is not None:
+                                m.elapsed = int(elapsed)
                             logger.debug(
                                 f"  LIVE [{elapsed}']: "
                                 f"{m.home_team.name if m.home_team else '?'} "
@@ -119,41 +121,37 @@ def run_live_tracker() -> None:
         for p in open_preds:
             preds_by_match.setdefault(p.match_id, []).append(p)
 
-        updated = 0
+        newly_settled = []
         for match_id, scores in newly_finished.items():
             hs, as_ = scores["home_score"], scores["away_score"]
             for pred in preds_by_match.get(match_id, []):
                 if pred.stake is None:
                     continue
+                if pred.result is not None:
+                    continue  # already settled (e.g. by update_results running concurrently)
                 result = calculate_result(pred.market, pred.outcome, hs, as_)
                 if result:
                     pred.result = result
                     pred.pnl = calculate_pnl(result, pred.stake, pred.odds_used)
-                    updated += 1
+                    newly_settled.append(pred)
 
         db.commit()
 
-        if updated:
-            _update_bankrolls(db, newly_finished, preds_by_match)
-            logger.info(f"Live tracker: settled {updated} predictions across {len(newly_finished)} matches")
+        if newly_settled:
+            _update_bankrolls(db, newly_settled)
+            logger.info(f"Live tracker: settled {len(newly_settled)} predictions across {len(newly_finished)} matches")
 
     finally:
         db.close()
 
 
-def _update_bankrolls(db, finished_map: dict, preds_by_match: dict) -> None:
-    """Підсумовує PnL нових ставок і створює bankroll snapshot."""
+def _update_bankrolls(db, newly_settled: list) -> None:
+    """Підсумовує PnL щойно settled ставок і створює bankroll snapshot."""
     users = db.query(User).filter(User.is_active.is_(True)).all()
     if not users:
         return
 
-    total_pnl = sum(
-        pred.pnl
-        for match_id in finished_map
-        for pred in preds_by_match.get(match_id, [])
-        if pred.pnl is not None
-    )
-
+    total_pnl = sum(p.pnl for p in newly_settled if p.pnl is not None)
     if total_pnl == 0:
         return
 
