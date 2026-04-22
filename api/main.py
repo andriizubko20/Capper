@@ -244,6 +244,7 @@ def get_stats(
                 Prediction.match_id.isnot(None),
                 Prediction.stake.isnot(None),
                 Prediction.result.isnot(None),
+                Prediction.is_active.is_(True),
                 Match.date >= since,
             )
             .order_by(Match.date)
@@ -397,6 +398,7 @@ def get_history(
                 Prediction.match_id.isnot(None),
                 Prediction.stake.isnot(None),
                 Prediction.result.isnot(None),
+                Prediction.is_active.is_(True),
                 Match.date >= since,
             )
             .order_by(Match.date.desc())
@@ -447,6 +449,7 @@ def get_compare(period: str = Query("30d")):
                     Prediction.match_id.isnot(None),
                     Prediction.stake.isnot(None),
                     Prediction.result.isnot(None),
+                    Prediction.is_active.is_(True),
                     Match.date >= since,
                 )
                 .order_by(Match.date)
