@@ -47,8 +47,8 @@ function CurveTooltip({ point, x, y, containerW }: {
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
         <div>
-          <div style={{ fontFamily: 'var(--font-display)', fontSize: 15, color: point.profit >= 1000 ? 'var(--green)' : 'var(--red)' }}>
-            {point.profit - 1000 >= 0 ? '+' : ''}${(point.profit - 1000).toFixed(0)}
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: 15, color: point.profit >= 0 ? 'var(--green)' : 'var(--red)' }}>
+            {point.profit >= 0 ? '+' : ''}${point.profit.toFixed(0)}
           </div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: 'var(--text-mute)' }}>P&L</div>
         </div>
@@ -193,11 +193,11 @@ export function StatsScreen({ model }: Props) {
             <div className="eyebrow" style={{ marginBottom: 6 }}>Profit Curve</div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
               {(() => {
-                const pnl = data.curveData.length > 0 ? (data.curveData[data.curveData.length - 1] ?? 1000) - 1000 : 0
+                const pnl = data.curveData[data.curveData.length - 1] ?? 0
                 const color = pnl > 0 ? 'var(--green)' : pnl < 0 ? 'var(--red)' : 'var(--text)'
                 return <>
                   <div style={{ fontFamily: 'var(--font-display)', fontSize: 30, color, letterSpacing: '-0.5px' }}>
-                    {pnl >= 0 ? '+' : ''}${pnl.toFixed(0)}
+                    {pnl >= 0 ? '+' : ''}${Math.abs(pnl).toFixed(0)}
                   </div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-dim)' }}>P&L</div>
                 </>
@@ -210,7 +210,7 @@ export function StatsScreen({ model }: Props) {
             ))}
           </div>
         </div>
-        <ProfitCurve data={data.curveData.map(v => v - 1000)} points={data.curvePoints}/>
+        <ProfitCurve data={data.curveData} points={data.curvePoints}/>
       </div>
 
       {/* Metrics grid */}

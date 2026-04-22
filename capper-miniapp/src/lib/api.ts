@@ -91,12 +91,14 @@ function mapApiStats(api: ApiStats, fallback: StatsData): StatsData {
     profit: l.pnl,
   }))
 
-  // curvePoints — bankroll від $1000 за кожною ставкою
-  const n = api.curve.length
-  const curvePoints = api.curve.map((val, i) => ({
-    label:  `Bet ${i + 1}`,
+  // API curve = bankroll (e.g. 1050, 980…). Convert to PnL$ by subtracting start.
+  const start = api.startingBalance ?? 1000
+  const pnlCurve = [0, ...api.curve.map(v => parseFloat((v - start).toFixed(2)))]
+  const n = pnlCurve.length
+  const curvePoints: StatsData['curvePoints'] = pnlCurve.map((val, i) => ({
+    label:  i === 0 ? 'Start' : `Bet ${i}`,
     bets:   Math.round((i / Math.max(n - 1, 1)) * api.totalBets),
-    profit: val,   // тепер це bankroll (починається з ~1000)
+    profit: val,
   }))
 
   return {
@@ -104,7 +106,7 @@ function mapApiStats(api: ApiStats, fallback: StatsData): StatsData {
     winRate:    api.winRate,
     bets:       api.totalBets,
     avgOdds:    api.avgOdds,
-    curveData:  api.curve,
+    curveData:  pnlCurve,
     curvePoints,
     streak,
     byLeague,

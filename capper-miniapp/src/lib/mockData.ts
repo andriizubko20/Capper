@@ -37,7 +37,7 @@ export interface StatsData {
   winRate: number
   bets: number
   avgOdds: number
-  curveData: number[]      // cumulative ROI % — drives the SVG line
+  curveData: number[]      // cumulative PnL $ — drives the SVG line (starts at 0)
   curvePoints: CurvePoint[] // parallel array — drives tooltip (same length as curveData)
   streak: StreakResult[]
   byLeague: LeagueRow[]
@@ -45,17 +45,23 @@ export interface StatsData {
 
 // ─── Curve helpers ────────────────────────────────────────────────────────────
 
+// Converts ROI%-shaped curve to PnL $ by scaling to totalProfit at finalRoi.
+function scaleCurve(arr: number[], totalProfit: number, finalRoi: number): number[] {
+  if (!finalRoi) return arr.map(() => 0)
+  const scale = totalProfit / finalRoi
+  return arr.map(v => parseFloat((v * scale).toFixed(1)))
+}
+
 function makeCurvePoints(
   labels: string[],
   totalBets: number,
   totalProfit: number,
-  _roiData: number[],
 ): CurvePoint[] {
   const n = labels.length
   return labels.map((label, i) => ({
     label,
-    bets:   Math.round((i / (n - 1)) * totalBets),
-    profit: parseFloat(((i / (n - 1)) * totalProfit).toFixed(1)),
+    bets:   Math.round((i / Math.max(n - 1, 1)) * totalBets),
+    profit: parseFloat(((i / Math.max(n - 1, 1)) * totalProfit).toFixed(1)),
   }))
 }
 
@@ -71,20 +77,20 @@ export const STATS_BY_MODEL_PERIOD: Record<Model, Record<Period, StatsData>> = {
   'Monster': {
     '7D': {
       roi: 31.5, winRate: 78, bets: 9, avgOdds: 2.08,
-      curveData:   [0, 3.5, 2.1, 6.8, 4.2, 9.1, 31.5],
-      curvePoints: makeCurvePoints(LABELS_7D, 9, 124, [0,3.5,2.1,6.8,4.2,9.1,31.5]),
+      curveData:   scaleCurve([0,3.5,2.1,6.8,4.2,9.1,31.5], 124, 31.5),
+      curvePoints: makeCurvePoints(LABELS_7D, 9, 124),
       streak: ['W','L','W','W','W','L','W','W','W'],
       byLeague: [
-        { name: 'Premier League',  flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 3, roi: 42.1, profit: 58.4 },
-        { name: 'Champions League',flag: '🏆',        bets: 3, roi: 28.7, profit: 41.2 },
-        { name: 'La Liga',         flag: '🇪🇸',        bets: 2, roi: 19.4, profit: 22.8 },
-        { name: 'Serie A',         flag: '🇮🇹',        bets: 1, roi: -8.5, profit: -9.1 },
+        { name: 'Premier League',  flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 3, roi: 42.1, profit:  58.4 },
+        { name: 'Champions League',flag: '🏆',        bets: 3, roi: 28.7, profit:  41.2 },
+        { name: 'La Liga',         flag: '🇪🇸',        bets: 2, roi: 19.4, profit:  22.8 },
+        { name: 'Serie A',         flag: '🇮🇹',        bets: 1, roi: -8.5, profit:  -9.1 },
       ],
     },
     '30D': {
       roi: 24.3, winRate: 61, bets: 47, avgOdds: 2.14,
-      curveData: [0,1.5,0.8,2.8,3.4,4.7,5.9,6.2,7.8,9.1,10.4,11.8,12.5,13.9,24.3],
-      curvePoints: makeCurvePoints(LABELS_30D, 47, 287, [0,1.5,0.8,2.8,3.4,4.7,5.9,6.2,7.8,9.1,10.4,11.8,12.5,13.9,24.3]),
+      curveData: scaleCurve([0,1.5,0.8,2.8,3.4,4.7,5.9,6.2,7.8,9.1,10.4,11.8,12.5,13.9,24.3], 287, 24.3),
+      curvePoints: makeCurvePoints(LABELS_30D, 47, 287),
       streak: ['W','W','L','W','W','W','P','W','L','W','W','W','L','W','W'],
       byLeague: [
         { name: 'Premier League', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 14, roi: 28.4, profit: 114.2 },
@@ -96,8 +102,8 @@ export const STATS_BY_MODEL_PERIOD: Record<Model, Record<Period, StatsData>> = {
     },
     '90D': {
       roi: 19.4, winRate: 59, bets: 134, avgOdds: 2.21,
-      curveData: [0,0.8,-0.5,1.2,2.1,3.5,4.9,5.3,7.9,8.4,9.6,11.4,12.8,13.7,16.1,19.4],
-      curvePoints: makeCurvePoints(LABELS_90D, 134, 842, [0,0.8,-0.5,1.2,2.1,3.5,4.9,5.3,7.9,8.4,9.6,11.4,12.8,16.1,19.4]),
+      curveData: scaleCurve([0,0.8,-0.5,1.2,2.1,3.5,4.9,5.3,7.9,8.4,9.6,11.4,12.8,13.7,16.1,19.4], 842, 19.4),
+      curvePoints: makeCurvePoints(LABELS_90D, 134, 842),
       streak: ['L','W','W','L','W','P','W','W','L','W','W','L','W','L','W'],
       byLeague: [
         { name: 'Premier League', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 38, roi: 24.1, profit: 312.4 },
@@ -109,15 +115,15 @@ export const STATS_BY_MODEL_PERIOD: Record<Model, Record<Period, StatsData>> = {
     },
     'ALL': {
       roi: 22.4, winRate: 60, bets: 287, avgOdds: 2.18,
-      curveData: [0,-0.8,1.4,3.2,5.4,7.1,8.9,10.2,11.8,13.2,14.7,15.4,17.8,19.2,20.4,21.7,22.4],
-      curvePoints: makeCurvePoints(LABELS_ALL, 287, 2241, [0,-0.8,1.4,3.2,5.4,7.1,8.9,10.2,11.8,13.2,14.7,15.4,17.8,19.2,20.4,21.7,22.4]),
+      curveData: scaleCurve([0,-0.8,1.4,3.2,5.4,7.1,8.9,10.2,11.8,13.2,14.7,15.4,17.8,19.2,20.4,21.7,22.4], 2241, 22.4),
+      curvePoints: makeCurvePoints(LABELS_ALL, 287, 2241),
       streak: ['W','L','W','W','P','L','W','W','W','L','W','W','L','W','W'],
       byLeague: [
-        { name: 'Premier League', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 82, roi: 26.3, profit: 718.4 },
-        { name: 'La Liga',        flag: '🇪🇸',        bets: 71, roi: 20.1, profit: 521.8 },
-        { name: 'Serie A',        flag: '🇮🇹',        bets: 58, roi: 18.4, profit: 412.7 },
-        { name: 'Bundesliga',     flag: '🇩🇪',        bets: 47, roi: 24.9, profit: 387.2 },
-        { name: 'Ligue 1',        flag: '🇫🇷',        bets: 29, roi:  9.7, profit: 128.3 },
+        { name: 'Premier League', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 82, roi: 26.3, profit:  718.4 },
+        { name: 'La Liga',        flag: '🇪🇸',        bets: 71, roi: 20.1, profit:  521.8 },
+        { name: 'Serie A',        flag: '🇮🇹',        bets: 58, roi: 18.4, profit:  412.7 },
+        { name: 'Bundesliga',     flag: '🇩🇪',        bets: 47, roi: 24.9, profit:  387.2 },
+        { name: 'Ligue 1',        flag: '🇫🇷',        bets: 29, roi:  9.7, profit:  128.3 },
       ],
     },
   },
@@ -125,8 +131,8 @@ export const STATS_BY_MODEL_PERIOD: Record<Model, Record<Period, StatsData>> = {
   'WS Gap': {
     '7D': {
       roi: 12.1, winRate: 56, bets: 9, avgOdds: 2.18,
-      curveData:   [0, 1.2, 0.4, 2.8, 2.1, 4.5, 12.1],
-      curvePoints: makeCurvePoints(LABELS_7D, 9, 48, [0,1.2,0.4,2.8,2.1,4.5,12.1]),
+      curveData:   scaleCurve([0,1.2,0.4,2.8,2.1,4.5,12.1], 48, 12.1),
+      curvePoints: makeCurvePoints(LABELS_7D, 9, 48),
       streak: ['W','L','L','W','W','L','W','W','L'],
       byLeague: [
         { name: 'Premier League',  flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 4, roi: 18.2, profit: 24.1 },
@@ -136,41 +142,41 @@ export const STATS_BY_MODEL_PERIOD: Record<Model, Record<Period, StatsData>> = {
     },
     '30D': {
       roi: 18.4, winRate: 56, bets: 42, avgOdds: 2.31,
-      curveData: [0,1.1,0.4,2.2,1.8,3.5,4.2,5.1,6.4,7.8,8.5,9.2,10.4,12.1,18.4],
-      curvePoints: makeCurvePoints(LABELS_30D, 42, 218, [0,1.1,0.4,2.2,1.8,3.5,4.2,5.1,6.4,7.8,8.5,9.2,10.4,12.1,18.4]),
+      curveData: scaleCurve([0,1.1,0.4,2.2,1.8,3.5,4.2,5.1,6.4,7.8,8.5,9.2,10.4,12.1,18.4], 218, 18.4),
+      curvePoints: makeCurvePoints(LABELS_30D, 42, 218),
       streak: ['L','W','W','L','W','W','P','L','W','W','L','W','W','L','W'],
       byLeague: [
-        { name: 'Premier League', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 12, roi: 22.1, profit: 84.2 },
-        { name: 'La Liga',        flag: '🇪🇸',        bets: 10, roi: 15.3, profit: 58.4 },
-        { name: 'Serie A',        flag: '🇮🇹',        bets:  8, roi: 18.7, profit: 52.1 },
-        { name: 'Bundesliga',     flag: '🇩🇪',        bets:  7, roi: 12.4, profit: 37.8 },
+        { name: 'Premier League', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 12, roi: 22.1, profit:  84.2 },
+        { name: 'La Liga',        flag: '🇪🇸',        bets: 10, roi: 15.3, profit:  58.4 },
+        { name: 'Serie A',        flag: '🇮🇹',        bets:  8, roi: 18.7, profit:  52.1 },
+        { name: 'Bundesliga',     flag: '🇩🇪',        bets:  7, roi: 12.4, profit:  37.8 },
         { name: 'Ligue 1',        flag: '🇫🇷',        bets:  5, roi: -6.8, profit: -24.1 },
       ],
     },
     '90D': {
       roi: 22.7, winRate: 58, bets: 118, avgOdds: 2.28,
-      curveData: [0,0.9,-0.3,1.8,2.5,4.1,5.7,6.2,8.4,9.8,10.5,12.3,13.7,15.1,18.2,19.4,21.9,22.7],
-      curvePoints: makeCurvePoints(LABELS_90D, 118, 714, [0,0.9,-0.3,1.8,2.5,4.1,5.7,6.2,8.4,9.8,10.5,12.3,13.7,15.1,18.2,19.4,21.9,22.7]),
+      curveData: scaleCurve([0,0.9,-0.3,1.8,2.5,4.1,5.7,6.2,8.4,9.8,10.5,12.3,13.7,15.1,18.2,19.4,21.9,22.7], 714, 22.7),
+      curvePoints: makeCurvePoints(LABELS_90D, 118, 714),
       streak: ['W','L','W','W','L','W','P','W','L','W','W','W','L','W','W'],
       byLeague: [
         { name: 'Premier League', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 34, roi: 28.4, profit: 284.2 },
         { name: 'La Liga',        flag: '🇪🇸',        bets: 28, roi: 21.7, profit: 198.4 },
         { name: 'Serie A',        flag: '🇮🇹',        bets: 24, roi: 19.2, profit: 162.8 },
         { name: 'Bundesliga',     flag: '🇩🇪',        bets: 20, roi: 24.8, profit: 181.4 },
-        { name: 'Ligue 1',        flag: '🇫🇷',        bets: 12, roi: 14.2, profit: 76.1 },
+        { name: 'Ligue 1',        flag: '🇫🇷',        bets: 12, roi: 14.2, profit:  76.1 },
       ],
     },
     'ALL': {
       roi: 25.3, winRate: 59, bets: 254, avgOdds: 2.26,
-      curveData: [0,-1.1,1.2,2.8,4.2,6.1,7.9,9.3,11.2,13.1,14.7,16.2,17.8,19.4,21.1,22.4,23.9,25.3],
-      curvePoints: makeCurvePoints(LABELS_ALL, 254, 1842, [0,-1.1,1.2,2.8,4.2,6.1,7.9,9.3,11.2,13.1,14.7,16.2,17.8,19.4,21.1,22.4,23.9,25.3]),
+      curveData: scaleCurve([0,-1.1,1.2,2.8,4.2,6.1,7.9,9.3,11.2,13.1,14.7,16.2,17.8,19.4,21.1,22.4,23.9,25.3], 1842, 25.3),
+      curvePoints: makeCurvePoints(LABELS_ALL, 254, 1842),
       streak: ['W','W','L','W','W','P','W','L','W','W','W','L','W','W','W'],
       byLeague: [
-        { name: 'Premier League', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 74, roi: 29.1, profit: 648.2 },
-        { name: 'La Liga',        flag: '🇪🇸',        bets: 62, roi: 23.4, profit: 471.8 },
-        { name: 'Serie A',        flag: '🇮🇹',        bets: 54, roi: 21.8, profit: 384.1 },
-        { name: 'Bundesliga',     flag: '🇩🇪',        bets: 42, roi: 27.2, profit: 348.9 },
-        { name: 'Ligue 1',        flag: '🇫🇷',        bets: 22, roi: 12.8, profit: 104.2 },
+        { name: 'Premier League', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 74, roi: 29.1, profit:  648.2 },
+        { name: 'La Liga',        flag: '🇪🇸',        bets: 62, roi: 23.4, profit:  471.8 },
+        { name: 'Serie A',        flag: '🇮🇹',        bets: 54, roi: 21.8, profit:  384.1 },
+        { name: 'Bundesliga',     flag: '🇩🇪',        bets: 42, roi: 27.2, profit:  348.9 },
+        { name: 'Ligue 1',        flag: '🇫🇷',        bets: 22, roi: 12.8, profit:  104.2 },
       ],
     },
   },
@@ -178,8 +184,8 @@ export const STATS_BY_MODEL_PERIOD: Record<Model, Record<Period, StatsData>> = {
   'Aqua': {
     '7D': {
       roi: 8.4, winRate: 44, bets: 9, avgOdds: 2.51,
-      curveData:   [0, 0.8, -1.2, 1.4, 0.2, 2.8, 8.4],
-      curvePoints: makeCurvePoints(LABELS_7D, 9, 32, [0,0.8,-1.2,1.4,0.2,2.8,8.4]),
+      curveData:   scaleCurve([0,0.8,-1.2,1.4,0.2,2.8,8.4], 32, 8.4),
+      curvePoints: makeCurvePoints(LABELS_7D, 9, 32),
       streak: ['L','L','W','L','W','W','L','W','W'],
       byLeague: [
         { name: 'Premier League',  flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 3, roi: 12.4, profit: 14.2 },
@@ -190,21 +196,21 @@ export const STATS_BY_MODEL_PERIOD: Record<Model, Record<Period, StatsData>> = {
     },
     '30D': {
       roi: 11.7, winRate: 52, bets: 38, avgOdds: 2.48,
-      curveData: [0,0.8,-0.4,1.2,0.7,2.1,1.5,3.2,2.8,4.5,3.9,5.7,5.2,7.4,11.7],
-      curvePoints: makeCurvePoints(LABELS_30D, 38, 142, [0,0.8,-0.4,1.2,0.7,2.1,1.5,3.2,2.8,4.5,3.9,5.7,5.2,7.4,11.7]),
+      curveData: scaleCurve([0,0.8,-0.4,1.2,0.7,2.1,1.5,3.2,2.8,4.5,3.9,5.7,5.2,7.4,11.7], 142, 11.7),
+      curvePoints: makeCurvePoints(LABELS_30D, 38, 142),
       streak: ['L','W','L','W','W','L','P','W','L','W','W','L','W','W','L'],
       byLeague: [
-        { name: 'Premier League', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 11, roi: 14.2, profit: 48.4 },
-        { name: 'La Liga',        flag: '🇪🇸',        bets:  9, roi:  8.7, profit: 28.1 },
-        { name: 'Serie A',        flag: '🇮🇹',        bets:  8, roi: 12.4, profit: 36.8 },
+        { name: 'Premier League', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 11, roi: 14.2, profit:  48.4 },
+        { name: 'La Liga',        flag: '🇪🇸',        bets:  9, roi:  8.7, profit:  28.1 },
+        { name: 'Serie A',        flag: '🇮🇹',        bets:  8, roi: 12.4, profit:  36.8 },
         { name: 'Bundesliga',     flag: '🇩🇪',        bets:  6, roi: -7.8, profit: -21.4 },
-        { name: 'Ligue 1',        flag: '🇫🇷',        bets:  4, roi:  9.1, profit: 18.4 },
+        { name: 'Ligue 1',        flag: '🇫🇷',        bets:  4, roi:  9.1, profit:  18.4 },
       ],
     },
     '90D': {
       roi: 14.2, winRate: 54, bets: 106, avgOdds: 2.44,
-      curveData: [0,0.5,-0.8,0.9,1.7,1.2,2.8,3.4,4.5,5.1,6.2,7.4,8.1,9.2,10.4,11.7,13.2,14.2],
-      curvePoints: makeCurvePoints(LABELS_90D, 106, 521, [0,0.5,-0.8,0.9,1.7,1.2,2.8,3.4,4.5,5.1,6.2,7.4,8.1,9.2,10.4,11.7,13.2,14.2]),
+      curveData: scaleCurve([0,0.5,-0.8,0.9,1.7,1.2,2.8,3.4,4.5,5.1,6.2,7.4,8.1,9.2,10.4,11.7,13.2,14.2], 521, 14.2),
+      curvePoints: makeCurvePoints(LABELS_90D, 106, 521),
       streak: ['W','L','L','W','W','P','L','W','W','L','W','W','L','W','L'],
       byLeague: [
         { name: 'Premier League', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 30, roi: 17.8, profit: 184.2 },
@@ -216,8 +222,8 @@ export const STATS_BY_MODEL_PERIOD: Record<Model, Record<Period, StatsData>> = {
     },
     'ALL': {
       roi: 16.8, winRate: 55, bets: 231, avgOdds: 2.41,
-      curveData: [0,-0.5,0.9,1.8,3.1,2.7,4.5,5.8,7.1,8.4,9.7,10.8,11.9,13.1,14.2,15.4,16.8],
-      curvePoints: makeCurvePoints(LABELS_ALL, 231, 1124, [0,-0.5,0.9,1.8,3.1,2.7,4.5,5.8,7.1,8.4,9.7,10.8,11.9,13.1,14.2,15.4,16.8]),
+      curveData: scaleCurve([0,-0.5,0.9,1.8,3.1,2.7,4.5,5.8,7.1,8.4,9.7,10.8,11.9,13.1,14.2,15.4,16.8], 1124, 16.8),
+      curvePoints: makeCurvePoints(LABELS_ALL, 231, 1124),
       streak: ['L','W','W','L','W','W','P','W','L','W','L','W','W','W','L'],
       byLeague: [
         { name: 'Premier League', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', bets: 68, roi: 19.2, profit: 428.4 },
