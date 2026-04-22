@@ -275,11 +275,12 @@ def get_stats(
             lg = (p.match.league.name if p.match and p.match.league else None) \
                  or p.league_name or "Other"
             if lg not in league_map:
-                league_map[lg] = {"bets": 0, "wins": 0, "pnl": 0.0}
+                league_map[lg] = {"bets": 0, "wins": 0, "pnl": 0.0, "stake": 0.0}
             league_map[lg]["bets"] += 1
             if p.result == "win":
                 league_map[lg]["wins"] += 1
-            league_map[lg]["pnl"] += p.pnl or 0
+            league_map[lg]["pnl"]   += p.pnl or 0
+            league_map[lg]["stake"] += p.stake or 0
 
         by_league = [
             {
@@ -288,6 +289,7 @@ def get_stats(
                 "bets": v["bets"],
                 "winRate": round(v["wins"] / v["bets"] * 100, 1),
                 "pnl": round(v["pnl"], 2),
+                "roi": round(v["pnl"] / v["stake"] * 100, 1) if v["stake"] else 0.0,
             }
             for lg, v in sorted(league_map.items(), key=lambda x: -x[1]["bets"])
         ]

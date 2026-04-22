@@ -71,7 +71,7 @@ interface ApiStats {
   totalBets: number
   avgOdds: number
   streak: { result: string; id: string }[]
-  byLeague: { league: string; flag: string; bets: number; winRate: number; pnl: number }[]
+  byLeague: { league: string; flag: string; bets: number; winRate: number; pnl: number; roi: number }[]
   curve: number[]           // bankroll curve: починається з ~1000
 }
 
@@ -87,7 +87,7 @@ function mapApiStats(api: ApiStats, fallback: StatsData): StatsData {
     name:   l.league,
     flag:   l.flag,
     bets:   l.bets,
-    roi:    l.winRate,   // winRate як proxy для roi до окремого endpoint
+    roi:    l.roi,
     profit: l.pnl,
   }))
 

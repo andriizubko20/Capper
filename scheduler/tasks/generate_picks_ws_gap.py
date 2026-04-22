@@ -292,10 +292,13 @@ def run_generate_picks_ws_gap(
         match_ids = [m.id for m in matches]
         existing_preds = db.query(Prediction).filter(
             Prediction.match_id.in_(match_ids),
-            Prediction.model_version.in_([MODEL_VERSION, MODEL_VERSION_KELLY]),
+            Prediction.model_version.in_([MODEL_VERSION, MODEL_VERSION_KELLY,
+                                          MODEL_VERSION_EARLY, MODEL_VERSION_KELLY_EARLY]),
         ).all()
-        existing_cap   = {p.match_id for p in existing_preds if p.model_version == MODEL_VERSION}
-        existing_kelly = {p.match_id for p in existing_preds if p.model_version == MODEL_VERSION_KELLY}
+        existing_cap          = {p.match_id for p in existing_preds if p.model_version == MODEL_VERSION}
+        existing_kelly        = {p.match_id for p in existing_preds if p.model_version == MODEL_VERSION_KELLY}
+        early_preds_by_match  = {p.match_id: p for p in existing_preds
+                                 if p.model_version == MODEL_VERSION_KELLY_EARLY}
 
         all_odds_rows = db.query(Odds).filter(
             Odds.match_id.in_(match_ids),
@@ -357,6 +360,11 @@ def run_generate_picks_ws_gap(
 
             # Версія 2: pure Kelly 25%
             if not has_kelly:
+                # Деактивуємо early-пік якщо він існує — щоб уникнути дублів у UI
+                early = early_preds_by_match.get(match.id)
+                if early and early.result is None:
+                    early.is_active = False
+
                 stake_kelly = round(min(bankroll_kelly * pick["kelly_fraction"], bankroll_kelly * KELLY_CAP), 2)
                 db.add(Prediction(
                     match_id=match.id, market="1x2",
