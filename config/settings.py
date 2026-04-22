@@ -1,5 +1,13 @@
 from pydantic_settings import BaseSettings
 
+# Canonical model_version values that count toward bankroll and stats.
+# All other versions (base non-Kelly, etc.) are parallel runs excluded from UI.
+CANONICAL_VERSIONS: frozenset[str] = frozenset({
+    "ws_gap_kelly_v1",
+    "monster_v1_kelly",
+    "aquamarine_v1_kelly",
+})
+
 
 class Settings(BaseSettings):
     telegram_bot_token: str = ""

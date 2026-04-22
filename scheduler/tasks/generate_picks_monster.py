@@ -2,9 +2,8 @@
 scheduler/tasks/generate_picks_monster.py
 
 Monster model — niche-based picks.
-Кожна ніша має свій IS win rate (p_is), Kelly 25%, cap 4%.
-model_version = "monster_v1"     (4% cap)
-model_version = "monster_v1_kelly" (no cap)
+Кожна ніша має свій IS win rate (p_is), Kelly 25%, cap 10%.
+model_version = "monster_v1_kelly"
 """
 import time as _time
 from datetime import datetime, timedelta, timezone
@@ -20,8 +19,7 @@ from model.monster.features import (
     load_historical_data, build_team_state, build_upcoming_features, compute_p_is
 )
 
-MODEL_VERSION       = "monster_v1"
-MODEL_VERSION_KELLY = "monster_v1_kelly"
+MODEL_VERSION = "monster_v1_kelly"
 
 KELLY_FRAC  = 0.25
 KELLY_CAP   = 0.10
@@ -164,27 +162,21 @@ def run_generate_picks_monster(
         hist_matches, hist_stats, hist_odds = load_historical_data()
         team_state = build_team_state(hist_matches, hist_stats)
 
-        bankroll_cap   = _compute_bankroll(db, settings.bankroll, MODEL_VERSION)
-        bankroll_kelly = _compute_bankroll(db, settings.bankroll, MODEL_VERSION_KELLY)
-        logger.info(f'[Monster] Bankroll cap=${bankroll_cap:.0f} kelly=${bankroll_kelly:.0f}')
+        bankroll = _compute_bankroll(db, settings.bankroll, MODEL_VERSION)
+        logger.info(f'[Monster] Bankroll=${bankroll:.0f}')
 
-        # Batch-load odds and existing predictions for all matches in one query
         match_ids = [m.id for m in matches_db]
         odds_by_match = _load_odds_batch(match_ids, db)
 
-        existing_preds = db.query(Prediction).filter(
+        existing = {p.match_id for p in db.query(Prediction.match_id).filter(
             Prediction.match_id.in_(match_ids),
-            Prediction.model_version.in_([MODEL_VERSION, MODEL_VERSION_KELLY]),
-        ).all()
-        existing_cap   = {p.match_id for p in existing_preds if p.model_version == MODEL_VERSION}
-        existing_kelly = {p.match_id for p in existing_preds if p.model_version == MODEL_VERSION_KELLY}
+            Prediction.model_version == MODEL_VERSION,
+        ).all()}
 
         new_picks = []
 
         for match in matches_db:
-            has_cap   = match.id in existing_cap
-            has_kelly = match.id in existing_kelly
-            if has_cap and has_kelly:
+            if match.id in existing:
                 continue
 
             odds_raw = odds_by_match.get(match.id)
@@ -256,31 +248,17 @@ def run_generate_picks_monster(
                 f'odds={odds_val:.2f} p_is={p_is:.3f} f*={f_star:.3f} EV={ev*100:.1f}%'
             )
 
-            if not has_cap:
-                stake_cap = round(min(bankroll_cap * kelly_frac, bankroll_cap * KELLY_CAP), 2)
-                db.add(Prediction(
-                    match_id=match.id, market='1x2',
-                    outcome=side,
-                    probability=round(p_is, 4),
-                    odds_used=float(odds_val),
-                    ev=ev,
-                    kelly_fraction=round(kelly_frac, 4),
-                    stake=stake_cap,
-                    model_version=MODEL_VERSION,
-                ))
-
-            if not has_kelly:
-                stake_kelly = round(min(bankroll_kelly * kelly_frac, bankroll_kelly * KELLY_CAP), 2)
-                db.add(Prediction(
-                    match_id=match.id, market='1x2',
-                    outcome=side,
-                    probability=round(p_is, 4),
-                    odds_used=float(odds_val),
-                    ev=ev,
-                    kelly_fraction=round(kelly_frac, 4),
-                    stake=stake_kelly,
-                    model_version=MODEL_VERSION_KELLY,
-                ))
+            stake = round(min(bankroll * kelly_frac, bankroll * KELLY_CAP), 2)
+            db.add(Prediction(
+                match_id=match.id, market='1x2',
+                outcome=side,
+                probability=round(p_is, 4),
+                odds_used=float(odds_val),
+                ev=ev,
+                kelly_fraction=round(kelly_frac, 4),
+                stake=stake,
+                model_version=MODEL_VERSION,
+            ))
 
             new_picks.append((match, {
                 'outcome': side,
@@ -288,14 +266,14 @@ def run_generate_picks_monster(
                 'ev': ev,
                 'p_is': p_is,
                 'niche': niche_str,
-                'stake_cap': round(min(bankroll_cap * kelly_frac, bankroll_cap * KELLY_CAP), 2),
+                'stake': stake,
             }))
 
         db.commit()
 
         if new_picks:
             logger.info(f'[Monster] Generated {len(new_picks)} picks')
-            _send_picks_to_telegram(new_picks, db, bankroll_cap)
+            _send_picks_to_telegram(new_picks, db, bankroll)
         else:
             logger.info('[Monster] No new picks')
 
@@ -345,7 +323,7 @@ def _send_picks_to_telegram(picks: list, db, bankroll: float) -> None:
                     f"  ➤ {side_label}\n"
                     f"  Коеф: {pick['odds']:.2f} | EV: {pick['ev']*100:.1f}% | "
                     f"p_win: {pick['p_is']:.1%}\n"
-                    f"  Стейк: ${pick['stake_cap']:.0f} (банкрол: ${bankroll:.0f})"
+                    f"  Стейк: ${pick['stake']:.0f} (банкрол: ${bankroll:.0f})"
                 )
                 lines.append(line)
 

@@ -4,17 +4,14 @@ from datetime import datetime, timezone
 
 # model_version → display name + color
 MODEL_META = {
-    "ws_gap_v1":           {"name": "WS Gap",  "color": "#F472B6"},
     "ws_gap_kelly_v1":     {"name": "WS Gap",  "color": "#F472B6"},
-    "monster_v1":          {"name": "Monster", "color": "#F59E0B"},
     "monster_v1_kelly":    {"name": "Monster", "color": "#F59E0B"},
-    "aquamarine_v1":       {"name": "Aqua",    "color": "#22D3EE"},
     "aquamarine_v1_kelly": {"name": "Aqua",    "color": "#22D3EE"},
 }
 
 # model query param → list of model_version values
 MODEL_VERSIONS: dict[str, list[str]] = {
-    "WS Gap":  ["ws_gap_kelly_v1", "ws_gap_kelly_v1_early"],
+    "WS Gap":  ["ws_gap_kelly_v1"],
     "Monster": ["monster_v1_kelly"],
     "Aqua":    ["aquamarine_v1_kelly"],
 }

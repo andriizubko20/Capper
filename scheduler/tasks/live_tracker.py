@@ -12,6 +12,7 @@ from data.api_client import SStatsClient
 from db.models import Match, Prediction, User, BankrollSnapshot
 from db.session import SessionLocal
 from scheduler.tasks._result_utils import calculate_result, calculate_pnl
+from config.settings import CANONICAL_VERSIONS
 
 # status codes від SStats
 STATUS_NOT_STARTED = {0, 1}
@@ -154,7 +155,8 @@ def _update_bankrolls(db, newly_settled: list) -> None:
     if not users:
         return
 
-    total_pnl = sum(p.pnl for p in newly_settled if p.pnl is not None)
+    canonical = [p for p in newly_settled if p.model_version in CANONICAL_VERSIONS]
+    total_pnl = sum(p.pnl for p in canonical if p.pnl is not None)
     if total_pnl == 0:
         return
 

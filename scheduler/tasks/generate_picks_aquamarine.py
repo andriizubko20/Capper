@@ -3,9 +3,7 @@ scheduler/tasks/generate_picks_aquamarine.py
 
 Aquamarine model — niche-based picks.
 Same infrastructure as Monster; different niche set.
-model_version = "aquamarine_v1"       (4% cap)
-model_version = "aquamarine_v1_kelly" (no cap)
-p_is is always computed on the fly (no DB cache table).
+model_version = "aquamarine_v1_kelly"
 """
 from datetime import datetime, timedelta, timezone
 
@@ -20,8 +18,7 @@ from model.monster.features import (
     load_historical_data, build_team_state, build_upcoming_features, compute_p_is
 )
 
-MODEL_VERSION       = "aquamarine_v1"
-MODEL_VERSION_KELLY = "aquamarine_v1_kelly"
+MODEL_VERSION = "aquamarine_v1_kelly"
 
 KELLY_FRAC  = 0.25
 KELLY_CAP   = 0.10
@@ -139,16 +136,13 @@ def run_generate_picks_aquamarine(
         hist_matches, hist_stats, hist_odds = load_historical_data()
         team_state = build_team_state(hist_matches, hist_stats)
 
-        bankroll_cap   = _compute_bankroll(db, settings.bankroll, MODEL_VERSION)
-        bankroll_kelly = _compute_bankroll(db, settings.bankroll, MODEL_VERSION_KELLY)
-        logger.info(f'[Aquamarine] Bankroll cap=${bankroll_cap:.0f} kelly=${bankroll_kelly:.0f}')
+        bankroll = _compute_bankroll(db, settings.bankroll, MODEL_VERSION)
+        logger.info(f'[Aquamarine] Bankroll=${bankroll:.0f}')
 
         new_picks = []
 
         for match in matches_db:
-            has_cap   = db.query(Prediction).filter_by(match_id=match.id, model_version=MODEL_VERSION).first()
-            has_kelly = db.query(Prediction).filter_by(match_id=match.id, model_version=MODEL_VERSION_KELLY).first()
-            if has_cap and has_kelly:
+            if db.query(Prediction).filter_by(match_id=match.id, model_version=MODEL_VERSION).first():
                 continue
 
             odds_raw = _get_odds(match.id, db)
@@ -217,31 +211,17 @@ def run_generate_picks_aquamarine(
                 f'odds={odds_val:.2f} p_is={p_is:.3f} f*={f_star:.3f} EV={ev*100:.1f}%'
             )
 
-            if not has_cap:
-                stake_cap = round(min(bankroll_cap * kelly_frac, bankroll_cap * KELLY_CAP), 2)
-                db.add(Prediction(
-                    match_id=match.id, market='1x2',
-                    outcome=side,
-                    probability=round(p_is, 4),
-                    odds_used=float(odds_val),
-                    ev=ev,
-                    kelly_fraction=round(kelly_frac, 4),
-                    stake=stake_cap,
-                    model_version=MODEL_VERSION,
-                ))
-
-            if not has_kelly:
-                stake_kelly = round(min(bankroll_kelly * kelly_frac, bankroll_kelly * KELLY_CAP), 2)
-                db.add(Prediction(
-                    match_id=match.id, market='1x2',
-                    outcome=side,
-                    probability=round(p_is, 4),
-                    odds_used=float(odds_val),
-                    ev=ev,
-                    kelly_fraction=round(kelly_frac, 4),
-                    stake=stake_kelly,
-                    model_version=MODEL_VERSION_KELLY,
-                ))
+            stake = round(min(bankroll * kelly_frac, bankroll * KELLY_CAP), 2)
+            db.add(Prediction(
+                match_id=match.id, market='1x2',
+                outcome=side,
+                probability=round(p_is, 4),
+                odds_used=float(odds_val),
+                ev=ev,
+                kelly_fraction=round(kelly_frac, 4),
+                stake=stake,
+                model_version=MODEL_VERSION,
+            ))
 
             new_picks.append((match, {
                 'outcome': side,
@@ -249,14 +229,14 @@ def run_generate_picks_aquamarine(
                 'ev': ev,
                 'p_is': p_is,
                 'niche': niche_str,
-                'stake_cap': round(min(bankroll_cap * kelly_frac, bankroll_cap * KELLY_CAP), 2),
+                'stake': stake,
             }))
 
         db.commit()
 
         if new_picks:
             logger.info(f'[Aquamarine] Generated {len(new_picks)} picks')
-            _send_picks_to_telegram(new_picks, db, bankroll_cap)
+            _send_picks_to_telegram(new_picks, db, bankroll)
         else:
             logger.info('[Aquamarine] No new picks')
 
@@ -298,7 +278,7 @@ def _send_picks_to_telegram(picks: list, db, bankroll: float) -> None:
                     f"  ➤ {side_label}\n"
                     f"  Коеф: {pick['odds']:.2f} | EV: {pick['ev']*100:.1f}% | "
                     f"p_win: {pick['p_is']:.1%}\n"
-                    f"  Стейк: ${pick['stake_cap']:.0f} (банкрол: ${bankroll:.0f})"
+                    f"  Стейк: ${pick['stake']:.0f} (банкрол: ${bankroll:.0f})"
                 )
                 lines.append(line)
 

@@ -4,7 +4,7 @@ from loguru import logger
 
 from scheduler.tasks.collect_data import run_daily_collection
 from scheduler.tasks.generate_picks import run_generate_picks
-from scheduler.tasks.generate_picks_ws_gap import run_generate_picks_ws_gap, run_early_picks_scan
+from scheduler.tasks.generate_picks_ws_gap import run_generate_picks_ws_gap
 from scheduler.tasks.generate_picks_monster import run_generate_picks_monster
 from scheduler.tasks.generate_picks_aquamarine import run_generate_picks_aquamarine
 from scheduler.tasks.update_monster_p_is import run_update_monster_p_is
@@ -31,17 +31,7 @@ def start() -> None:
     # ML v1 — вимкнено, активна тільки WS Gap модель
     # scheduler.add_job(run_generate_picks, ...)
 
-    # Щодня о 9:10 UTC — Phase 1: ранні піки (до N днів вперед)
-    # minute=10 щоб не перетинатися з ws_gap hourly scanner (:05)
-    scheduler.add_job(
-        run_early_picks_scan,
-        CronTrigger(hour=9, minute=10),
-        id="early_picks_scan",
-        name="Early picks scan (daily 09:10 UTC)",
-        misfire_grace_time=600,
-    )
-
-    # Щогодини — Phase 2: фінальні піки (WS Gap, ~5h до старту)
+    # Щогодини — WS Gap picks (~5h до старту)
     scheduler.add_job(
         run_generate_picks_ws_gap,
         CronTrigger(minute=5),

@@ -2,9 +2,8 @@
 scheduler/tasks/generate_picks_ws_gap.py
 
 WS Gap model — picks без ML.
-Логіка: ws_gap >= 80, ws_dominant >= 80, odds >= 1.7 → ставка на домінуючу команду.
-Sizing: Elo-based Kelly, 25% fractional, 4% cap.
-model_version = "ws_gap_v1"
+Логіка: ws_gap >= 70, odds 2.0-4.0 → ставка на домінуючу команду.
+Sizing: Elo-based Kelly, 25% fractional, 10% cap.
 """
 from datetime import datetime, timedelta, timezone
 
@@ -18,10 +17,7 @@ from model.features.builder import build_match_features
 from model.features.elo import compute_dynamic_elo, build_elo_snapshots
 from model.weighted_score import compute_weighted_score
 
-MODEL_VERSION             = "ws_gap_v1"         # фінальний, 4% cap
-MODEL_VERSION_KELLY       = "ws_gap_kelly_v1"    # фінальний, pure Kelly 25%
-MODEL_VERSION_EARLY       = "ws_gap_v1_early"    # ранній, 4% cap
-MODEL_VERSION_KELLY_EARLY = "ws_gap_kelly_v1_early"  # ранній, pure Kelly 25%
+MODEL_VERSION = "ws_gap_kelly_v1"
 
 LEAGUE_FLAGS = {
     "England":     "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
@@ -278,27 +274,16 @@ def run_generate_picks_ws_gap(
             columns=["match_id", "team_id", "player_api_id"]
         )
 
-        # Поточний банкрол для кожної версії (compound)
-        bankroll_cap   = _compute_current_bankroll(db, settings.bankroll, MODEL_VERSION)
-        bankroll_kelly = _compute_current_bankroll(db, settings.bankroll, MODEL_VERSION_KELLY)
-        logger.info(
-            f"[WS Gap] Bankroll cap=${bankroll_cap:.0f} kelly=${bankroll_kelly:.0f} "
-            f"(initial=${settings.bankroll:.0f})"
-        )
+        bankroll = _compute_current_bankroll(db, settings.bankroll, MODEL_VERSION)
+        logger.info(f"[WS Gap] Bankroll=${bankroll:.0f} (initial=${settings.bankroll:.0f})")
 
         new_picks = []
 
-        # Batch-load existing predictions and odds to avoid N+1 queries
         match_ids = [m.id for m in matches]
-        existing_preds = db.query(Prediction).filter(
+        existing = {p.match_id for p in db.query(Prediction.match_id).filter(
             Prediction.match_id.in_(match_ids),
-            Prediction.model_version.in_([MODEL_VERSION, MODEL_VERSION_KELLY,
-                                          MODEL_VERSION_EARLY, MODEL_VERSION_KELLY_EARLY]),
-        ).all()
-        existing_cap          = {p.match_id for p in existing_preds if p.model_version == MODEL_VERSION}
-        existing_kelly        = {p.match_id for p in existing_preds if p.model_version == MODEL_VERSION_KELLY}
-        early_preds_by_match  = {p.match_id: p for p in existing_preds
-                                 if p.model_version == MODEL_VERSION_KELLY_EARLY}
+            Prediction.model_version == MODEL_VERSION,
+        ).all()}
 
         all_odds_rows = db.query(Odds).filter(
             Odds.match_id.in_(match_ids),
@@ -310,10 +295,7 @@ def run_generate_picks_ws_gap(
             odds_by_match.setdefault(o.match_id, {})[o.outcome] = o.value
 
         for match in matches:
-            # Пропускаємо якщо обидві версії вже є
-            has_cap   = match.id in existing_cap
-            has_kelly = match.id in existing_kelly
-            if has_cap and has_kelly:
+            if match.id in existing:
                 logger.debug(f"[WS Gap] Match {match.id} already predicted, skip")
                 continue
 
@@ -338,53 +320,29 @@ def run_generate_picks_ws_gap(
                 elo_snapshots=elo_snapshots,
             )
 
-            # Генеруємо пік (stake = pure Kelly)
-            pick = _ws_gap_pick(features, odds, max(bankroll_cap, bankroll_kelly))
+            pick = _ws_gap_pick(features, odds, bankroll)
             if pick is None:
                 continue
 
-            # Версія 1: 4% cap
-            if not has_cap:
-                stake_cap = round(min(bankroll_cap * pick["kelly_fraction"], bankroll_cap * KELLY_CAP), 2)
-                db.add(Prediction(
-                    match_id=match.id, market="1x2",
-                    outcome=pick["outcome"],
-                    probability=float(pick["probability"]),
-                    odds_used=float(pick["odds"]),
-                    ev=float(pick["ev"]),
-                    kelly_fraction=float(pick["kelly_fraction"]),
-                    stake=stake_cap,
-                    weighted_score=int(pick["weighted_score"]),
-                    model_version=MODEL_VERSION,
-                ))
-
-            # Версія 2: pure Kelly 25%
-            if not has_kelly:
-                # Деактивуємо early-пік якщо він існує — щоб уникнути дублів у UI
-                early = early_preds_by_match.get(match.id)
-                if early and early.result is None:
-                    early.is_active = False
-
-                stake_kelly = round(min(bankroll_kelly * pick["kelly_fraction"], bankroll_kelly * KELLY_CAP), 2)
-                db.add(Prediction(
-                    match_id=match.id, market="1x2",
-                    outcome=pick["outcome"],
-                    probability=float(pick["probability"]),
-                    odds_used=float(pick["odds"]),
-                    ev=float(pick["ev"]),
-                    kelly_fraction=float(pick["kelly_fraction"]),
-                    stake=stake_kelly,
-                    weighted_score=int(pick["weighted_score"]),
-                    model_version=MODEL_VERSION_KELLY,
-                ))
-
+            stake = round(min(bankroll * pick["kelly_fraction"], bankroll * KELLY_CAP), 2)
+            db.add(Prediction(
+                match_id=match.id, market="1x2",
+                outcome=pick["outcome"],
+                probability=float(pick["probability"]),
+                odds_used=float(pick["odds"]),
+                ev=float(pick["ev"]),
+                kelly_fraction=float(pick["kelly_fraction"]),
+                stake=stake,
+                weighted_score=int(pick["weighted_score"]),
+                model_version=MODEL_VERSION,
+            ))
             new_picks.append((match, pick))
 
         db.commit()
 
         if new_picks:
-            logger.info(f"[WS Gap] Generated {len(new_picks)} picks (both versions)")
-            _send_picks_to_telegram(new_picks, phase="final", bankroll=bankroll_cap)
+            logger.info(f"[WS Gap] Generated {len(new_picks)} picks")
+            _send_picks_to_telegram(new_picks, bankroll=bankroll)
         else:
             logger.info("[WS Gap] No new picks")
 
@@ -392,11 +350,7 @@ def run_generate_picks_ws_gap(
         db.close()
 
 
-def _send_picks_to_telegram(picks: list, phase: str = "final", bankroll: float | None = None) -> None:
-    """
-    phase: "final" | "early"
-    bankroll: поточний compound банкрол (для відображення в повідомленні)
-    """
+def _send_picks_to_telegram(picks: list, bankroll: float | None = None) -> None:
     import asyncio
     from aiogram import Bot
     from db.models import User
@@ -424,22 +378,18 @@ def _send_picks_to_telegram(picks: list, phase: str = "final", bankroll: float |
                     f"П1 ({home})" if pick["outcome"] == "home" else f"П2 ({away})"
                 )
                 time_str = match.date.strftime("%d.%m %H:%M")
-                stake_cap = round(min(br * pick["kelly_fraction"], br * KELLY_CAP), 2)
+                stake = round(min(br * pick["kelly_fraction"], br * KELLY_CAP), 2)
                 lines.append(
                     f"{flag} {home} — {away} [{time_str}]\n"
                     f"  ➤ {outcome_label}\n"
                     f"  Коэф: {pick['odds']:.2f} | EV: {pick['ev']*100:.1f}% | "
                     f"WS: {pick['weighted_score']} | Gap: {pick['ws_gap']}\n"
-                    f"  Стейк: ${stake_cap:.0f} (банкрол: ${br:.0f})"
+                    f"  Стейк: ${stake:.0f} (банкрол: ${br:.0f})"
                 )
 
             n = len(picks)
             picks_word = "пика" if n in (2, 3, 4) else ("пик" if n == 1 else "пиков")
-            if phase == "early":
-                header = f"📅 Ранние пики — {n} {picks_word} (до {settings.early_picks_days_ahead} дней):\n\n"
-            else:
-                header = f"🔔 Финальный пик — {n} {picks_word} (старт ~{settings.picks_hours_before}ч):\n\n"
-
+            header = f"🔔 WS Gap — {n} {picks_word} (старт ~{settings.picks_hours_before}ч):\n\n"
             message = header + "\n\n".join(lines)
 
             sent = 0
@@ -450,152 +400,9 @@ def _send_picks_to_telegram(picks: list, phase: str = "final", bankroll: float |
                 except Exception as e:
                     logger.warning(f"Failed to send to {user.telegram_id}: {e}")
 
-            logger.info(f"[WS Gap] [{phase}] Picks sent to {sent}/{len(users)} users")
+            logger.info(f"[WS Gap] Picks sent to {sent}/{len(users)} users")
         finally:
             db.close()
             await bot.session.close()
 
     asyncio.run(_send())
-
-
-def run_early_picks_scan() -> None:
-    """
-    Phase 1 — щодня о 9:05 UTC.
-    Генерує ранні піки для матчів від picks_hours_before+1h до early_picks_days_ahead днів вперед.
-    Зберігає з model_version *_early. Не перезаписує вже наявні (early або final).
-    """
-    now = datetime.now(timezone.utc)
-    scan_from = now + timedelta(hours=settings.picks_hours_before + 1)
-    scan_to   = now + timedelta(days=settings.early_picks_days_ahead)
-
-    logger.info(
-        f"[WS Gap Early] Scanning | window: "
-        f"{scan_from.strftime('%d.%m %H:%M')} – {scan_to.strftime('%d.%m %H:%M')} UTC"
-    )
-
-    db = SessionLocal()
-    try:
-        from db.models import League as LeagueModel
-
-        matches = db.query(Match).join(LeagueModel).filter(
-            Match.date >= scan_from.replace(tzinfo=None),
-            Match.date <= scan_to.replace(tzinfo=None),
-            Match.status == "Not Started",
-            LeagueModel.api_id.in_(ALLOWED_LEAGUE_API_IDS),
-        ).all()
-
-        if not matches:
-            logger.info("[WS Gap Early] No matches in window, skipping")
-            return
-
-        logger.info(f"[WS Gap Early] Found {len(matches)} matches")
-
-        matches_df    = _load_matches_df(db)
-        stats_df      = _load_stats_df(db)
-        teams         = _load_teams_elo(matches_df)
-        elo_snapshots = build_elo_snapshots(matches_df)
-
-        from db.models import InjuryReport
-        inj_rows = db.query(InjuryReport).all()
-        injuries_df = pd.DataFrame([{
-            "match_id": i.match_id,
-            "team_id": i.team_id,
-            "player_api_id": i.player_api_id,
-        } for i in inj_rows]) if inj_rows else pd.DataFrame(
-            columns=["match_id", "team_id", "player_api_id"]
-        )
-
-        bankroll_cap   = _compute_current_bankroll(db, settings.bankroll, MODEL_VERSION)
-        bankroll_kelly = _compute_current_bankroll(db, settings.bankroll, MODEL_VERSION_KELLY)
-
-        new_picks = []
-
-        # Batch-load existing predictions and odds to avoid N+1 queries
-        early_match_ids = [m.id for m in matches]
-        early_existing = db.query(Prediction.match_id).filter(
-            Prediction.match_id.in_(early_match_ids),
-            Prediction.model_version.in_([
-                MODEL_VERSION, MODEL_VERSION_KELLY,
-                MODEL_VERSION_EARLY, MODEL_VERSION_KELLY_EARLY,
-            ]),
-        ).all()
-        early_has_pick = {row.match_id for row in early_existing}
-
-        early_odds_rows = db.query(Odds).filter(
-            Odds.match_id.in_(early_match_ids),
-            Odds.market == "1x2",
-            Odds.is_closing.is_(False),
-        ).all()
-        early_odds_by_match: dict[int, dict] = {}
-        for o in early_odds_rows:
-            early_odds_by_match.setdefault(o.match_id, {})[o.outcome] = o.value
-
-        for match in matches:
-            # Пропускаємо якщо є будь-який пік (early або final) для цього матчу
-            if match.id in early_has_pick:
-                logger.debug(f"[WS Gap Early] Match {match.id} already has a pick, skip")
-                continue
-
-            odds = early_odds_by_match.get(match.id)
-            if not odds:
-                logger.debug(f"[WS Gap Early] No odds for match {match.id}, skip")
-                continue
-
-            features = build_match_features(
-                match={
-                    "id": match.id,
-                    "home_team_id": match.home_team_id,
-                    "away_team_id": match.away_team_id,
-                    "date": match.date,
-                    "league_id": match.league_id,
-                },
-                matches_df=matches_df,
-                stats_df=stats_df,
-                teams=teams,
-                odds=odds,
-                injuries_df=injuries_df,
-                elo_snapshots=elo_snapshots,
-            )
-
-            pick = _ws_gap_pick(features, odds, max(bankroll_cap, bankroll_kelly))
-            if pick is None:
-                continue
-
-            stake_cap   = round(min(bankroll_cap   * pick["kelly_fraction"], bankroll_cap   * KELLY_CAP), 2)
-            stake_kelly = round(min(bankroll_kelly * pick["kelly_fraction"], bankroll_kelly * KELLY_CAP), 2)
-
-            db.add(Prediction(
-                match_id=match.id, market="1x2",
-                outcome=pick["outcome"],
-                probability=float(pick["probability"]),
-                odds_used=float(pick["odds"]),
-                ev=float(pick["ev"]),
-                kelly_fraction=float(pick["kelly_fraction"]),
-                stake=stake_cap,
-                weighted_score=int(pick["weighted_score"]),
-                model_version=MODEL_VERSION_EARLY,
-            ))
-            db.add(Prediction(
-                match_id=match.id, market="1x2",
-                outcome=pick["outcome"],
-                probability=float(pick["probability"]),
-                odds_used=float(pick["odds"]),
-                ev=float(pick["ev"]),
-                kelly_fraction=float(pick["kelly_fraction"]),
-                stake=stake_kelly,
-                weighted_score=int(pick["weighted_score"]),
-                model_version=MODEL_VERSION_KELLY_EARLY,
-            ))
-
-            new_picks.append((match, pick))
-
-        db.commit()
-
-        if new_picks:
-            logger.info(f"[WS Gap Early] Generated {len(new_picks)} early picks")
-            _send_picks_to_telegram(new_picks, phase="early", bankroll=bankroll_cap)
-        else:
-            logger.info("[WS Gap Early] No new early picks")
-
-    finally:
-        db.close()
