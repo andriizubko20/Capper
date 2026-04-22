@@ -85,12 +85,12 @@ def start() -> None:
         misfire_grace_time=300,
     )
 
-    # Щодня о 07:00 UTC = 10:00 Київ — підтвердження / деактивація пікс
+    # Кожні 2 години в :45 — підтвердження / деактивація пікс + timing update
     scheduler.add_job(
         run_confirm_picks,
-        CronTrigger(hour=7, minute=0),
+        CronTrigger(hour="*/2", minute=45),
         id="confirm_picks",
-        name="Daily confirm picks (10:00 Kyiv)",
+        name="Confirm picks (every 2h at :45)",
         misfire_grace_time=600,
     )
 
