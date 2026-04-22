@@ -283,15 +283,33 @@ def run_generate_picks_ws_gap(
 
         new_picks = []
 
+        # Batch-load existing predictions and odds to avoid N+1 queries
+        match_ids = [m.id for m in matches]
+        existing_preds = db.query(Prediction).filter(
+            Prediction.match_id.in_(match_ids),
+            Prediction.model_version.in_([MODEL_VERSION, MODEL_VERSION_KELLY]),
+        ).all()
+        existing_cap   = {p.match_id for p in existing_preds if p.model_version == MODEL_VERSION}
+        existing_kelly = {p.match_id for p in existing_preds if p.model_version == MODEL_VERSION_KELLY}
+
+        all_odds_rows = db.query(Odds).filter(
+            Odds.match_id.in_(match_ids),
+            Odds.market == "1x2",
+            Odds.is_closing.is_(False),
+        ).all()
+        odds_by_match: dict[int, dict] = {}
+        for o in all_odds_rows:
+            odds_by_match.setdefault(o.match_id, {})[o.outcome] = o.value
+
         for match in matches:
             # Пропускаємо якщо обидві версії вже є
-            has_cap   = db.query(Prediction).filter_by(match_id=match.id, model_version=MODEL_VERSION).first()
-            has_kelly = db.query(Prediction).filter_by(match_id=match.id, model_version=MODEL_VERSION_KELLY).first()
+            has_cap   = match.id in existing_cap
+            has_kelly = match.id in existing_kelly
             if has_cap and has_kelly:
                 logger.debug(f"[WS Gap] Match {match.id} already predicted, skip")
                 continue
 
-            odds = _get_odds_for_match(match.id, db)
+            odds = odds_by_match.get(match.id)
             if not odds:
                 logger.warning(f"[WS Gap] No odds for match {match.id}, skip")
                 continue
@@ -477,20 +495,33 @@ def run_early_picks_scan() -> None:
 
         new_picks = []
 
+        # Batch-load existing predictions and odds to avoid N+1 queries
+        early_match_ids = [m.id for m in matches]
+        early_existing = db.query(Prediction.match_id).filter(
+            Prediction.match_id.in_(early_match_ids),
+            Prediction.model_version.in_([
+                MODEL_VERSION, MODEL_VERSION_KELLY,
+                MODEL_VERSION_EARLY, MODEL_VERSION_KELLY_EARLY,
+            ]),
+        ).all()
+        early_has_pick = {row.match_id for row in early_existing}
+
+        early_odds_rows = db.query(Odds).filter(
+            Odds.match_id.in_(early_match_ids),
+            Odds.market == "1x2",
+            Odds.is_closing.is_(False),
+        ).all()
+        early_odds_by_match: dict[int, dict] = {}
+        for o in early_odds_rows:
+            early_odds_by_match.setdefault(o.match_id, {})[o.outcome] = o.value
+
         for match in matches:
             # Пропускаємо якщо є будь-який пік (early або final) для цього матчу
-            has_any = db.query(Prediction).filter(
-                Prediction.match_id == match.id,
-                Prediction.model_version.in_([
-                    MODEL_VERSION, MODEL_VERSION_KELLY,
-                    MODEL_VERSION_EARLY, MODEL_VERSION_KELLY_EARLY,
-                ])
-            ).first()
-            if has_any:
+            if match.id in early_has_pick:
                 logger.debug(f"[WS Gap Early] Match {match.id} already has a pick, skip")
                 continue
 
-            odds = _get_odds_for_match(match.id, db)
+            odds = early_odds_by_match.get(match.id)
             if not odds:
                 logger.debug(f"[WS Gap Early] No odds for match {match.id}, skip")
                 continue

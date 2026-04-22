@@ -1,10 +1,12 @@
 function Sparkline({ data }: { data: number[] }) {
+  if (data.length === 0) return <svg className="spark-svg"/>
   const w = 320, h = 56
   const min = Math.min(...data)
   const max = Math.max(...data)
   const range = max - min || 1
+  const maxIndex = Math.max(data.length - 1, 1)
   const pts = data.map((v, i) => [
-    (i / (data.length - 1)) * w,
+    (i / maxIndex) * w,
     h - ((v - min) / range) * (h - 8) - 4,
   ])
   const d = pts.map((p, i) => (i === 0 ? `M${p[0]},${p[1]}` : `L${p[0]},${p[1]}`)).join(' ')

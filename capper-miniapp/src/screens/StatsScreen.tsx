@@ -81,8 +81,9 @@ function ProfitCurve({
   const min = Math.min(0, ...data)
   const max = Math.max(...data)
   const range = max - min || 1
+  const maxIndex = Math.max(data.length - 1, 1)
   const pts = data.map((v, i) => [
-    (i / (data.length - 1)) * w,
+    (i / maxIndex) * w,
     h - ((v - min) / range) * (h - 24) - 12,
   ])
   const d = pts.map((p, i) => (i === 0 ? `M${p[0]},${p[1]}` : `L${p[0]},${p[1]}`)).join(' ')
@@ -181,7 +182,7 @@ export function StatsScreen({ model }: Props) {
   const finished = data.streak.filter(s => s !== 'P').slice(-15)
   const wins     = finished.filter(s => s === 'W').length
   const losses   = finished.filter(s => s === 'L').length
-  const winRate  = Math.round((wins / (wins + losses)) * 100)
+  const winRate  = wins + losses > 0 ? Math.round((wins / (wins + losses)) * 100) : 0
 
   return (
     <div className="scroll-area" style={{ opacity: loading ? 0.55 : 1, transition: 'opacity 0.2s' }}>

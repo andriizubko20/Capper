@@ -149,7 +149,10 @@ def get_picks(
     if not versions:
         raise HTTPException(status_code=400, detail=f"Unknown model: {model}")
 
-    target_date = date.fromisoformat(date_) if date_ else date.today()
+    try:
+        target_date = date.fromisoformat(date_) if date_ else date.today()
+    except ValueError:
+        raise HTTPException(status_code=400, detail=f"Invalid date format: {date_}")
     day_start = datetime.combine(target_date, datetime.min.time())
     day_end = datetime.combine(target_date, datetime.max.time())
 

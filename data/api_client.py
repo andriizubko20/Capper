@@ -4,7 +4,7 @@ from loguru import logger
 from config.settings import settings
 
 NETWORK_RETRY_DELAY = 60  # секунд між спробами при мережевій помилці
-NETWORK_MAX_RETRIES = 999  # майже нескінченно
+NETWORK_MAX_RETRIES = 10  # ~10 хв максимум, далі таск завершується з помилкою
 
 
 class SStatsAPIError(Exception):
@@ -38,7 +38,10 @@ class SStatsClient:
                     raise SStatsAPIError(f"HTTP {status}: {endpoint}") from e
             except httpx.RequestError as e:
                 attempt += 1
-                logger.warning(f"SStats connection error: {endpoint} — повтор через {NETWORK_RETRY_DELAY}s (спроба {attempt})")
+                if attempt >= NETWORK_MAX_RETRIES:
+                    logger.error(f"SStats connection failed after {NETWORK_MAX_RETRIES} retries: {endpoint}")
+                    raise SStatsAPIError(f"Connection failed after {NETWORK_MAX_RETRIES} retries: {endpoint}") from e
+                logger.warning(f"SStats connection error: {endpoint} — повтор через {NETWORK_RETRY_DELAY}s (спроба {attempt}/{NETWORK_MAX_RETRIES})")
                 time.sleep(NETWORK_RETRY_DELAY)
 
     def post(self, endpoint: str, body: dict) -> dict | list:

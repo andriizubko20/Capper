@@ -182,7 +182,9 @@ export function PicksScreen({ model }: Props) {
 
   const refresh = () => {
     setPicksLoading(true)
-    getPicks(activeDay, model).then(p => { setPicks(p); setPicksLoading(false) })
+    getPicks(activeDay, model)
+      .then(p => { setPicks(p); setPicksLoading(false) })
+      .catch(() => setPicksLoading(false))
     getStats(model, '30D').then(setModelStats)
   }
 
