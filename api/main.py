@@ -101,6 +101,11 @@ def prediction_to_pick(pred: Prediction, match: Match) -> dict[str, Any]:
 
     profit = round(pred.stake * (pred.odds_used - 1), 0) if pred.stake else 0
 
+    # Derive timing from current date rather than DB field — confirm_picks only
+    # runs once daily at 07:00 UTC, so DB timing lags for early-morning matches
+    match_today = match.date.date() == date.today()
+    timing = "final" if match_today else (pred.timing or "early")
+
     return {
         "id": str(pred.id),
         "league": league_name,
@@ -116,7 +121,7 @@ def prediction_to_pick(pred: Prediction, match: Match) -> dict[str, Any]:
         "ev": round(pred.ev * 100, 1),         # у відсотках
         "stake": pred.stake,
         "status": status,
-        "timing": pred.timing,
+        "timing": timing,
         "score": score,
         "pnl": pred.pnl,
         "date": match.date.date().isoformat(),
