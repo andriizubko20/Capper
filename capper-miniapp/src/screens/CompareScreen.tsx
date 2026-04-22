@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo } from 'react'
 import { COMPARE_BY_PERIOD } from '@/lib/mockData'
 import type { Period, ModelData } from '@/lib/mockData'
 import type { Model } from '@/lib/types'
@@ -11,7 +11,7 @@ function roiColor(roi: number) {
   return roi > 25 ? 'var(--green)' : roi >= 0 ? 'var(--indigo-2)' : 'var(--red)'
 }
 
-function MiniCurve({ data, color }: { data: number[]; color: string }) {
+const MiniCurve = memo(function MiniCurve({ data, color }: { data: number[]; color: string }) {
   const w = 320, h = 60
   const min = Math.min(0, ...data)
   const max = Math.max(...data)
@@ -36,9 +36,9 @@ function MiniCurve({ data, color }: { data: number[]; color: string }) {
         style={{ filter: `drop-shadow(0 0 4px ${color}99)` }}/>
     </svg>
   )
-}
+})
 
-function CombinedCurves({ models }: { models: ModelData[] }) {
+const CombinedCurves = memo(function CombinedCurves({ models }: { models: ModelData[] }) {
   const w = 360, h = 160
   const allVals = models.flatMap(m => m.curve)
   const min = Math.min(0, ...allVals)
@@ -78,7 +78,7 @@ function CombinedCurves({ models }: { models: ModelData[] }) {
       })}
     </svg>
   )
-}
+})
 
 interface Props { model: Model }
 

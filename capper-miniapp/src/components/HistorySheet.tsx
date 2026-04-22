@@ -186,7 +186,7 @@ export function HistorySheet({ model, onClose }: Props) {
                     </div>
                   </div>
                   <div className="hist-table">
-                    {day.picks.map(p => <HistoryRow key={p.id} pick={p}/>)}
+                    {day.picks.map(p => <HistoryRow key={`${day.date}-${p.id}`} pick={p}/>)}
                   </div>
                 </div>
               )

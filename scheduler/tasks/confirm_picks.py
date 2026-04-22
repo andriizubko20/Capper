@@ -57,13 +57,14 @@ def run_confirm_picks() -> None:
             match: Match = pred.match
             match_date = match.date.date() if hasattr(match.date, 'date') else match.date
 
-            # Отримуємо найсвіжіші odds для цього матчу і ринку
+            # Отримуємо найсвіжіші non-closing odds для цього матчу і ринку
             latest_odds = (
                 db.query(Odds)
                 .filter(
                     Odds.match_id == pred.match_id,
                     Odds.market == pred.market,
                     Odds.outcome == pred.outcome,
+                    Odds.is_closing.is_(False),
                 )
                 .order_by(desc(Odds.recorded_at))
                 .first()

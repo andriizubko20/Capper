@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { BankrollCard } from '@/components/BankrollCard'
 import { DailyPnlCard } from '@/components/DailyPnlCard'
 import { PickCard } from '@/components/PickCard'
@@ -186,14 +186,13 @@ export function PicksScreen({ model }: Props) {
     getStats(model, '30D').then(setModelStats)
   }
 
-  // Рахуємо daily P&L з завантажених picks
-  const daily: DailyPnl | null = picks.length === 0 ? null : {
+  const daily = useMemo<DailyPnl | null>(() => picks.length === 0 ? null : {
     pnl:     picks.reduce((s, p) => s + (p.pnl ?? 0), 0),
     wins:    picks.filter(p => p.status === 'win').length,
     losses:  picks.filter(p => p.status === 'loss').length,
     pending: picks.filter(p => p.status === 'pending' || p.status === 'live' || p.status === 'finished').length,
     invested: Math.round(picks.reduce((s, p) => s + (p.stake ?? 0), 0)),
-  }
+  }, [picks])
 
   return (
     <>

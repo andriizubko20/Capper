@@ -109,7 +109,7 @@ def run_live_tracker() -> None:
 
                     time.sleep(0.2)
                 except Exception as e:
-                    logger.warning(f"Live tracker error for match {m.api_id}: {e}")
+                    logger.warning(f"Live tracker error for match {m.api_id} [{type(e).__name__}]: {e}")
 
         db.commit()
 

@@ -31,12 +31,13 @@ def start() -> None:
     # ML v1 — вимкнено, активна тільки WS Gap модель
     # scheduler.add_job(run_generate_picks, ...)
 
-    # Щодня о 9:05 UTC — Phase 1: ранні піки (до N днів вперед)
+    # Щодня о 9:10 UTC — Phase 1: ранні піки (до N днів вперед)
+    # minute=10 щоб не перетинатися з ws_gap hourly scanner (:05)
     scheduler.add_job(
         run_early_picks_scan,
-        CronTrigger(hour=9, minute=5),
+        CronTrigger(hour=9, minute=10),
         id="early_picks_scan",
-        name="Early picks scan (daily 09:05 UTC)",
+        name="Early picks scan (daily 09:10 UTC)",
         misfire_grace_time=600,
     )
 
