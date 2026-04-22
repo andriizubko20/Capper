@@ -74,9 +74,9 @@
 
 ## Що залишилось
 
-- [ ] `openpyxl` в `requirements.txt` (потрібен для `import_historical`)
-- [ ] `confirm_picks.py` — порогові значення EV по моделях (потребує аналізу production даних)
-- [ ] Deploy на VPS
+- [x] `openpyxl` в `requirements.txt` — додано (2026-04-22)
+- [x] Deploy на VPS — завершено 2026-04-22 (VPS 165.227.164.220, 49 файлів, docker recreate)
+- [x] `confirm_picks.py` EV thresholds — дослідження проведено 2026-04-22: 57 production picks, нуль деактивацій, програші по всьому EV діапазону. Threshold 0.0 залишається. Переглянути при 100+ settled bets на модель.
 - [ ] Нова модель: Variant A/B/C (experiments, не prod)
 
 ## MODEL_VERSIONS (поточні)

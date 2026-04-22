@@ -13,3 +13,5 @@ Append-only record of wiki operations.
 ## [2026-04-22] ingest | Bug Audit page — додано секцію Model-Level Bugs (items 21-25)
 ## [2026-04-22] ingest | Deep Audit Pass 2 — знайдено і виправлено 19 багів (items 26-44): UTC dates, cache TTL, lazy load, isoDate, rollback, commit granularity, history limit, auth_date, ELO NaN тощо
 ## [2026-04-22] ingest | Project Status — оновлено з pass 2 фіксами; оновлено "Що залишилось"
+## [2026-04-22] ingest | Deploy VPS — 165.227.164.220; 44 bug fixes; docker recreate; всі 4 контейнери up
+## [2026-04-22] ingest | EV thresholds research — 57 production picks, нуль деактивацій, threshold 0.0 залишається; revisit @100+ bets per model

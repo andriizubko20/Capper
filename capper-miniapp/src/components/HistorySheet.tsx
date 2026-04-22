@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { getHistory, type HistoryDay } from '@/lib/api'
 import type { Pick, Model } from '@/lib/types'
 
@@ -72,31 +72,14 @@ export function HistorySheet({ model, onClose }: Props) {
 
   const handleClose = () => { setVisible(false); setTimeout(onClose, 300) }
 
-  // swipe-down to close
-  const startY = useRef<number | null>(null)
-  const onTouchStart = (e: React.TouchEvent) => { startY.current = e.touches[0].clientY }
-  const onTouchEnd   = (e: React.TouchEvent) => {
-    if (startY.current !== null && e.changedTouches[0].clientY - startY.current > 60) handleClose()
-    startY.current = null
-  }
-
   // totals across all loaded days
   const totalWins   = days.reduce((s, d) => s + d.picks.filter(p => p.status === 'win').length, 0)
   const totalLosses = days.reduce((s, d) => s + d.picks.filter(p => p.status === 'loss').length, 0)
   const totalPnl    = days.reduce((s, d) => s + pnlOf(d), 0)
 
   return (
-    <div
-      className={`history-sheet-backdrop${visible ? ' visible' : ''}`}
-      onClick={e => { if (e.target === e.currentTarget) handleClose() }}
-    >
-      <div
-        className={`history-sheet${visible ? ' visible' : ''}`}
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-      >
-        <div className="history-handle"/>
-
+    <div className={`history-sheet-backdrop${visible ? ' visible' : ''}`}>
+      <div className={`history-sheet${visible ? ' visible' : ''}`}>
         {/* Header */}
         <div className="history-header">
           <button className="history-back" onClick={handleClose} aria-label="Закрити">

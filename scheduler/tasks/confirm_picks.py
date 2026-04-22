@@ -8,7 +8,10 @@
 - Якщо EV < 0 → is_active=False (ставка деактивована)
 - Якщо матч сьогодні → timing='final', інакше timing='early'
 
-TODO: додати model-specific threshold check після ресьорчу моделей.
+Аналіз model-specific thresholds (2026-04-22):
+57 production picks, нуль деактивацій, програші розподілені по всьому діапазону EV
+(WS Gap: програші від 0.22 до 1.22). Немає статистичної бази для per-model порогів.
+Переглянути після 100+ settled bets на модель.
 """
 from datetime import date, datetime, timedelta, timezone
 
