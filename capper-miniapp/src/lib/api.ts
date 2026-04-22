@@ -191,8 +191,11 @@ export async function getHistory(model: Model): Promise<HistoryDay[]> {
 export async function getBankroll(): Promise<BankrollData> {
   if (!BASE) return BANKROLL
   try {
+    // Pass Telegram WebApp initData for server-side signature verification
+    const initData = window.Telegram?.WebApp?.initData
+    const query = initData ? `?init_data=${encodeURIComponent(initData)}` : ''
     const data = await apiFetch<{ balance: number; roi: number; sparkline: number[] }>(
-      '/api/bankroll'
+      `/api/bankroll${query}`
     )
     return { amount: data.balance, roi: data.roi }
   } catch {

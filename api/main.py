@@ -4,8 +4,12 @@ FastAPI app — 5 endpoints для Telegram miniapp.
 """
 from __future__ import annotations
 
+import hashlib
+import hmac
+import json
 from datetime import date, datetime, timedelta, timezone
 from typing import Any
+from urllib.parse import parse_qsl
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -31,6 +35,31 @@ app.add_middleware(
 
 
 # ── helpers ──────────────────────────────────────────────────────────────────
+
+def verify_telegram_init_data(init_data: str) -> int | None:
+    """
+    Verifies Telegram WebApp initData signature (HMAC-SHA256).
+    Returns telegram_id on success, None on failure or missing bot token.
+    """
+    from config.settings import settings
+    bot_token = settings.telegram_bot_token
+    if not bot_token or not init_data:
+        return None
+    try:
+        params = dict(parse_qsl(init_data, strict_parsing=True))
+        received_hash = params.pop("hash", None)
+        if not received_hash:
+            return None
+        data_check_string = "\n".join(f"{k}={v}" for k, v in sorted(params.items()))
+        secret_key = hmac.new(b"WebAppData", bot_token.encode(), hashlib.sha256).digest()
+        computed_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(computed_hash, received_hash):
+            return None
+        user_info = json.loads(params.get("user", "{}"))
+        return user_info.get("id")
+    except Exception:
+        return None
+
 
 def get_user_or_404(db, telegram_id: int) -> User:
     user = db.query(User).filter(User.telegram_id == telegram_id).first()
@@ -281,13 +310,28 @@ def _empty_stats() -> dict:
 
 
 @app.get("/api/bankroll")
-def get_bankroll(telegram_id: int = Query(None)):
+def get_bankroll(
+    init_data: str = Query(None),
+    telegram_id: int = Query(None),
+):
     """
     Поточний баланс + sparkline.
-    Якщо telegram_id переданий — дані юзера, інакше — глобальні mock-дані.
+    init_data: Telegram WebApp initData (підписаний HMAC-SHA256) — пріоритет над telegram_id.
+    Якщо жодного — повертає placeholder.
     """
+    # Preferred: verify initData signature → extract telegram_id
+    if init_data:
+        verified_id = verify_telegram_init_data(init_data)
+        if verified_id is None:
+            raise HTTPException(status_code=401, detail="Invalid or expired initData")
+        telegram_id = verified_id
+    elif telegram_id is not None:
+        # Direct telegram_id without initData: allowed only in dev mode
+        from config.settings import settings
+        if settings.env == "production":
+            raise HTTPException(status_code=401, detail="initData required in production")
+
     if telegram_id is None:
-        # поки немає per-user — повертаємо placeholder
         return {"balance": 1000.0, "roi": 0.0, "sparkline": [1000.0]}
 
     db = SessionLocal()

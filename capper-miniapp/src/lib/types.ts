@@ -5,6 +5,13 @@ export type BetSide = 'HOME' | 'AWAY' | 'DRAW' | `OVER ${string}` | `UNDER ${str
 
 export type BetTiming = 'early' | 'final'
 
+// Telegram WebApp global injected by Telegram client
+declare global {
+  interface Window {
+    Telegram?: { WebApp?: { initData: string } }
+  }
+}
+
 export interface Pick {
   id: string
   model: Model
