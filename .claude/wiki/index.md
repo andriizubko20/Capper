@@ -38,6 +38,8 @@ _Content catalog. Updated automatically on every INGEST or LINT operation._
 | [Capper Overview](pages/capper-overview.md) | Архітектура, стек, pipeline проекту. |
 | [Project Status](pages/project-status.md) | Поточний стан: bug fixes 2026-04-22, pending medium issues, deploy. |
 | [Bug Audit 2026-04-22](pages/bug-audit-2026-04-22.md) | 33 знайдених проблеми (critical+high виправлені); 12 medium залишились задокументованими. |
+| [VPS SStats Proxy](pages/vps-sstats-proxy.md) | Workaround DigitalOcean ↔ sstats.net: Mac proxy + SSH reverse tunnel + socat. Temp solution — Mac dependency. |
+| [DB Restore 2026-04-22](pages/db-restore-2026-04-22.md) | Schema drift: match_stats/injuries/monster_p_is відсутні на VPS; відновлено з локальної БД (pg_dump + stream). |
 
 ## Research
 

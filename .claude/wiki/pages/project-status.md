@@ -77,7 +77,38 @@
 - [x] `openpyxl` в `requirements.txt` — додано (2026-04-22)
 - [x] Deploy на VPS — завершено 2026-04-22 (VPS 165.227.164.220, 49 файлів, docker recreate)
 - [x] `confirm_picks.py` EV thresholds — дослідження проведено 2026-04-22: 57 production picks, нуль деактивацій, програші по всьому EV діапазону. Threshold 0.0 залишається. Переглянути при 100+ settled bets на модель.
+- [x] VPS ↔ SStats connectivity — workaround через локальний Mac proxy + SSH reverse tunnel (див. [VPS SStats Proxy](vps-sstats-proxy.md))
+- [x] VPS DB restore — 18,506 match_stats + 30,085 injuries + 76 monster_p_is залито з локальної БД (див. [DB Restore 2026-04-22](db-restore-2026-04-22.md))
+- [x] **Proxy permanent setup** — launchd (Mac) + systemd (VPS) переживають crash/sleep/reboot; Mac увімкненість — єдиний SPOF. Cloudflare Worker протестовано і **НЕ працює** (api.sstats.net обмежує всі datacenter IP, не лише DO NYC). Див. [VPS SStats Proxy](vps-sstats-proxy.md).
+- [ ] **SStats support** — написати про whitelist VPS IP `165.227.164.220`. Правильний шлях для 100% uptime.
+- [x] **CLV + league_name tracking** — виправлено 2026-04-23. 4 bugs у 4 файлах, 64 predictions backfilled. CLV тепер рахується автоматично (23:00 UTC cron), per-league breakdown доступний. Commit `7a36578`.
 - [ ] Нова модель: Variant A/B/C (experiments, не prod)
+
+## Per-league stats (2026-04-23, settled only)
+
+Перший раз доступно per-league breakdown після 2026-04-23 CLV fix:
+
+| League | Bets | WR | PnL |
+|--------|------|-----|------|
+| Premier League | 11 | 72.7% | +$571 |
+| Serie A | 7 | 71.4% | +$396 |
+| Jupiler Pro | 3 | 66.7% | +$273 |
+| Ligue 1 | 6 | 66.7% | +$191 |
+| Bundesliga | 10 | 60.0% | +$7 |
+| La Liga | 9 | 44.4% | -$24 |
+| Primeira Liga | 1 | 0% | -$109 |
+
+Sample sizes малі, треба 20+ bets на лігу щоб оцінити edge реально. La Liga — кандидат на ближчу увагу.
+
+## Активні піки (після сесії 2026-04-22)
+
+```
+WS Gap:     33  (+4 за сесію)
+Monster:    23  (+2 за сесію)
+Aquamarine:  7
+─────────────────────────
+Разом:      63 активних, match_id IS NOT NULL
+```
 
 ## MODEL_VERSIONS (поточні)
 

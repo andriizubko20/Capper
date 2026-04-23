@@ -15,3 +15,12 @@ Append-only record of wiki operations.
 ## [2026-04-22] ingest | Project Status — оновлено з pass 2 фіксами; оновлено "Що залишилось"
 ## [2026-04-22] ingest | Deploy VPS — 165.227.164.220; 44 bug fixes; docker recreate; всі 4 контейнери up
 ## [2026-04-22] ingest | EV thresholds research — 57 production picks, нуль деактивацій, threshold 0.0 залишається; revisit @100+ bets per model
+## [2026-04-22] ingest | VPS ↔ SStats connectivity — network path NYC↔UK обриває chunked response (4% отримується); workaround через Mac proxy + SSH reverse tunnel + socat
+## [2026-04-22] ingest | DB restore — match_stats(0→18506), injury_reports(0→30085), monster_p_is(0→76), відсутні колонки додані; pg_dump з локальної БД + psql stream
+## [2026-04-22] ingest | Pick regeneration — WS Gap 29→33 (+4), Monster 21→23 (+2, Telegram OK), Aqua 7→7; Total 57→63 active picks
+## [2026-04-22] ingest | Leagues sync — DROP UNIQUE(api_id) + ADD UNIQUE(api_id, season); +56 ліг з локальної; orphaned matches 11485→0
+## [2026-04-22] ingest | Match 5247 backfill — OH Leuven 0:2 Westerlo pick created+settled (WS Gap away@2.45 WIN +$288.43); bankroll $2597.69→$2886.12
+## [2026-04-22] ingest | Model efficacy analysis — 47 bets, WR 68%, ROI +40%; red flags: EV inversion (10-25% EV має WR 76.9% vs 50%+ EV має 58.3%), final picks -2.5% ROI, CLV not tracked, league_name empty
+## [2026-04-22] ingest | Cloudflare Worker rejected — `aqua.andrii-zubko20.workers.dev` отримує ті самі truncated 14751 байт за 77с; api.sstats.net обмежує datacenter IP в цілому
+## [2026-04-22] ingest | Proxy permanent setup — launchd (Mac proxy + SSH tunnel) + systemd capper-proxy-forwarder (VPS socat) переживають crash/sleep/reboot; Mac увімкненість — єдиний SPOF
+## [2026-04-23] ingest | CLV + league_name fix — 4 bugs: generate_picks_*.py не писали league_name/home_name/away_name/match_date; update_clv.py фільтр "FT" замість "Finished"; closing odds без recorded_at. Fixed + backfilled 64 predictions + deployed via docker cp. CLV тепер працює (3 settled picks avg +0.68), per-league breakdown доступний (EPL лідер 72.7% WR, La Liga 44%)
