@@ -24,7 +24,7 @@ def run_clv_update() -> None:
         matches = db.query(Match).filter(
             Match.date >= window_start,
             Match.date < window_end,
-            Match.status == "FT",
+            Match.status.in_(("FT", "Finished")),
         ).all()
 
         with SStatsClient() as client:
@@ -50,6 +50,7 @@ def run_clv_update() -> None:
                             outcome=o["outcome"],
                             value=o["odds"],
                             is_closing=True,
+                            recorded_at=datetime.utcnow(),
                         ))
                     updated += 1
                 except Exception as e:

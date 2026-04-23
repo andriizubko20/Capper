@@ -221,6 +221,10 @@ def run_generate_picks_aquamarine(
                 kelly_fraction=round(kelly_frac, 4),
                 stake=stake,
                 model_version=MODEL_VERSION,
+                league_name=match.league.name if match.league else None,
+                home_name=match.home_team.name if match.home_team else None,
+                away_name=match.away_team.name if match.away_team else None,
+                match_date=match.date,
             ))
 
             new_picks.append((match, {
