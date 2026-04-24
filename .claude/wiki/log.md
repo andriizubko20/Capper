@@ -24,3 +24,16 @@ Append-only record of wiki operations.
 ## [2026-04-22] ingest | Cloudflare Worker rejected — `aqua.andrii-zubko20.workers.dev` отримує ті самі truncated 14751 байт за 77с; api.sstats.net обмежує datacenter IP в цілому
 ## [2026-04-22] ingest | Proxy permanent setup — launchd (Mac proxy + SSH tunnel) + systemd capper-proxy-forwarder (VPS socat) переживають crash/sleep/reboot; Mac увімкненість — єдиний SPOF
 ## [2026-04-23] ingest | CLV + league_name fix — 4 bugs: generate_picks_*.py не писали league_name/home_name/away_name/match_date; update_clv.py фільтр "FT" замість "Finished"; closing odds без recorded_at. Fixed + backfilled 64 predictions + deployed via docker cp. CLV тепер працює (3 settled picks avg +0.68), per-league breakdown доступний (EPL лідер 72.7% WR, La Liga 44%)
+
+## [2026-04-24] ingest | Gem Model v1 — architecture + audit findings
+- 94% of historical odds recorded post-match → removed 7 market features from training
+- Glicko + win_prob sanity-checked (pre-match ✅)
+- Phase 3 code written: 7 new files under model/gem/
+- Bugs fixed during smoke: lightgbm→4.6, catboost bootstrap_type, xgb early_stopping
+
+## [2026-04-25] ingest | Gem smoke passed + 2-week roadmap
+- Smoke test (3 trials × 3 folds) прошел: log-loss 0.9981 (calibrated), 61 bets sim (WR 60.7%, ROI -3.55%)
+- SHAP top: glicko_home_prob (0.096), glicko_away_prob (0.092), home_pass_acc (0.039), league_prior_draw_rate (0.030)
+- Fixed bugs: xgb early_stopping, xgb save_model, catboost bootstrap_type/bagging_temp, lgb sklearn compat
+- Added n_jobs=2 в Optuna для 30-40% прискорення повного тренінгу
+- Roadmap: 2 тижні план до production Telegram + live WR

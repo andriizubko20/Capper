@@ -17,6 +17,8 @@ _Content catalog. Updated automatically on every INGEST or LINT operation._
 | [WS Gap Model](pages/ws-gap-model.md) | 2-рівневий фільтр. Мало ставок, висока якість. |
 | [Monster Model](pages/monster-model.md) | Ансамбль з порогами під кожну лігу. Широке покриття. |
 | [Aquamarine Model](pages/aquamarine-model.md) | Підмножина Monster. Тільки найвищий winrate. |
+| [Gem Model (v1)](pages/gem-model.md) | 3-model stacking + calibration. WR≥70%, flat 4%. Phase 3 code done, smoke passed. |
+| [Gem Roadmap 2 Weeks](pages/gem-model-roadmap.md) | Day-by-day план 25.04→08.05: train → forward-test → telegram → deploy. |
 
 ## Football
 

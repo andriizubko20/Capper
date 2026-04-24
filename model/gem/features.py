@@ -45,15 +45,17 @@ def build_gem_features(
     h2h: dict,
     home_glicko_prob: float | None,   # match_stats.home_win_prob (pre-match Glicko)
     away_glicko_prob: float | None,   # match_stats.away_win_prob
-    home_odds: float | None,
-    draw_odds: float | None,
-    away_odds: float | None,
     home_has_injuries: bool,
     away_has_injuries: bool,
+    league_priors: dict | None = None,  # target-encoded league rates from training fold
 ) -> dict[str, float | None]:
     """
-    Returns 50-feature dict for XGBoost.
-    Missing values stay as None → XGBoost handles NaN natively.
+    Returns feature dict for XGBoost/LGB/CatBoost.
+    Missing values stay as None → tree models handle NaN natively.
+
+    Market-odds features were removed in audit: 94% of historical odds rows
+    were recorded post-match (closing), so using them as features leaks
+    post-match information. Odds are used only for simulation + inference gem filter.
     """
     f: dict[str, float | None] = {}
 
@@ -123,28 +125,26 @@ def build_gem_features(
     f["home_has_any_injuries"] = int(bool(home_has_injuries))
     f["away_has_any_injuries"] = int(bool(away_has_injuries))
 
-    # ── 7. Market + Glicko reference (10) ─────────────────────────────
-    mp = market_probs_from_odds(home_odds, draw_odds, away_odds)
+    # ── 7. Glicko pre-match probabilities (3 — market features removed) ──
     f["glicko_home_prob"] = home_glicko_prob
     f["glicko_away_prob"] = away_glicko_prob
-    # Implied draw when Glicko sum < 1: treat as residual
     glicko_draw = None
     if home_glicko_prob is not None and away_glicko_prob is not None:
         residual = 1.0 - home_glicko_prob - away_glicko_prob
         glicko_draw = residual if residual >= 0 else 0.0
     f["glicko_draw_prob"] = glicko_draw
 
-    f["market_home_odds"] = home_odds
-    f["market_draw_odds"] = draw_odds
-    f["market_away_odds"] = away_odds
-    f["market_home_prob"] = mp["home"]
-    f["market_draw_prob"] = mp["draw"]
-    f["market_away_prob"] = mp["away"]
-    f["glicko_minus_market_home"] = _diff(home_glicko_prob, mp["home"])  # central gem signal
-
-    # ── 8. League context (2 + one-hot) ───────────────────────────────
+    # ── 8. League context (2 binary clusters + 3 target-encoded priors + one-hot) ─
     f["league_cluster_top5"]   = int(league_cluster(league_name) == "top5_ucl")
     f["league_cluster_second"] = int(league_cluster(league_name) == "second_tier")
+    if league_priors is not None:
+        f["league_prior_home_wr"]  = league_priors.get("home_wr")
+        f["league_prior_draw_rate"] = league_priors.get("draw_rate")
+        f["league_prior_away_wr"]  = league_priors.get("away_wr")
+    else:
+        f["league_prior_home_wr"]  = None
+        f["league_prior_draw_rate"] = None
+        f["league_prior_away_wr"]  = None
     for lg in LEAGUE_NAMES_ORDERED:
         key = _league_feature_key(lg)
         f[key] = int(league_name == lg)
@@ -177,10 +177,8 @@ def expected_feature_names() -> list[str]:
         "home_rest_days", "away_rest_days", "rest_gap",
         "home_has_any_injuries", "away_has_any_injuries",
         "glicko_home_prob", "glicko_away_prob", "glicko_draw_prob",
-        "market_home_odds", "market_draw_odds", "market_away_odds",
-        "market_home_prob", "market_draw_prob", "market_away_prob",
-        "glicko_minus_market_home",
         "league_cluster_top5", "league_cluster_second",
+        "league_prior_home_wr", "league_prior_draw_rate", "league_prior_away_wr",
     ]
     leagues = [_league_feature_key(lg) for lg in LEAGUE_NAMES_ORDERED]
     return base + leagues
