@@ -35,10 +35,8 @@ LABEL_MAP = {
 # Down to 20 niches selected after re-evaluation on 2025-08-01+ data.
 RAW_NICHES = {
     "Bundesliga": [
-        "away[2.1,3.0) xd>=0.2 h2h>=0.5",
         "home[1.7,2.1) ws>=1 pos>=50",
         "home[1.7,2.1) ra>=0 h2h>=0.5",
-        "away[1.85,2.4) sot>=4 pa>=80 h2h>=0.5",
     ],
     "Eredivisie": [
         "home[1.4,1.6) gm>=0",
