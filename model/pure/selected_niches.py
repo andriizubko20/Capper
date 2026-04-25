@@ -31,61 +31,40 @@ LABEL_MAP = {
 }
 
 
-# User's hand-picked list, organised by league
+# User's hand-picked list (v2: post-recency filter, 2026-04-25)
+# Down to 20 niches selected after re-evaluation on 2025-08-01+ data.
 RAW_NICHES = {
     "Bundesliga": [
+        "away[2.1,3.0) xd>=0.2 h2h>=0.5",
         "home[1.7,2.1) ws>=1 pos>=50",
         "home[1.7,2.1) ra>=0 h2h>=0.5",
-        "away[2.1,3.0) xd>=0.2 h2h>=0.5",
-        "away[1.85,2.4) xt>=0",
         "away[1.85,2.4) sot>=4 pa>=80 h2h>=0.5",
-        "away[1.85,2.4) sot>=4",
-        "away[1.85,2.4) pos>=50 h2h>=0.5",
-        "away[1.85,2.4) ols>=1 ra>=0",
-        "away[1.55,1.85) f>=0.5 ppg>=1.5 h2h>=0.5",
     ],
     "Eredivisie": [
         "home[1.4,1.6) gm>=0",
     ],
     "Jupiler Pro League": [
-        "away[2.1,3.0) ppg>=1.5 gm>=0 ra>=0 h2h>=0.5",
         "home[1.55,1.85) ppg>=1.5 ra>=0 m<=0.60",
     ],
     "La Liga": [
-        "home[1.7,2.1) f>=0.5 ols>=1",
-        "home[1.55,1.85) g>=50 m<=0.60",
-        "home[1.4,1.6) xd>=0.2",
-        "away[2.1,3.0) g>=100 ra>=0",
-        "away[1.85,2.4) ppg>=1.5 pa>=80",
         "away[1.85,2.4) pa>=80 h2h>=0.5",
-        "away[1.7,2.1) xt>=0",
-        "away[1.7,2.1) f>=0.5 ols>=1 h2h>=0.5",
+        "away[1.85,2.4) ppg>=1.5 pa>=80",
     ],
     "Ligue 1": [
-        "home[2.1,3.0) xt>=0 pos>=50 pa>=80",
-        "home[1.85,2.4) xt>=0 pa>=80",
-        "home[1.7,2.1) ws>=1 ols>=1",
-        "home[1.55,1.85) ppg>=1.5 ols>=1",
+        "home[1.55,1.85) ppg>=1.5 ra>=0 h2h>=0.5",
+        "home[1.85,2.4) xt>=0 pos>=50",
         "away[1.7,2.1) ppg>=1.8 h2h>=0.5",
-        "away[1.55,1.85) ws>=1 h2h>=0.5",
     ],
-    "Premier League": [
-        "away[1.55,1.85) g>=100 p>=0.55 ppg>=1.5",
-    ],
-    # Primeira Liga removed by user request
     "Serie A": [
+        "home[1.7,2.1) xd>=0.2 ppg>=1.8",
+        "away[1.85,2.4) f>=0.5 xt>=0",
+        "away[1.7,2.1) ws>=1 ra>=0",
+        "away[1.7,2.1) ppg>=1.8 ws>=1 pa>=80",
+        "away[1.55,1.85) sot>=4",
+        "away[1.55,1.85) f>=0.5 ra>=0 m<=0.60",
         "home[1.85,2.4) xd>=0.2 ppg>=1.8",
-        "home[1.85,2.4) xd>=0.2 xt>=0",
         "home[1.7,2.1) xd>=0.2 ppg>=1.8 ws>=1",
         "away[2.1,3.0) xt>=0 pos>=50 pa>=80",
-        "away[2.1,3.0) f>=0.5 ppg>=1.5 ws>=1 pa>=80",
-        "away[1.85,2.4) xd>=0.4 ppg>=1.5",
-        "away[1.85,2.4) f>=1.0 xt>=0",
-        "away[1.7,2.1) xd>=0.4 ppg>=1.5",
-        "away[1.7,2.1) xd>=0.2 ws>=2",
-        "away[1.55,1.85) f>=0.5 ra>=0 m<=0.60",
-        "away[1.55,1.85) pa>=80 ra>=0",
-        "away[1.4,1.6) pa>=80",
     ],
 }
 
