@@ -20,7 +20,7 @@ from db.models import League as LeagueModel, Match, Odds, Prediction
 from db.session import SessionLocal
 from model.gem.team_state import build_h2h, build_team_state
 from scheduler.tasks.generate_picks_pure import (
-    LEAGUE_API_IDS, MODEL_VERSION, KELLY_FRAC, KELLY_CAP,
+    LEAGUE_COUNTRY, MODEL_VERSION, KELLY_FRAC, KELLY_CAP,
     _load_historical_for_state, _build_match_features, _matches_niche, _load_niches,
     _compute_bankroll,
 )
@@ -42,8 +42,16 @@ def run_backfill(date_from: datetime, date_to: datetime) -> None:
             Match.date >= date_from,
             Match.date <= date_to,
             LeagueModel.name.in_(pure_leagues),
-            LeagueModel.api_id.in_(LEAGUE_API_IDS),
         ).all()
+        # Country allowlist filter (handles name collisions like
+        # German vs Austrian Bundesliga, English vs Ukrainian Premier League).
+        matches = [
+            m for m in matches
+            if m.league and (
+                m.league.name == "Champions League" or
+                m.league.country == LEAGUE_COUNTRY.get(m.league.name)
+            )
+        ]
         logger.info(f"[Pure backfill] Found {len(matches)} matches in window")
 
         # Build state from full history (finished + upcoming)
