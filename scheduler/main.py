@@ -8,6 +8,7 @@ from scheduler.tasks.generate_picks_ws_gap import run_generate_picks_ws_gap
 from scheduler.tasks.generate_picks_monster import run_generate_picks_monster
 from scheduler.tasks.generate_picks_aquamarine import run_generate_picks_aquamarine
 from scheduler.tasks.generate_picks_pure import run_generate_picks_pure
+from scheduler.tasks.rebalance_stakes import run_rebalance_stakes
 from scheduler.tasks.update_monster_p_is import run_update_monster_p_is
 from scheduler.tasks.update_clv import run_clv_update
 from scheduler.tasks.update_results import run_update_results
@@ -65,6 +66,17 @@ def start() -> None:
         CronTrigger(minute=25),
         id="generate_picks_pure",
         name="Generate picks Pure (hourly)",
+        misfire_grace_time=300,
+    )
+
+    # Кожні 2 години в :50 — restake unsettled picks based on current bankroll.
+    # Solves the over-bet problem where multiple picks settle as losses but
+    # the remaining pending picks keep stale (over-sized) stakes.
+    scheduler.add_job(
+        run_rebalance_stakes,
+        CronTrigger(hour="*/2", minute=50),
+        id="rebalance_stakes",
+        name="Rebalance stakes for unsettled picks (every 2h at :50)",
         misfire_grace_time=300,
     )
 
