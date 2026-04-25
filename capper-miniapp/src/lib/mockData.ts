@@ -234,6 +234,14 @@ export const STATS_BY_MODEL_PERIOD: Record<Model, Record<Period, StatsData>> = {
       ],
     },
   },
+  // Pure model — fresh deployment, mock placeholder data
+  // (real stats come from /api/stats?model=Pure once picks accumulate)
+  'Pure': {
+    '7D':  { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
+    '30D': { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
+    '90D': { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
+    'ALL': { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
+  },
 }
 
 // ─── Compare screen ───────────────────────────────────────────────────────────
@@ -254,12 +262,14 @@ const MODEL_META = {
   gap:     { name: 'WS Gap' as Model,  tag: 'gap',     color: '#F43F8E' },
   monster: { name: 'Monster' as Model, tag: 'monster',  color: '#FACC15' },
   aqua:    { name: 'Aqua' as Model,    tag: 'aqua',     color: '#22D3EE' },
+  pure:    { name: 'Pure' as Model,    tag: 'pure',    color: '#9D4EDD' },
 }
 
 export const MODEL_COLOR: Record<Model, string> = {
   'WS Gap':  MODEL_META.gap.color,
   'Monster': MODEL_META.monster.color,
   'Aqua':    MODEL_META.aqua.color,
+  'Pure':    MODEL_META.pure.color,
 }
 
 export const COMPARE_BY_PERIOD: Record<Period, ModelData[]> = {

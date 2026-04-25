@@ -8,16 +8,13 @@ For each upcoming match in target leagues:
   2. Compute side features (home + away perspective).
   3. For each side: test against all niches → pick the one with highest p_is.
   4. Compute EV = p_is * odds - 1, Kelly stake (25% × cap 10%).
-  5. Save to predictions table with model_version='pure_v1'.
-  6. Telegram broadcast (mirrors Monster format).
+  5. Save to predictions table with model_version='pure_v1' — picked up by API
+     and shown in the mini-app (no Telegram broadcast).
 """
-import asyncio
 import json
-import time as _time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 from loguru import logger
 
@@ -29,7 +26,6 @@ from model.gem.team_state import build_h2h, build_team_state
 MODEL_VERSION = "pure_v1"
 KELLY_FRAC = 0.25
 KELLY_CAP = 0.10
-HIGH_RISK_ODDS = 2.5
 
 # API-Football league IDs to avoid name collisions (e.g. German Bundesliga
 # vs Austrian Bundesliga — both stored as "Bundesliga" in DB).
@@ -417,73 +413,10 @@ def run_generate_picks_pure(
             }))
 
         db.commit()
-
-        if new_picks:
-            logger.info(f"[Pure] Generated {len(new_picks)} picks")
-            _send_picks_to_telegram(new_picks, db, bankroll)
-        else:
-            logger.info("[Pure] No new picks")
+        logger.info(f"[Pure] Generated {len(new_picks)} picks")
 
     finally:
         db.close()
-
-
-def _send_picks_to_telegram(picks: list, db, bankroll: float) -> None:
-    pick_meta = [
-        (
-            match.home_team.name if match.home_team else "?",
-            match.away_team.name if match.away_team else "?",
-            match.date.strftime("%d.%m %H:%M"),
-            pick,
-        )
-        for match, pick in picks
-    ]
-
-    async def _send():
-        from aiogram import Bot
-        from db.models import User
-        if not settings.telegram_bot_token:
-            return
-        bot = Bot(token=settings.telegram_bot_token)
-        db2 = SessionLocal()
-        try:
-            users = db2.query(User).filter_by(is_active=True).all()
-            if not users:
-                return
-            lines = []
-            for home, away, time_str, pick in pick_meta:
-                side = pick["outcome"]
-                side_label = f"П1 ({home})" if side == "home" else f"П2 ({away})"
-                hr_prefix = "⚠️ <b>HIGH RISK</b>\n" if pick["odds"] >= HIGH_RISK_ODDS else ""
-                line = (
-                    f"{hr_prefix}"
-                    f"<b>{home} — {away}</b> [{time_str}]\n"
-                    f"  ➤ {side_label}\n"
-                    f"  Кеф: {pick['odds']:.2f} | EV: {pick['ev']*100:.1f}% | "
-                    f"p_win: {pick['p_is']:.1%}\n"
-                    f"  Стейк: ${pick['stake']:.0f} (банкрол: ${bankroll:.0f})\n"
-                    f"  Niche: <code>{pick['niche']}</code>"
-                )
-                lines.append(line)
-
-            n = len(picks)
-            picks_word = "пика" if n in (2, 3, 4) else ("пик" if n == 1 else "пиков")
-            header = f"💎 <b>Pure — {n} {picks_word}</b>\n\n"
-            message = header + "\n\n".join(lines)
-
-            sent = 0
-            for user in users:
-                try:
-                    await bot.send_message(user.telegram_id, message, parse_mode="HTML")
-                    sent += 1
-                except Exception as e:
-                    logger.warning(f"Failed to send to {user.telegram_id}: {e}")
-            logger.info(f"[Pure] Picks sent to {sent}/{len(users)} users")
-        finally:
-            db2.close()
-            await bot.session.close()
-
-    asyncio.run(_send())
 
 
 if __name__ == "__main__":

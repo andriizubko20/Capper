@@ -1,5 +1,5 @@
 export type Screen = 'picks' | 'stats' | 'compare'
-export type Model  = 'WS Gap' | 'Monster' | 'Aqua'
+export type Model  = 'WS Gap' | 'Monster' | 'Aqua' | 'Pure'
 export type PickStatus = 'live' | 'win' | 'loss' | 'pending' | 'finished'
 export type BetSide = 'HOME' | 'AWAY' | 'DRAW' | `OVER ${string}` | `UNDER ${string}`
 

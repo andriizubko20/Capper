@@ -320,8 +320,10 @@ def get_stats(
 def _empty_stats() -> dict:
     return {
         "roi": 0, "winRate": 0, "profit": 0,
+        "balance": STARTING_BALANCE,
+        "startingBalance": STARTING_BALANCE,
         "totalBets": 0, "avgOdds": 0,
-        "streak": [], "byLeague": [], "curve": [],
+        "streak": [], "byLeague": [], "curve": [STARTING_BALANCE],
     }
 
 
