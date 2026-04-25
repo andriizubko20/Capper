@@ -263,8 +263,14 @@ class GemEnsemble:
         feature_names: list[str],
         n_optuna_trials: int = 200,
         n_cv_folds: int = 12,
+        params_override: dict | None = None,
     ) -> dict[str, np.ndarray]:
-        """Full training flow. Returns dict of OOF arrays per model."""
+        """
+        Full training flow. Returns dict of OOF arrays per model.
+
+        params_override: dict of {model_name: params}. If provided, skip Optuna
+            tuning and use these params directly. Used for fast OOF rebuilds.
+        """
         self.feature_names = list(feature_names)
         splits = walk_forward_splits(info["date"], n_folds=n_cv_folds)
         if not splits:
@@ -273,10 +279,14 @@ class GemEnsemble:
         oof_arrays: dict[str, np.ndarray] = {}
 
         for name in MODEL_NAMES:
-            logger.info(f"─ Tuning {name} ({n_optuna_trials} Optuna trials) ─")
-            self.params[name] = tune_hyperparams(
-                name, X, y, info, feature_names, splits, n_optuna_trials,
-            )
+            if params_override and name in params_override:
+                logger.info(f"─ Using saved params for {name}, skipping Optuna ─")
+                self.params[name] = params_override[name]
+            else:
+                logger.info(f"─ Tuning {name} ({n_optuna_trials} Optuna trials) ─")
+                self.params[name] = tune_hyperparams(
+                    name, X, y, info, feature_names, splits, n_optuna_trials,
+                )
             logger.info(f"─ OOF for {name} ({len(splits)} folds) ─")
             oof_arrays[name] = build_oof(
                 name, self.params[name], X, y, info, feature_names, splits,

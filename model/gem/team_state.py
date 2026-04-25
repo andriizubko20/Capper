@@ -154,6 +154,10 @@ def _snapshot(h: dict, side_glicko_now) -> dict:
 
 def _update_history(history: dict, row) -> None:
     """After processing a match, push its result into both teams' histories."""
+    # Upcoming/unfinished matches: pre-match snapshot was already taken — don't
+    # update history with NULL scores.
+    if row.home_score is None or row.away_score is None:
+        return
     home_xg, away_xg = row.home_xg, row.away_xg
     home_poss, away_poss = row.home_possession, row.away_possession
     home_sot, away_sot = row.home_sot, row.away_sot

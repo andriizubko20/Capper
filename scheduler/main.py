@@ -7,6 +7,7 @@ from scheduler.tasks.generate_picks import run_generate_picks
 from scheduler.tasks.generate_picks_ws_gap import run_generate_picks_ws_gap
 from scheduler.tasks.generate_picks_monster import run_generate_picks_monster
 from scheduler.tasks.generate_picks_aquamarine import run_generate_picks_aquamarine
+from scheduler.tasks.generate_picks_pure import run_generate_picks_pure
 from scheduler.tasks.update_monster_p_is import run_update_monster_p_is
 from scheduler.tasks.update_clv import run_clv_update
 from scheduler.tasks.update_results import run_update_results
@@ -55,6 +56,15 @@ def start() -> None:
         CronTrigger(minute=20),
         id="generate_picks_aquamarine",
         name="Generate picks Aquamarine (hourly)",
+        misfire_grace_time=300,
+    )
+
+    # Щогодини в :25 — Pure picks (~5h до старту)
+    scheduler.add_job(
+        run_generate_picks_pure,
+        CronTrigger(minute=25),
+        id="generate_picks_pure",
+        name="Generate picks Pure (hourly)",
         misfire_grace_time=300,
     )
 

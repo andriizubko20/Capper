@@ -48,7 +48,12 @@ def run(
     n_optuna_trials: int = 200,
     n_cv_folds: int = 12,
     calib_tail_frac: float = 0.15,
+    use_saved_params: bool = False,
 ) -> dict:
+    """
+    use_saved_params: if True, load tuned params from artifacts/params.json and
+        skip Optuna entirely. Used for fast re-runs (e.g. after data change).
+    """
     t0 = datetime.utcnow()
     logger.info("=" * 72)
     logger.info(f"Gem training — {t0.isoformat()}Z")
@@ -75,10 +80,16 @@ def run(
     # 4. Train ensemble
     logger.info("Training stacking ensemble …")
     ensemble = GemEnsemble()
+    params_override = None
+    if use_saved_params:
+        with open(ARTIFACTS_DIR / "params.json") as f:
+            params_override = json.load(f)
+        logger.info(f"Using saved params (skipping Optuna): {list(params_override)}")
     oof_arrays = ensemble.train(
         X, y, info, feature_names,
         n_optuna_trials=n_optuna_trials,
         n_cv_folds=n_cv_folds,
+        params_override=params_override,
     )
 
     # Stacked OOF probs (pre-calibration)
@@ -176,6 +187,20 @@ def run(
     ensemble.save(ARTIFACTS_DIR)
     calibrator.save(ARTIFACTS_DIR)
 
+    # Persist OOF + info for downstream analysis (analyze.py)
+    np.savez_compressed(
+        ARTIFACTS_DIR / "oof.npz",
+        oof_xgb=oof_arrays["xgb"],
+        oof_lgb=oof_arrays["lgb"],
+        oof_cat=oof_arrays["cat"],
+        oof_ensemble_raw=raw_ens_oof,
+        oof_ensemble_calibrated=cal_ens_oof,
+        y=y,
+        covered=covered,
+    )
+    info.to_parquet(ARTIFACTS_DIR / "info.parquet")
+    logger.info(f"OOF + info persisted to {ARTIFACTS_DIR}/")
+
     # Experiment log
     EXPERIMENTS_DIR.mkdir(parents=True, exist_ok=True)
     ts_tag = t0.strftime("%Y%m%d_%H%M%S")
@@ -207,5 +232,12 @@ if __name__ == "__main__":
     ap.add_argument("--trials", type=int, default=200, help="Optuna trials per base model")
     ap.add_argument("--folds",  type=int, default=12,  help="Walk-forward CV folds")
     ap.add_argument("--tail",   type=float, default=0.15, help="Calibration tail fraction")
+    ap.add_argument("--use-saved-params", action="store_true",
+                    help="Skip Optuna and use saved params from artifacts/params.json")
     args = ap.parse_args()
-    run(n_optuna_trials=args.trials, n_cv_folds=args.folds, calib_tail_frac=args.tail)
+    run(
+        n_optuna_trials=args.trials,
+        n_cv_folds=args.folds,
+        calib_tail_frac=args.tail,
+        use_saved_params=args.use_saved_params,
+    )

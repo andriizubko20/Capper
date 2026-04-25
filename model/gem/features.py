@@ -22,6 +22,22 @@ def _safe_div(a: float | None, b: float | None) -> float | None:
     return a / b
 
 
+def _mul(a: float | None, b: float | None) -> float | None:
+    if a is None or b is None:
+        return None
+    return a * b
+
+
+def _sign(x: float | None) -> int | None:
+    if x is None:
+        return None
+    if x > 0:
+        return 1
+    if x < 0:
+        return -1
+    return 0
+
+
 def market_probs_from_odds(
     home_odds: float | None,
     draw_odds: float | None,
@@ -149,6 +165,34 @@ def build_gem_features(
         key = _league_feature_key(lg)
         f[key] = int(league_name == lg)
 
+    # ── 9. Composite / interaction features (v2) ──────────────────────
+    # dominance_score: multiplicative interaction between strength gap and quality gap
+    f["dominance_score"] = _mul(f["glicko_gap"], f["xg_diff_gap"])
+
+    # Direct attack-vs-defense quality matchup
+    home_attack_minus_away_def  = _diff(home_state["xg_for_10"], away_state["xg_against_10"])
+    away_attack_minus_home_def  = _diff(away_state["xg_for_10"], home_state["xg_against_10"])
+    f["xg_quality_gap"] = _diff(home_attack_minus_away_def, away_attack_minus_home_def)
+
+    # Momentum alignment: count of momentum signals agreeing on direction (-3..+3)
+    form_gap_sign      = _sign(f.get("form_gap"))
+    xg_trend_gap_sign  = _sign(_diff(home_state["xg_trend"], away_state["xg_trend"]))
+    glicko_mom_sign    = _sign(f.get("glicko_momentum_gap"))
+    if None in (form_gap_sign, xg_trend_gap_sign, glicko_mom_sign):
+        f["momentum_alignment_score"] = None
+    else:
+        f["momentum_alignment_score"] = form_gap_sign + xg_trend_gap_sign + glicko_mom_sign
+
+    # Home advantage strength: how much team's home PPG outperforms league's home WR baseline
+    # league_prior_home_wr is in [0,1]; home_ppg_at_home is in [0,3] — scale prior by 3 for comparable units
+    if home_state["ppg_home_10"] is not None and f.get("league_prior_home_wr") is not None:
+        f["home_advantage_factor"] = home_state["ppg_home_10"] - f["league_prior_home_wr"] * 3.0
+    else:
+        f["home_advantage_factor"] = None
+
+    # Away "hotness" trap: hot away side often overrated by market — negative signal for OUR home pick
+    f["away_hotness_signal"] = _mul(away_state.get("win_streak"), away_state.get("xg_trend"))
+
     return f
 
 
@@ -179,6 +223,8 @@ def expected_feature_names() -> list[str]:
         "glicko_home_prob", "glicko_away_prob", "glicko_draw_prob",
         "league_cluster_top5", "league_cluster_second",
         "league_prior_home_wr", "league_prior_draw_rate", "league_prior_away_wr",
+        "dominance_score", "xg_quality_gap", "momentum_alignment_score",
+        "home_advantage_factor", "away_hotness_signal",
     ]
     leagues = [_league_feature_key(lg) for lg in LEAGUE_NAMES_ORDERED]
     return base + leagues

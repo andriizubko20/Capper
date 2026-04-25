@@ -43,9 +43,13 @@ def league_cluster(name: str) -> str:
 ROLLING_10 = 10
 ROLLING_5 = 5
 
-# Gem filter thresholds (can be tuned after OOS backtest)
+# Gem filter thresholds (v2)
+# v1 had only 21 picks/24mo at P_bet>0.72. Smoke v2 with P_bet=0.68 + MIN_GEM=0.08
+# gave 145 picks but WR 56.6% (filter let in noisy "10-20% gap" bucket).
+# v2 final: keep tight P thresholds + require strong gem_score (top quartile on v1 = 85.7% WR).
 MAX_DRAW_PROB = 0.28
-MIN_BET_PROB = 0.72
+MIN_BET_PROB = 0.70
+MIN_GEM_SCORE = 0.12   # above the "bad" 10-20% bucket from v1 analysis
 MIN_ODDS = 1.50
 MAX_ODDS = 3.00
 

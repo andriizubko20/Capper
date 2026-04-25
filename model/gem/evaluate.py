@@ -26,7 +26,10 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 
-from model.gem.niches import MAX_DRAW_PROB, MIN_BET_PROB, MIN_ODDS, MAX_ODDS, FLAT_STAKE_FRAC
+from model.gem.features import market_probs_from_odds
+from model.gem.niches import (
+    FLAT_STAKE_FRAC, MAX_DRAW_PROB, MAX_ODDS, MIN_BET_PROB, MIN_GEM_SCORE, MIN_ODDS,
+)
 
 
 # ── ML metrics ───────────────────────────────────────────────────────────────
@@ -115,18 +118,17 @@ def simulate_gem_bets(
     stake_frac: float = FLAT_STAKE_FRAC,
     max_draw_prob: float = MAX_DRAW_PROB,
     min_bet_prob: float = MIN_BET_PROB,
+    min_gem_score: float = MIN_GEM_SCORE,
     min_odds: float = MIN_ODDS,
     max_odds: float = MAX_ODDS,
 ) -> dict:
     """
     Chronological flat-stake backtest of the gem filter.
 
-    For each match: pick side = argmax(P(H), P(A)).
-    Apply gem filter: P(D)<max_draw_prob, P(side)>min_bet_prob,
-                      min_odds ≤ side_odds ≤ max_odds.
-    Stake = stake_frac × current bankroll. Settle with actual result.
-
-    Returns dict with summary stats and per-bet + per-week DataFrames.
+    Filter: P(D)<max_draw, P(side)>min_bet, gem_score>min_gem,
+            min_odds≤side_odds≤max_odds.
+    gem_score = our_p(side) - market_p(side), where market_p is de-vigged.
+    Stake = stake_frac × current bankroll.
     """
     df = info.reset_index(drop=True).copy()
     df["pH"] = proba[:, 0]
@@ -148,6 +150,15 @@ def simulate_gem_bets(
         if pd.isna(odds) or odds < min_odds or odds > max_odds:
             continue
 
+        # Gem score gate: require positive edge over the (de-vigged) market
+        mp = market_probs_from_odds(m["home_odds"], m["draw_odds"], m["away_odds"])
+        market_p = mp["home"] if side == "H" else mp["away"]
+        if market_p is None:
+            continue
+        gem_score = p_side - market_p
+        if gem_score < min_gem_score:
+            continue
+
         stake = stake_frac * bank
         won = (side == "H" and m["result"] == "H") or (side == "A" and m["result"] == "A")
         pnl = stake * (odds - 1) if won else -stake
@@ -155,7 +166,7 @@ def simulate_gem_bets(
 
         bets.append({
             "date": m["date"], "league": m["league_name"], "side": side,
-            "odds": odds, "p_side": p_side, "p_draw": m["pD"],
+            "odds": odds, "p_side": p_side, "p_draw": m["pD"], "gem_score": gem_score,
             "won": int(won), "stake": stake, "pnl": pnl, "bank_after": bank_after,
         })
         bank = bank_after

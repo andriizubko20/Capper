@@ -1,0 +1,70 @@
+name,category,type,direction,in_pure,source,notes,n_nonnull,min,q25,median,q75,max
+home_odds,MARKET,continuous,low_means_home_favored,yes,odds table (is_closing=false),Decimal 1x2 odds for HOME. Lower = market sees home as favorite. CAVEAT: 94% rows are post-match closing (leakage for training).,6954.0,1.01,1.67,2.2,3.1,26.0
+draw_odds,MARKET,continuous,n/a,no (used for de-vig),odds table,Decimal odds for draw. Used to remove bookmaker margin via 1/o normalization.,,,,,,
+away_odds,MARKET,continuous,low_means_away_favored,yes,odds table,Decimal 1x2 odds for AWAY.,6954.0,1.04,2.25,3.25,5.0,51.0
+home_market_prob,MARKET,continuous,high_means_home_favored,yes (max_market_prob filter),de-vigged from odds (1/o / sum(1/o)),"Implied probability HOME wins, removed bookmaker margin. Used to find 'undervalued' (cap max → only low-implied = mispriced fav).",6954.0,0.036,0.306,0.426,0.565,0.935
+draw_market_prob,MARKET,continuous,n/a,no,de-vigged,Implied draw probability.,,,,,,
+away_market_prob,MARKET,continuous,high_means_away_favored,yes,de-vigged,Implied probability AWAY wins.,6954.0,0.019,0.189,0.288,0.414,0.901
+odds_ratio,MARKET,continuous,high_means_home_favored,no (derivable),away_odds / home_odds,How much shorter the home odds are vs away. Quick intuition for 'how clear is the favorite'.,,,,,,
+vig,MARKET,continuous,n/a,no (derivable),(1/h + 1/d + 1/a) - 1,Bookmaker margin. Typically 4-7%. Higher = thinner edge.,,,,,,
+home_glicko,STRENGTH,continuous,high_means_home_strong,yes (via glicko_gap),match_stats.home_glicko (PRE-match),SStats Glicko-2 rating for home team. Default ~1500. Higher = stronger.,,,,,,
+away_glicko,STRENGTH,continuous,high_means_away_strong,yes (via glicko_gap),match_stats.away_glicko (PRE-match),Glicko rating for away team.,,,,,,
+glicko_gap,STRENGTH,continuous,positive_for_home,YES (key),home_glicko - away_glicko,STRONGEST single discriminative feature in calibration. Top decile WR 78% if betting home.,3619.0,-492.815,-102.772,-1.037,100.993,561.648
+home_glicko_prob,STRENGTH,continuous,high_means_home_strong,YES (key),match_stats.home_win_prob,Pre-match Glicko model's win probability for home. Best single calibrated factor (top decile 79% WR).,3454.0,0.053,0.29,0.405,0.542,0.858
+away_glicko_prob,STRENGTH,continuous,high_means_away_strong,YES,match_stats.away_win_prob,Glicko prob for away.,3454.0,0.048,0.215,0.325,0.445,0.827
+glicko_prob_diff,STRENGTH,continuous,positive_for_home,no (derivable),home_glicko_prob - home_market_prob (mispricing signal),Our Glicko model says home is N% likely; market says M%. Diff = the 'gem' edge.,,,,,,
+home_xg_for_10,XG_ATTACK,continuous,high_means_home_strong,yes (via xg_diff_home),rolling 10-match avg of HOME team's xG_for,Last 10 matches xG scored. Range 0.5-3.0.,,,,,,
+home_xg_against_10,XG_DEFENSE,continuous,low_means_home_strong,yes (via xg_diff_home),rolling 10-match avg of HOME's xG conceded,Defense quality: lower better.,,,,,,
+away_xg_for_10,XG_ATTACK,continuous,high_means_away_strong,yes,"rolling 10-match avg, AWAY team",Same as home_xg_for_10 but for away.,,,,,,
+away_xg_against_10,XG_DEFENSE,continuous,low_means_away_strong,yes,rolling 10-match,Away team's defensive quality.,,,,,,
+xg_diff_home,XG_NET,continuous,positive_for_home,YES,home_xg_for_10 - home_xg_against_10,Home team's net xG (attack minus defense). Positive = good team.,4383.0,-2.364,-0.439,-0.17,0.288,2.211
+xg_diff_away,XG_NET,continuous,positive_for_away,YES,away_xg_for_10 - away_xg_against_10,Away team's net xG.,4403.0,-1.664,-0.416,-0.151,0.317,2.364
+attack_vs_def_home,XG_MATCHUP,continuous,positive_for_home,YES,home_xg_for_10 - away_xg_against_10,Home attack vs away defense matchup. Positive = home outscores expected.,3363.0,-1.269,-0.339,-0.087,0.212,1.652
+attack_vs_def_away,XG_MATCHUP,continuous,positive_for_away,YES,away_xg_for_10 - home_xg_against_10,Away attack vs home defense.,3363.0,-1.46,-0.341,-0.088,0.216,1.756
+xg_quality_gap,XG_MATCHUP,continuous,positive_for_home,YES (Gem v2),(home.xg_for - away.xg_against) - (away.xg_for - home.xg_against),Net matchup advantage in xG terms. Captures both attack and defense imbalances.,,,,,,
+xg_for_home_10,XG_HOME_SPLIT,continuous,high_means_home_strong,no (Gem only),rolling 10 of HOME team xG_for ONLY when playing at HOME,Home team's xG when playing AT HOME (different from overall). Captures home advantage in xG.,,,,,,
+xg_against_home_10,XG_HOME_SPLIT,continuous,low_means_home_strong,no,"rolling 10, only home matches",Home team's defensive xG at home.,,,,,,
+xg_for_away_10,XG_AWAY_SPLIT,continuous,high_means_away_strong,no,"rolling 10, only away matches",Away team's xG when playing on the road.,,,,,,
+xg_against_away_10,XG_AWAY_SPLIT,continuous,low_means_away_strong,no,"rolling 10, only away matches",Away team's defensive xG on the road.,,,,,,
+home_ppg_10,FORM,continuous,high_means_home_strong,yes (via form_advantage),rolling 10-match avg points (3 win/1 draw/0 loss),Home team's points-per-game over last 10. Range 0-3.,,,,,,
+away_ppg_10,FORM,continuous,high_means_away_strong,yes,rolling 10-match,Away team's PPG.,,,,,,
+form_advantage,FORM,continuous,positive_for_home,YES (forensic key),home_ppg_10 - away_ppg_10,🔥 STRONGEST signal in user-curated forensic analysis (Cohen's d=+0.70).,6954.0,-3.0,-0.6,0.0,0.5,3.0
+home_form_5,FORM,continuous,high_means_home_strong,no (Gem),rolling 5-match avg points,Shorter window than ppg_10 — captures recent shape change.,,,,,,
+away_form_5,FORM,continuous,high_means_away_strong,no,rolling 5-match,Same for away.,,,,,,
+form_advantage_5,FORM,continuous,positive_for_home,no (derivable),home_form_5 - away_form_5,Short-term form gap (last 5 vs last 5). Possibly more predictive than 10-match.,,,,,,
+ppg_home_10,FORM_SPLIT,continuous,high_means_home_strong,no,"rolling 10, HOME matches only",Home team's PPG at home — captures home advantage strength.,,,,,,
+ppg_away_10,FORM_SPLIT,continuous,high_means_away_strong,no,"rolling 10, AWAY matches only",Away team's PPG on the road.,,,,,,
+home_xg_trend,MOMENTUM,continuous,positive_for_home,no,last_5_xg_for - rolling_10_xg_for (home team),Positive = home team's attack is accelerating recently.,,,,,,
+away_xg_trend,MOMENTUM,continuous,positive_for_away,no,last_5 - rolling_10 (away),Same for away.,,,,,,
+xg_trend_advantage,MOMENTUM,continuous,positive_for_home,no (derivable),home_xg_trend - away_xg_trend,Net momentum diff.,,,,,,
+home_glicko_momentum,MOMENTUM,continuous,positive_for_home,no,home_glicko_now - home_glicko_5_matches_ago,Glicko rating drift over last 5 matches. Proxy for squad health/rotation effect.,,,,,,
+away_glicko_momentum,MOMENTUM,continuous,positive_for_away,no,Glicko drift over 5,,,,,,,
+glicko_momentum_diff,MOMENTUM,continuous,positive_for_home,no (derivable),home_glicko_momentum - away_glicko_momentum,Composite momentum gap.,,,,,,
+home_win_streak,MOMENTUM,ordinal,high_means_home_strong,no,consecutive wins ending at last match,0 if not on win streak.,,,,,,
+home_lose_streak,MOMENTUM,ordinal,low_means_home_strong,no,consecutive losses,0 if not on lose streak.,,,,,,
+away_win_streak,MOMENTUM,ordinal,high_means_away_strong,no,consecutive wins (away team),,,,,,,
+away_lose_streak,MOMENTUM,ordinal,low_means_away_strong,no,consecutive losses (away team),Could be 'opponent weakness' signal: hot favorite vs cold opponent.,,,,,,
+home_possession_10,STYLE,continuous,ambiguous,no,rolling 10-match possession %,0-100. Higher = more possession-based; not necessarily better.,,,,,,
+away_possession_10,STYLE,continuous,ambiguous,no,rolling 10,,,,,,,
+home_sot_10,STYLE,continuous,high_means_home_strong,no,shots on target rolling 10,Higher = more attacking output.,,,,,,
+away_sot_10,STYLE,continuous,high_means_away_strong,no,rolling 10,,,,,,,
+home_pass_acc_10,STYLE,continuous,high_means_home_strong,no,pass accuracy rolling 10 (passes_accurate/passes_total),Quality of build-up. Top-tier teams ~85-90%.,,,,,,
+away_pass_acc_10,STYLE,continuous,high_means_away_strong,no,rolling 10,,,,,,,
+home_rest_days,PHYSICAL,ordinal,high_means_home_strong,no,match_date - home.last_match_date,"Days since last match. 7+ = good rest, <4 = midweek-tired.",,,,,,
+away_rest_days,PHYSICAL,ordinal,high_means_away_strong,no,Same for away,,,,,,,
+rest_advantage,PHYSICAL,continuous,positive_for_home,no (derivable),home_rest - away_rest,Travel/fatigue advantage. Positive = home is fresher.,,,,,,
+home_has_injuries,PHYSICAL,binary,true_means_home_weak,no,has any row in injury_reports for this match+team,Crude flag — doesn't weight player importance.,,,,,,
+away_has_injuries,PHYSICAL,binary,true_means_away_weak,no,Same for away,,,,,,,
+h2h_home_wr,H2H,continuous,positive_for_home,no,win rate of HOME team in last 5 H2H meetings (any venue),Range 0-1. Niches with strong dynastic dominance.,,,,,,
+h2h_avg_goals,H2H,continuous,ambiguous,no,avg total goals in last 5 H2H,Style indicator; doesn't directly predict winner.,,,,,,
+h2h_home_last_result,H2H,ordinal,positive_for_home,no,"1 if home won last H2H, -1 if lost, 0 if drew",Recency: was last meeting a win? Some weight.,,,,,,
+league_name,CONTEXT,categorical,n/a,YES (one-hot + per-league models),leagues.name,Per-league niche tuning is essential — different leagues have different home advantage and form impacts.,,,,,,
+league_cluster_top5,CONTEXT,binary,n/a,no (Gem only),league in top-5 + UCL set,Top-tier vs second-tier.,,,,,,
+league_home_wr,CONTEXT,continuous,high_means_home_advantage,no,all-time home win rate for this league,"Baseline. Range ~0.40-0.48. La Liga ~0.46, Serie A ~0.40.",,,,,,
+league_prior_home_wr,CONTEXT,continuous,high_means_home_advantage,Gem only,Bayesian-smoothed train-only home WR (target encoding),Computed per fold to avoid leakage.,,,,,,
+league_prior_draw_rate,CONTEXT,continuous,n/a,Gem only,target encoding,League-specific draw rate (varies 22-28%).,,,,,,
+league_prior_away_wr,CONTEXT,continuous,high_means_away_strong,Gem only,target encoding,,,,,,,
+matches_played_home,META,ordinal,n/a,yes (min_matches_played),team's prior matches in dataset,Filter early-season noise. Typical: require >=5.,6954.0,1.0,19.0,40.0,70.0,135.0
+matches_played_away,META,ordinal,n/a,yes,Same for away,,6954.0,1.0,19.0,40.5,70.0,135.0
+date,META,ordinal,n/a,yes (chronological splits),matches.date,Used for walk-forward CV and stability checks.,,,,,,
+last_match_date_home,META,ordinal,n/a,no (derivable for rest),team's last match in dataset,Used to compute rest_days.,,,,,,
