@@ -210,7 +210,13 @@ export function PicksScreen({ model }: Props) {
         <SwipeableCards
           card0={
             <BankrollCard
-              amount={modelStats.curveData.length ? modelStats.curveData[modelStats.curveData.length - 1] : 1000}
+              amount={
+                // curveData = PnL$ (delta from $1000 starting bankroll).
+                // Bankroll = starting + last PnL. When no bets yet → $1000.
+                modelStats.curveData.length
+                  ? 1000 + modelStats.curveData[modelStats.curveData.length - 1]
+                  : 1000
+              }
               roi={modelStats.roi}
               sparkline={modelStats.curveData}
             />
