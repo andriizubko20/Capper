@@ -69,10 +69,46 @@ LEAGUE_COUNTRY: dict[str, str] = {
 }
 
 ARTIFACTS = Path(__file__).parents[2] / "model" / "gem" / "artifacts"
+PER_LEAGUE_PATH = ARTIFACTS / "per_league_thresholds.json"
 
 # ── Module-level cached singletons ────────────────────────────────────────
 _ENSEMBLE: GemEnsemble | None = None
 _CALIBRATOR: GemCalibrator | None = None
+_PER_LEAGUE: dict[str, dict] | None = None
+
+
+def _load_per_league_thresholds() -> dict[str, dict]:
+    """
+    Load per-league optimal thresholds from JSON.
+    If file missing, fall back to universal config from niches.py for ALL leagues.
+    """
+    global _PER_LEAGUE
+    if _PER_LEAGUE is not None:
+        return _PER_LEAGUE
+    import json
+    if PER_LEAGUE_PATH.exists():
+        with open(PER_LEAGUE_PATH) as f:
+            _PER_LEAGUE = json.load(f)
+        logger.info(
+            f"[Gem] Loaded per-league thresholds for {len(_PER_LEAGUE)} leagues"
+        )
+    else:
+        logger.warning("[Gem] per_league_thresholds.json missing — using universal niches.py config")
+        _PER_LEAGUE = {}
+    return _PER_LEAGUE
+
+
+def _thresholds_for(league: str) -> dict | None:
+    """Return per-league thresholds, or None if league not whitelisted for Gem."""
+    cfg = _load_per_league_thresholds()
+    if not cfg:
+        # Fall back to universal config (legacy mode)
+        return {
+            "max_draw_prob":  MAX_DRAW_PROB,
+            "min_bet_prob":   MIN_BET_PROB,
+            "min_gem_score":  MIN_GEM_SCORE,
+        }
+    return cfg.get(league)
 
 
 def _load_ensemble() -> tuple[GemEnsemble, GemCalibrator]:
@@ -270,15 +306,27 @@ def _gem_pick_for_match(
     home_odds: float,
     draw_odds: float,
     away_odds: float,
+    league: str | None = None,
 ) -> dict | None:
     """
     Apply gem filter to calibrated [P_H, P_D, P_A]. Pick the better of HOME/AWAY
     if both pass the filter, scored by gem_score.
 
+    Per-league thresholds are loaded from artifacts/per_league_thresholds.json.
+    If `league` is not in the per-league config, the match is skipped (returns
+    None) — leagues without a viable sweep combo are excluded from Gem.
+
     Returns dict {side, p, odds, market_p, gem_score, p_draw} or None.
     """
+    thr = _thresholds_for(league) if league is not None else None
+    if thr is None:
+        return None
+    max_draw_prob = thr["max_draw_prob"]
+    min_bet_prob  = thr["min_bet_prob"]
+    min_gem_score = thr["min_gem_score"]
+
     p_h, p_d, p_a = float(proba_cal[0]), float(proba_cal[1]), float(proba_cal[2])
-    if p_d >= MAX_DRAW_PROB:
+    if p_d >= max_draw_prob:
         return None
 
     market = market_probs_from_odds(home_odds, draw_odds, away_odds)
@@ -290,12 +338,12 @@ def _gem_pick_for_match(
         ("home", p_h, home_odds, market["home"]),
         ("away", p_a, away_odds, market["away"]),
     ):
-        if p_side <= MIN_BET_PROB:
+        if p_side <= min_bet_prob:
             continue
         if not (MIN_ODDS <= odds_side <= MAX_ODDS):
             continue
         gem_score = p_side - mp
-        if gem_score <= MIN_GEM_SCORE:
+        if gem_score <= min_gem_score:
             continue
         candidates.append({
             "side":      side,
@@ -427,7 +475,10 @@ def run_generate_picks_gem(
         new_picks = 0
         for i, match in enumerate(match_objs):
             home_odds, draw_odds, away_odds = odds_cache[match.id]
-            decision = _gem_pick_for_match(proba_cal[i], home_odds, draw_odds, away_odds)
+            league_name = match.league.name if match.league else None
+            decision = _gem_pick_for_match(
+                proba_cal[i], home_odds, draw_odds, away_odds, league=league_name,
+            )
             if decision is None:
                 continue
 
@@ -448,7 +499,6 @@ def run_generate_picks_gem(
 
             home = match.home_team.name if match.home_team else "?"
             away = match.away_team.name if match.away_team else "?"
-            league_name = match.league.name if match.league else None
             logger.info(
                 f"[Gem] Pick: {home} vs {away} → {side} | odds={odds_val:.2f} "
                 f"p={p_side:.3f} mp={decision['market_p']:.3f} "

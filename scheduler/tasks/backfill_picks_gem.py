@@ -122,7 +122,10 @@ def run_backfill(date_from: datetime | str, date_to: datetime | str | None = Non
         added = 0
         for i, match in enumerate(match_objs):
             home_odds, draw_odds, away_odds = odds_cache[match.id]
-            decision = _gem_pick_for_match(proba_cal[i], home_odds, draw_odds, away_odds)
+            league_name = match.league.name if match.league else None
+            decision = _gem_pick_for_match(
+                proba_cal[i], home_odds, draw_odds, away_odds, league=league_name,
+            )
             if decision is None:
                 continue
 
@@ -142,7 +145,6 @@ def run_backfill(date_from: datetime | str, date_to: datetime | str | None = Non
 
             home = match.home_team.name if match.home_team else "?"
             away = match.away_team.name if match.away_team else "?"
-            league_name = match.league.name if match.league else None
 
             db.add(Prediction(
                 match_id=match.id, market="1x2",
