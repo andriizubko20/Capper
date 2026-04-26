@@ -2,6 +2,9 @@ from data.api_client import SStatsClient
 from loguru import logger
 
 # Топ-5 + Ліга чемпіонів — ID з SStats.net
+# Перевірено 2026-04-26: SStats має odds для цих ліг (через Cloudflare Worker proxy
+# відсутні труханції на 15KB). Виключені: HNL, Championship, 2. Bundesliga, Liga I —
+# SStats повертає `data:null` (95-byte response) → їх odds немає в upstream.
 TRACKED_LEAGUES = {
     39: ("Premier League", "England"),
     140: ("La Liga", "Spain"),
@@ -14,10 +17,8 @@ TRACKED_LEAGUES = {
     144: ("Jupiler Pro League", "Belgium"),
     136: ("Serie B", "Italy"),
     94: ("Primeira Liga", "Portugal"),
-    # Нові ліги (пріоритет завантаження)
+    # SStats має 1x2 + AH + O/U
     203: ("Süper Lig", "Turkey"),
-    40: ("Championship", "England"),
-    79: ("2. Bundesliga", "Germany"),
     62: ("Ligue 2", "France"),
     333: ("Premier League", "Ukraine"),
     218: ("Bundesliga", "Austria"),
@@ -25,8 +26,6 @@ TRACKED_LEAGUES = {
     106: ("Ekstraklasa", "Poland"),
     103: ("Eliteserien", "Norway"),
     113: ("Allsvenskan", "Sweden"),
-    283: ("Liga I", "Romania"),
-    211: ("HNL", "Croatia"),
     3: ("UEFA Europa League", "Europe"),
     848: ("UEFA Europa Conference League", "Europe"),
 }

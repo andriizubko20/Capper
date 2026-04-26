@@ -103,10 +103,10 @@ def _load_stats_df(db) -> pd.DataFrame:
 
 
 def _get_odds_for_match(match_id: int, db) -> dict | None:
-    odds = db.query(Odds).filter_by(match_id=match_id, market="1x2", is_closing=False).all()
-    if not odds:
-        return None
-    return {o.outcome: o.value for o in odds}
+    """Best 1x2 odds per outcome across ALL bookmakers (bookmaker shopping)."""
+    from data.best_odds import best_1x2_odds_dict
+    out = best_1x2_odds_dict(db, match_id, is_closing=False)
+    return out or None
 
 
 def _ws_gap_pick(features: dict, odds: dict, bankroll: float) -> dict | None:
@@ -285,6 +285,8 @@ def run_generate_picks_ws_gap(
             Prediction.model_version == MODEL_VERSION,
         ).all()}
 
+        # Bookmaker shopping: keep the BEST (max) price per (match, outcome)
+        # across all bookmakers in a single batch query.
         all_odds_rows = db.query(Odds).filter(
             Odds.match_id.in_(match_ids),
             Odds.market == "1x2",
@@ -292,7 +294,16 @@ def run_generate_picks_ws_gap(
         ).all()
         odds_by_match: dict[int, dict] = {}
         for o in all_odds_rows:
-            odds_by_match.setdefault(o.match_id, {})[o.outcome] = o.value
+            try:
+                v = float(o.value)
+            except (TypeError, ValueError):
+                continue
+            if v <= 1.0:
+                continue
+            m_dict = odds_by_match.setdefault(o.match_id, {})
+            cur = m_dict.get(o.outcome)
+            if cur is None or v > cur:
+                m_dict[o.outcome] = v
 
         for match in matches:
             if match.id in existing:

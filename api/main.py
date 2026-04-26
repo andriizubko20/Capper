@@ -425,6 +425,97 @@ def get_history(
         db.close()
 
 
+@app.get("/api/clv")
+def get_clv(
+    model: str = Query(..., description="Display name: WS Gap | Monster | Aqua | Pure | Gem"),
+    days: int = Query(30, ge=1, le=365, description="Rolling window in days"),
+):
+    """
+    Returns rolling-window CLV stats + a daily-average trend series for one
+    model. Mirrors the daily metric used by the CLV alert monitor.
+
+    Response:
+        {
+          "model":   "Gem",
+          "days":    30,
+          "avg_clv": 0.012,        # weighted avg over the window
+          "n_picks": 47,
+          "pos_rate": 0.55,        # share of picks with CLV > 0
+          "trend":   [             # daily averages (most recent last)
+              {"date": "2026-04-01", "avg_clv": 0.014, "n": 3},
+              ...
+          ]
+        }
+    """
+    versions = MODEL_VERSIONS.get(model)
+    if not versions:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unknown model '{model}'. Valid: {list(MODEL_VERSIONS)}",
+        )
+    since = datetime.now(timezone.utc) - timedelta(days=days)
+
+    db = SessionLocal()
+    try:
+        rows = (
+            db.query(Prediction, Match)
+            .outerjoin(Match, Prediction.match_id == Match.id)
+            .filter(
+                Prediction.model_version.in_(versions),
+                Prediction.clv.isnot(None),
+            )
+            .all()
+        )
+
+        # Bucket by match date (UTC) and aggregate.
+        buckets: dict[date, list[float]] = {}
+        for pred, match in rows:
+            d: date | None = None
+            if match and match.date is not None:
+                md = match.date
+                if md.tzinfo is None:
+                    md = md.replace(tzinfo=timezone.utc)
+                if md < since:
+                    continue
+                d = md.date()
+            elif pred.match_date is not None:
+                md_dt = datetime(
+                    pred.match_date.year, pred.match_date.month, pred.match_date.day,
+                    tzinfo=timezone.utc,
+                )
+                if md_dt < since:
+                    continue
+                d = pred.match_date
+            if d is None:
+                continue
+            buckets.setdefault(d, []).append(float(pred.clv))
+
+        all_clvs = [v for vals in buckets.values() for v in vals]
+        n = len(all_clvs)
+        avg_clv = round(sum(all_clvs) / n, 4) if n else 0.0
+        pos_rate = round(sum(1 for v in all_clvs if v > 0) / n, 4) if n else 0.0
+
+        trend = [
+            {
+                "date":    d.isoformat(),
+                "avg_clv": round(sum(vals) / len(vals), 4),
+                "n":       len(vals),
+            }
+            for d, vals in sorted(buckets.items())
+        ]
+
+        return {
+            "model":    model,
+            "days":     days,
+            "avg_clv":  avg_clv,
+            "n_picks":  n,
+            "pos_rate": pos_rate,
+            "trend":    trend,
+        }
+    finally:
+        db.close()
+
+
 @app.get("/api/compare")
 def get_compare(period: str = Query("30d")):
     """Порівняння всіх трьох моделей за period."""

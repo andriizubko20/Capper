@@ -9,6 +9,7 @@ from scheduler.tasks.generate_picks_monster import run_generate_picks_monster
 from scheduler.tasks.generate_picks_aquamarine import run_generate_picks_aquamarine
 from scheduler.tasks.generate_picks_pure import run_generate_picks_pure
 from scheduler.tasks.rebalance_stakes import run_rebalance_stakes
+from scheduler.tasks.rebuild_stakes_chronological import rebuild as run_rebuild_stakes_chronological
 from scheduler.tasks.update_team_ratings import run_update_team_ratings
 from scheduler.tasks.track_odds_movement import run_track_odds_movement
 from scheduler.tasks.collect_injuries import run_collect_injuries
@@ -29,6 +30,7 @@ def _run_pure_late():
     )
 from scheduler.tasks.update_monster_p_is import run_update_monster_p_is
 from scheduler.tasks.update_clv import run_clv_update
+from scheduler.tasks.clv_monitor import run_clv_monitor
 from scheduler.tasks.update_results import run_update_results
 from scheduler.tasks.live_tracker import run_live_tracker
 from scheduler.tasks.confirm_picks import run_confirm_picks
@@ -164,6 +166,17 @@ def start() -> None:
         misfire_grace_time=300,
     )
 
+    # Раз на тиждень (неділя 04:00 UTC) — повний рекомпьют історичних stakes/pnls
+    # з compound Kelly. Idempotent — нічого не змінить якщо все вже консистентно.
+    # Захищає від drift після backfill або ручних правок.
+    scheduler.add_job(
+        run_rebuild_stakes_chronological,
+        CronTrigger(day_of_week="sun", hour=4, minute=0),
+        id="rebuild_stakes_chronological",
+        name="Rebuild all stakes chronologically (weekly Sun 04:00)",
+        misfire_grace_time=3600,
+    )
+
     # Кожні 3 хвилини — live tracking (score + result для завершених матчів)
     scheduler.add_job(
         run_live_tracker,
@@ -198,6 +211,17 @@ def start() -> None:
         id="update_clv",
         name="Update CLV for finished matches",
         misfire_grace_time=300,
+    )
+
+    # 08:00 UTC щодня — моніторинг CLV (rolling 30d avg per model).
+    # Шле Telegram alert якщо модель пробила -2% поріг (або відновилася).
+    # Запускається після нічного update_clv (23:00) — свіжі closing odds вже є.
+    scheduler.add_job(
+        run_clv_monitor,
+        CronTrigger(hour=8, minute=0),
+        id="clv_monitor",
+        name="CLV monitoring (daily 08:00 UTC)",
+        misfire_grace_time=3600,
     )
 
     # 02:00 UTC = 05:00 Київ — нічне завантаження нових ліг

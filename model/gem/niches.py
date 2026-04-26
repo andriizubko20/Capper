@@ -56,3 +56,13 @@ MAX_ODDS = 3.00
 
 # Kelly/stake config
 FLAT_STAKE_FRAC = 0.04  # 4% of current bankroll
+
+# ── Movement filter (sharp-money signal) ─────────────────────────────────
+# Toggle + thresholds for `model.gem.movement_filter`. See movement_filter.md
+# for full design rationale. Filter is graceful: insufficient data → allow.
+ENABLE_MOVEMENT_FILTER       = True
+MOVEMENT_DRIFT_THRESHOLD     = 0.05   # 5% odds drift against us → skip
+MOVEMENT_VELOCITY_THRESHOLD  = 0.03   # 3% shift in last 30 min against us → skip
+MOVEMENT_DISPERSION_THRESHOLD = 0.10  # std/mean > 10% across books → skip
+MOVEMENT_MIN_SNAPSHOTS       = 3      # need ≥3 snapshots to compute drift
+MOVEMENT_MIN_BOOKMAKERS      = 2      # need ≥2 books for dispersion

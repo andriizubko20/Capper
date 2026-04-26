@@ -11,6 +11,10 @@ CANONICAL_VERSIONS: frozenset[str] = frozenset({
 
 class Settings(BaseSettings):
     telegram_bot_token: str = ""
+    # Telegram chat ID to receive admin/operational alerts (e.g. CLV monitor).
+    # Numeric (positive for user, negative for group/channel). Set via
+    # ADMIN_CHAT_ID env var or .env. Empty = alerts disabled (logged only).
+    admin_chat_id: str = ""
     sstats_api_key: str = ""
     sstats_api_host: str = "https://api.sstats.net"
     api_football_key: str = ""         # API-Football v3 (free tier 100 req/day)

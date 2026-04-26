@@ -19,7 +19,8 @@ import pandas as pd
 from loguru import logger
 
 from config.settings import settings
-from db.models import League as LeagueModel, Match, Odds, Prediction, TeamRating
+from data.best_odds import best_1x2_odds
+from db.models import League as LeagueModel, Match, Prediction, TeamRating
 from db.session import SessionLocal
 from model.gem.team_state import build_h2h, build_team_state
 from model.glicko.algorithm import TeamRating as TR, expected_score
@@ -174,18 +175,8 @@ def _build_match_features(db, match: Match, team_state: dict, h2h_dict: dict) ->
         logger.debug(f"[Pure] No Glicko (self or SStats) for match {match.id}, skip")
         return None
 
-    # Odds — from latest snapshot
-    odds_rows = db.query(Odds).filter(
-        Odds.match_id == match.id, Odds.market == "1x2",
-    ).all()
-    by_outcome: dict[str, float] = {}
-    for o in odds_rows:
-        # Take freshest (highest recorded_at) per outcome
-        if o.outcome not in by_outcome:
-            by_outcome[o.outcome] = o.value
-    home_odds = by_outcome.get("home")
-    draw_odds = by_outcome.get("draw")
-    away_odds = by_outcome.get("away")
+    # Odds — bookmaker shopping: best price per outcome across ALL bookmakers.
+    home_odds, draw_odds, away_odds = best_1x2_odds(db, match.id, is_closing=False)
     if not (home_odds and draw_odds and away_odds):
         logger.debug(f"[Pure] No 1x2 odds for match {match.id}, skip")
         return None

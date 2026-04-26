@@ -33,15 +33,20 @@ def collect_odds_for_upcoming(db, client) -> None:
                 for o in odds_list:
                     if o["market"] not in ("1x2", "double_chance"):
                         continue
+                    # Bookmaker shopping: store one row per
+                    # (match, market, bookmaker, outcome). Multiple bookmakers
+                    # per match are kept so downstream picks can shop the BEST
+                    # price across all of them.
                     exists = db.query(Odds).filter_by(
                         match_id=match.id,
                         market=o["market"],
+                        bookmaker=o["bookmaker"],
                         outcome=o["outcome"],
+                        is_closing=False,
                     ).first()
                     if exists:
-                        # Оновлюємо поточний коефіцієнт (opening_value не чіпаємо)
+                        # Refresh the current price; do not touch opening_value.
                         exists.value = o["odds"]
-                        exists.bookmaker = o["bookmaker"]
                         updated_odds += 1
                     else:
                         db.add(Odds(

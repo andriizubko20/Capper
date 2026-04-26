@@ -33,11 +33,13 @@ import pandas as pd
 from loguru import logger
 
 from config.settings import settings
-from db.models import League as LeagueModel, Match, Odds, Prediction, TeamRating
+from data.best_odds import best_1x2_odds
+from db.models import League as LeagueModel, Match, Prediction, TeamRating
 from db.session import SessionLocal
 from model.gem.calibration import GemCalibrator
 from model.gem.ensemble import GemEnsemble
 from model.gem.features import build_gem_features, expected_feature_names, market_probs
+from model.gem.movement_filter import movement_signals, should_skip_pick
 from model.gem.niches import (
     FLAT_STAKE_FRAC,  # noqa: F401  (kept for parity with niches.py constants)
     MAX_DRAW_PROB,
@@ -216,15 +218,12 @@ def _has_injury(db, match_id: int, team_id: int) -> bool:
 
 
 def _latest_1x2_odds(db, match_id: int) -> tuple[float | None, float | None, float | None]:
-    """Latest 1x2 odds per outcome (first row per outcome assumed freshest)."""
-    odds_rows = db.query(Odds).filter(
-        Odds.match_id == match_id, Odds.market == "1x2",
-    ).all()
-    by_outcome: dict[str, float] = {}
-    for o in odds_rows:
-        if o.outcome not in by_outcome:
-            by_outcome[o.outcome] = o.value
-    return by_outcome.get("home"), by_outcome.get("draw"), by_outcome.get("away")
+    """Best 1x2 odds per outcome across ALL bookmakers (bookmaker shopping).
+
+    Each side picked independently from whichever bookmaker offers the highest
+    price. See data/best_odds.py for the trade-off note (best odds used for
+    both stake and devig — simple, slightly conservative on EV)."""
+    return best_1x2_odds(db, match_id, is_closing=False)
 
 
 # ── Feature row construction for inference ───────────────────────────────
@@ -492,6 +491,19 @@ def run_generate_picks_gem(
             ev = round(p_side * odds_val - 1, 4)
             if ev <= 0:
                 continue
+
+            # Sharp-money filter: skip picks where the line has moved
+            # against us. Graceful — sparse data → allow.
+            try:
+                sigs = movement_signals(db, match.id)
+                skip, reason = should_skip_pick(sigs, side)
+                if skip:
+                    logger.info(
+                        f"[Gem] Skip {match.id} ({side}) — line moved against us: {reason}"
+                    )
+                    continue
+            except Exception as e:  # never let the filter break pick gen
+                logger.warning(f"[Gem] movement_filter error on {match.id}: {e}")
 
             b = odds_val - 1
             f_star = max(0.0, (p_side * b - (1 - p_side)) / b) if b > 0 else 0.0

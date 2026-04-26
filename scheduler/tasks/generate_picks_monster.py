@@ -59,7 +59,10 @@ def _get_p_is(db, matches, stats, odds_df, league, niche_str) -> float | None:
 
 
 def _load_odds_batch(match_ids: list[int], db) -> dict[int, dict]:
-    """Load odds for all matches in one query instead of N separate queries."""
+    """Best 1x2 odds per outcome per match across ALL bookmakers.
+
+    Bookmaker shopping: for each (match, outcome) we keep the highest price
+    across all bookmakers — single batch query, grouped client-side."""
     rows = db.query(Odds).filter(
         Odds.match_id.in_(match_ids),
         Odds.market == '1x2',
@@ -67,7 +70,16 @@ def _load_odds_batch(match_ids: list[int], db) -> dict[int, dict]:
     ).all()
     result: dict[int, dict] = {}
     for o in rows:
-        result.setdefault(o.match_id, {})[o.outcome] = o.value
+        try:
+            v = float(o.value)
+        except (TypeError, ValueError):
+            continue
+        if v <= 1.0:
+            continue
+        m_dict = result.setdefault(o.match_id, {})
+        cur = m_dict.get(o.outcome)
+        if cur is None or v > cur:
+            m_dict[o.outcome] = v
     return result
 
 

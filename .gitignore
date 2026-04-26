@@ -35,3 +35,11 @@ Thumbs.db
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Model training artifacts (regeneratable, large)
+model/*/artifacts/*.npz
+model/*/artifacts/*.parquet
+model/*/reports/
+
+# Agent worktrees (transient)
+.claude/worktrees/agent-*/

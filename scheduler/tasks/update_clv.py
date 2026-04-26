@@ -3,7 +3,7 @@ from datetime import date, datetime, timedelta, timezone
 from loguru import logger
 
 from data.api_client import SStatsClient
-from data.collectors.odds import fetch_closing_odds
+from data.collectors.odds import fetch_reference_closing_odds
 from db.models import Match, Odds, Prediction
 from db.session import SessionLocal
 
@@ -31,7 +31,11 @@ def run_clv_update() -> None:
             updated = 0
             for match in matches:
                 try:
-                    closing = fetch_closing_odds(match.api_id, client)
+                    # CLV is computed against ONE reference bookmaker
+                    # (Pinnacle preferred — sharpest line) for stable
+                    # apples-to-apples comparisons over time. We still persist
+                    # closing rows for all sides of that single bookmaker.
+                    closing = fetch_reference_closing_odds(match.api_id, client)
                     closing_map = {o["outcome"]: o["odds"] for o in closing if o["market"] == "1x2"}
 
                     predictions = db.query(Prediction).filter_by(match_id=match.id).all()

@@ -10,7 +10,8 @@ from datetime import datetime, timedelta, timezone
 from loguru import logger
 
 from config.settings import settings
-from db.models import Match, Odds, Prediction
+from data.best_odds import best_1x2_odds_dict
+from db.models import Match, Prediction
 from db.session import SessionLocal
 from model.aquamarine.niches import MODELS, OOS_START, HIGH_RISK_ODDS, parse_niche, match_niche
 from model.monster.niches import LEAGUE_API_IDS as AQUAMARINE_LEAGUE_API_IDS
@@ -41,10 +42,9 @@ def _get_p_is(matches, stats, odds_df, league, niche_str) -> float | None:
 
 
 def _get_odds(match_id: int, db) -> dict | None:
-    rows = db.query(Odds).filter_by(match_id=match_id, market='1x2', is_closing=False).all()
-    if not rows:
-        return None
-    return {o.outcome: o.value for o in rows}
+    """Best 1x2 odds per outcome across ALL bookmakers (bookmaker shopping)."""
+    out = best_1x2_odds_dict(db, match_id, is_closing=False)
+    return out or None
 
 
 def _compute_bankroll(db, initial: float, model_ver: str) -> float:

@@ -27,12 +27,13 @@ KELLY_CAP   = 0.10
 STARTING_BK = 1000.0
 FINISHED = {"Finished", "FT", "finished", "ft", "Match Finished"}
 
-# Models that use Kelly+cap sizing — Pure shares the convention
+# Models that use Kelly+cap sizing — Pure and Gem share the convention
 KELLY_VERSIONS = [
     "ws_gap_kelly_v1",
     "monster_v1_kelly",
     "aquamarine_v1_kelly",
     "pure_v1",
+    "gem_v1",
 ]
 
 
