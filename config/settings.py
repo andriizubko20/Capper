@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     bankroll: float = 1000.0
     picks_hours_before: int = 5        # фінальний пік за N годин до старту матчу
     picks_hours_before_late: float = 1.5  # late-pass pick after lineups confirmed
-    early_picks_days_ahead: int = 4    # ранній пік — матчі до N днів вперед
+    early_picks_days_ahead: int = 7    # ранній пік — матчі до N днів вперед (used as upper bound in generate_picks_*)
 
     # Mini App URL
     miniapp_url: str = "https://aqua-traders.online"

@@ -396,7 +396,7 @@ def run_generate_picks_gem(
     if match_date_from is None:
         match_date_from = now + timedelta(hours=settings.picks_hours_before - 0.5)
     if match_date_to is None:
-        match_date_to = now + timedelta(hours=settings.picks_hours_before + 0.5)
+        match_date_to = now + timedelta(days=settings.early_picks_days_ahead)
 
     logger.info(
         f"[Gem] Generating picks | window: "
