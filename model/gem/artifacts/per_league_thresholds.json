@@ -1,5 +1,5 @@
 {
-  "Serie A": {
+  "Italy: Serie A": {
     "devig": "shin",
     "min_odds": 1.4,
     "max_odds": 3.0,
@@ -13,7 +13,7 @@
     "wilson_lower_95": 0.5974,
     "avg_odds": 1.9
   },
-  "La Liga": {
+  "Spain: La Liga": {
     "devig": "proportional",
     "min_odds": 1.5,
     "max_odds": 3.0,
@@ -27,7 +27,7 @@
     "wilson_lower_95": 0.5353,
     "avg_odds": 1.92
   },
-  "Eredivisie": {
+  "Netherlands: Eredivisie": {
     "devig": "shin",
     "min_odds": 1.5,
     "max_odds": 2.5,
@@ -41,7 +41,7 @@
     "wilson_lower_95": 0.4734,
     "avg_odds": 1.68
   },
-  "Bundesliga": {
+  "Germany: Bundesliga": {
     "devig": "proportional",
     "min_odds": 1.4,
     "max_odds": 3.0,
@@ -55,7 +55,7 @@
     "wilson_lower_95": 0.4677,
     "avg_odds": 2.3
   },
-  "Ligue 1": {
+  "France: Ligue 1": {
     "devig": "proportional",
     "min_odds": 1.4,
     "max_odds": 2.5,
@@ -69,7 +69,7 @@
     "wilson_lower_95": 0.4677,
     "avg_odds": 1.58
   },
-  "Jupiler Pro League": {
+  "Belgium: Jupiler Pro League": {
     "devig": "proportional",
     "min_odds": 1.4,
     "max_odds": 2.5,
@@ -83,7 +83,7 @@
     "wilson_lower_95": 0.5795,
     "avg_odds": 1.64
   },
-  "Champions League": {
+  "Europe: Champions League": {
     "devig": "proportional",
     "min_odds": 1.4,
     "max_odds": 3.0,

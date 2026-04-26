@@ -18,16 +18,17 @@ import numpy as np
 import pandas as pd
 from loguru import logger
 
+from sqlalchemy import tuple_
+
 from config.settings import settings
 from db.models import League as LeagueModel, Match, Prediction
 from db.session import SessionLocal
 from model.gem.features import expected_feature_names
-from model.gem.niches import TARGET_LEAGUES
+from model.gem.niches import TARGET_LEAGUES, to_canonical
 from model.gem.team_state import build_h2h, build_team_state
 from scheduler.tasks.generate_picks_gem import (
     KELLY_CAP,
     KELLY_FRAC,
-    LEAGUE_COUNTRY,
     MODEL_VERSION,
     _build_match_row,
     _compute_bankroll,
@@ -58,15 +59,8 @@ def run_backfill(date_from: datetime | str, date_to: datetime | str | None = Non
         matches = db.query(Match).join(LeagueModel).filter(
             Match.date >= date_from,
             Match.date <= date_to,
-            LeagueModel.name.in_(TARGET_LEAGUES),
+            tuple_(LeagueModel.name, LeagueModel.country).in_(list(TARGET_LEAGUES)),
         ).all()
-        matches = [
-            m for m in matches
-            if m.league and (
-                m.league.name == "Champions League"
-                or m.league.country == LEAGUE_COUNTRY.get(m.league.name)
-            )
-        ]
         logger.info(f"[Gem backfill] Found {len(matches)} matches in window")
 
         # Build state from full history (finished + upcoming).
@@ -122,9 +116,11 @@ def run_backfill(date_from: datetime | str, date_to: datetime | str | None = Non
         added = 0
         for i, match in enumerate(match_objs):
             home_odds, draw_odds, away_odds = odds_cache[match.id]
-            league_name = match.league.name if match.league else None
+            league_canonical = (
+                to_canonical(match.league.name, match.league.country) if match.league else None
+            )
             decision = _gem_pick_for_match(
-                proba_cal[i], home_odds, draw_odds, away_odds, league=league_name,
+                proba_cal[i], home_odds, draw_odds, away_odds, league=league_canonical,
             )
             if decision is None:
                 continue
@@ -155,7 +151,7 @@ def run_backfill(date_from: datetime | str, date_to: datetime | str | None = Non
                 kelly_fraction=round(kelly, 4),
                 stake=stake,
                 model_version=MODEL_VERSION,
-                league_name=league_name,
+                league_name=match.league.name if match.league else None,
                 home_name=home,
                 away_name=away,
                 match_date=match.date,

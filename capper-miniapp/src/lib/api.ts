@@ -71,7 +71,7 @@ interface ApiStats {
   totalBets: number
   avgOdds: number
   streak: { result: string; id: string }[]
-  byLeague: { league: string; flag: string; bets: number; winRate: number; pnl: number; roi: number }[]
+  byLeague: { league: string; country?: string; flag: string; bets: number; winRate: number; pnl: number; roi: number }[]
   curve: number[]           // bankroll curve: починається з ~1000
 }
 

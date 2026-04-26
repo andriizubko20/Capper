@@ -5,10 +5,11 @@ Loads historical data for Gem model training and backtesting.
 """
 import pandas as pd
 from loguru import logger
-from sqlalchemy import text
+from sqlalchemy import text, tuple_
 
+from db.models import League as LeagueModel
 from db.session import SessionLocal
-from model.gem.niches import TARGET_LEAGUES
+from model.gem.niches import TARGET_LEAGUES, to_canonical
 
 
 def load_historical() -> dict[str, pd.DataFrame]:
@@ -23,30 +24,43 @@ def load_historical() -> dict[str, pd.DataFrame]:
     """
     db = SessionLocal()
     try:
-        leagues_sql = tuple(TARGET_LEAGUES)
+        # Resolve TARGET_LEAGUES (set of (name, country) tuples) → list of league.id.
+        # Tuples-IN at SQL level is awkward to portably express; doing the lookup in
+        # SQLAlchemy and feeding a tuple of integers to the raw-SQL queries keeps
+        # the rest of the loaders unchanged.
+        league_rows = (
+            db.query(LeagueModel.id, LeagueModel.name, LeagueModel.country)
+            .filter(tuple_(LeagueModel.name, LeagueModel.country).in_(list(TARGET_LEAGUES)))
+            .all()
+        )
+        if not league_rows:
+            logger.warning("Loaded zero target leagues from DB — check TARGET_LEAGUES")
+        league_ids = tuple(r.id for r in league_rows) or (-1,)
+        league_canonical_by_id = {r.id: to_canonical(r.name, r.country) for r in league_rows}
 
         matches = pd.DataFrame(
             db.execute(
                 text(
                     """
-                    SELECT m.id AS match_id, m.date, l.name AS league_name,
+                    SELECT m.id AS match_id, m.date, m.league_id,
                            m.home_team_id, m.away_team_id,
                            m.home_score, m.away_score
-                    FROM matches m JOIN leagues l ON l.id = m.league_id
+                    FROM matches m
                     WHERE m.status IN ('Finished','FT','finished','ft','Match Finished')
                       AND m.home_score IS NOT NULL AND m.away_score IS NOT NULL
-                      AND l.name IN :leagues
+                      AND m.league_id IN :league_ids
                     ORDER BY m.date ASC
                     """
                 ),
-                {"leagues": leagues_sql},
+                {"league_ids": league_ids},
             ).fetchall(),
             columns=[
-                "match_id", "date", "league_name",
+                "match_id", "date", "league_id",
                 "home_team_id", "away_team_id", "home_score", "away_score",
             ],
         )
         matches["date"] = pd.to_datetime(matches["date"])
+        matches["league_name"] = matches["league_id"].map(league_canonical_by_id)
         matches["result"] = matches.apply(
             lambda r: "H" if r.home_score > r.away_score
             else ("A" if r.away_score > r.home_score else "D"),
@@ -67,12 +81,11 @@ def load_historical() -> dict[str, pd.DataFrame]:
                            s.home_win_prob, s.away_win_prob
                     FROM match_stats s
                     JOIN matches m ON m.id = s.match_id
-                    JOIN leagues l ON l.id = m.league_id
                     WHERE m.home_score IS NOT NULL
-                      AND l.name IN :leagues
+                      AND m.league_id IN :league_ids
                     """
                 ),
-                {"leagues": leagues_sql},
+                {"league_ids": league_ids},
             ).fetchall(),
             columns=[
                 "match_id", "home_xg", "away_xg",
@@ -95,13 +108,12 @@ def load_historical() -> dict[str, pd.DataFrame]:
                            MAX(CASE WHEN o.outcome='away' THEN o.value END) AS away_odds
                     FROM odds o
                     JOIN matches m ON m.id = o.match_id
-                    JOIN leagues l ON l.id = m.league_id
                     WHERE o.market='1x2' AND o.is_closing=false
-                      AND l.name IN :leagues
+                      AND m.league_id IN :league_ids
                     GROUP BY o.match_id
                     """
                 ),
-                {"leagues": leagues_sql},
+                {"league_ids": league_ids},
             ).fetchall(),
             columns=["match_id", "home_odds", "draw_odds", "away_odds"],
         )
@@ -113,12 +125,11 @@ def load_historical() -> dict[str, pd.DataFrame]:
                     SELECT i.match_id, i.team_id, COUNT(*) AS cnt
                     FROM injury_reports i
                     JOIN matches m ON m.id = i.match_id
-                    JOIN leagues l ON l.id = m.league_id
-                    WHERE l.name IN :leagues
+                    WHERE m.league_id IN :league_ids
                     GROUP BY i.match_id, i.team_id
                     """
                 ),
-                {"leagues": leagues_sql},
+                {"league_ids": league_ids},
             ).fetchall(),
             columns=["match_id", "team_id", "cnt"],
         )

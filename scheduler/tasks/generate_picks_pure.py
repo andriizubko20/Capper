@@ -30,21 +30,22 @@ MODEL_VERSION = "pure_v1"
 KELLY_FRAC = 0.25
 KELLY_CAP = 0.10
 
-# Allowlist (league_name, country) to avoid name collisions
+# Allowlist of (league_name, country) pairs to avoid name collisions
 # (e.g. German vs Austrian Bundesliga, English vs Ukrainian Premier League).
-# We filter by country instead of api_id because different SStats/API-Football
-# ID systems may be used in different DB snapshots.
-LEAGUE_COUNTRY: dict[str, str] = {
-    "Premier League":     "England",
-    "La Liga":            "Spain",
-    "Bundesliga":         "Germany",
-    "Serie A":            "Italy",
-    "Serie B":            "Italy",
-    "Ligue 1":            "France",
-    "Primeira Liga":      "Portugal",
-    "Eredivisie":         "Netherlands",
-    "Jupiler Pro League": "Belgium",
-    "Champions League":   "World",   # actual country may differ; not strict
+# We filter by (name, country) because different SStats/API-Football ID systems
+# may be used in different DB snapshots. Champions League is country='Europe'
+# in our schema and the entry below matches that.
+PURE_LEAGUE_KEYS: set[tuple[str, str]] = {
+    ("Premier League",     "England"),
+    ("La Liga",            "Spain"),
+    ("Bundesliga",         "Germany"),
+    ("Serie A",            "Italy"),
+    ("Serie B",            "Italy"),
+    ("Ligue 1",            "France"),
+    ("Primeira Liga",      "Portugal"),
+    ("Eredivisie",         "Netherlands"),
+    ("Jupiler Pro League", "Belgium"),
+    ("Champions League",   "Europe"),
 }
 
 ARTIFACTS = Path(__file__).parents[2] / "model" / "pure" / "artifacts"
@@ -329,13 +330,12 @@ def run_generate_picks_pure(
             Match.status == "Not Started",
             LeagueModel.name.in_(pure_leagues),
         ).all()
-        # Filter by allowlist country to avoid name collisions
+        # Filter by (name, country) allowlist to avoid name collisions —
+        # this is the only line that protects Pure from picking up e.g.
+        # Ukrainian Premier League fixtures.
         upcoming = [
             m for m in upcoming
-            if m.league and (
-                m.league.name == "Champions League" or  # accept any country for UCL
-                m.league.country == LEAGUE_COUNTRY.get(m.league.name)
-            )
+            if m.league and (m.league.name, m.league.country) in PURE_LEAGUE_KEYS
         ]
 
         if not upcoming:

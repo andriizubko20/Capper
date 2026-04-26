@@ -208,7 +208,9 @@ def sweep_filter(
 
 # ── 3. per-cluster + per-league breakdown ────────────────────────────────────
 
-TOP5_UCL = {"Premier League", "La Liga", "Bundesliga", "Serie A", "Ligue 1", "Champions League"}
+# Picks DF carries canonical "Country: Name" league_name (see niches.to_canonical).
+# Use the shared classifier so we don't drift from TARGET_LEAGUES / TOP5_UCL.
+from model.gem.niches import league_cluster as _league_cluster_fn  # noqa: E402
 
 
 def per_cluster(picks: pd.DataFrame) -> dict:
@@ -216,7 +218,7 @@ def per_cluster(picks: pd.DataFrame) -> dict:
         return {"n": 0}
     picks = picks.copy()
     picks["cluster"] = picks["league_name"].apply(
-        lambda l: "top5_ucl" if l in TOP5_UCL else "second_tier"
+        lambda l: "top5_ucl" if _league_cluster_fn(l) == "top5_ucl" else "second_tier"
     )
     cluster_stats = picks.groupby("cluster").agg(
         n=("won", "size"),

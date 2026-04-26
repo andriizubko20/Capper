@@ -48,27 +48,18 @@ from model.gem.niches import (
     MIN_GEM_SCORE,
     MIN_ODDS,
     TARGET_LEAGUES,
+    to_canonical,
 )
 from model.gem.team_state import build_h2h, build_team_state
+from sqlalchemy import tuple_
 
 MODEL_VERSION = "gem_v1"
 KELLY_FRAC = 0.25
 KELLY_CAP = 0.10
 
-# Same allowlist as Pure — country guard against name collisions
-# (e.g. German vs Austrian Bundesliga, English vs Ukrainian Premier League).
-LEAGUE_COUNTRY: dict[str, str] = {
-    "Premier League":     "England",
-    "La Liga":            "Spain",
-    "Bundesliga":         "Germany",
-    "Serie A":            "Italy",
-    "Serie B":            "Italy",
-    "Ligue 1":            "France",
-    "Primeira Liga":      "Portugal",
-    "Eredivisie":         "Netherlands",
-    "Jupiler Pro League": "Belgium",
-    "Champions League":   "World",   # accept any country for UCL
-}
+# League name + country uniquely identify a league. TARGET_LEAGUES is now a set
+# of (name, country) tuples (see model/gem/niches.py) — country guard against
+# name collisions is built into the filter, no separate LEAGUE_COUNTRY map needed.
 
 ARTIFACTS = Path(__file__).parents[2] / "model" / "gem" / "artifacts"
 PER_LEAGUE_PATH = ARTIFACTS / "per_league_thresholds.json"
@@ -135,16 +126,21 @@ def _load_historical_for_state(db) -> tuple[pd.DataFrame, pd.DataFrame]:
     from sqlalchemy import text
     matches = pd.DataFrame(db.execute(text(
         """
-        SELECT m.id AS match_id, m.date, m.league_id, l.name AS league_name,
+        SELECT m.id AS match_id, m.date, m.league_id,
+               l.name AS league_raw_name, l.country AS league_country,
                m.home_team_id, m.away_team_id, m.home_score, m.away_score
         FROM matches m JOIN leagues l ON l.id = m.league_id
         ORDER BY m.date ASC
         """
     )).fetchall(), columns=[
-        "match_id", "date", "league_id", "league_name",
+        "match_id", "date", "league_id", "league_raw_name", "league_country",
         "home_team_id", "away_team_id", "home_score", "away_score",
     ])
     matches["date"] = pd.to_datetime(matches["date"])
+    # Disambiguated canonical league identifier — used everywhere downstream
+    matches["league_name"] = [
+        to_canonical(n, c) for n, c in zip(matches["league_raw_name"], matches["league_country"])
+    ]
 
     def _result(r):
         if r.home_score is None or r.away_score is None or pd.isna(r.home_score) or pd.isna(r.away_score):
@@ -275,10 +271,12 @@ def _build_match_row(
     home_inj = _has_injury(db, match.id, match.home_team_id)
     away_inj = _has_injury(db, match.id, match.away_team_id)
 
-    league_name = match.league.name if match.league else None
+    if match.league is None:
+        return None
+    league_canonical = to_canonical(match.league.name, match.league.country)
     feat = build_gem_features(
         match_date=pd.Timestamp(match.date),
-        league_name=league_name,
+        league_canonical=league_canonical,
         home_state=h_state,
         away_state=a_state,
         h2h=h2h_dict.get(match.id, {}),
@@ -293,7 +291,7 @@ def _build_match_row(
     info = {
         "match_id":    match.id,
         "date":        pd.Timestamp(match.date),
-        "league_name": league_name,
+        "league_name": league_canonical,
     }
     return row, info
 
@@ -414,15 +412,8 @@ def run_generate_picks_gem(
             Match.date >= match_date_from.replace(tzinfo=None),
             Match.date <= match_date_to.replace(tzinfo=None),
             Match.status == "Not Started",
-            LeagueModel.name.in_(TARGET_LEAGUES),
+            tuple_(LeagueModel.name, LeagueModel.country).in_(list(TARGET_LEAGUES)),
         ).all()
-        upcoming = [
-            m for m in upcoming
-            if m.league and (
-                m.league.name == "Champions League"
-                or m.league.country == LEAGUE_COUNTRY.get(m.league.name)
-            )
-        ]
         if not upcoming:
             logger.info("[Gem] No matches in window, skipping")
             return
@@ -478,9 +469,11 @@ def run_generate_picks_gem(
         new_picks = 0
         for i, match in enumerate(match_objs):
             home_odds, draw_odds, away_odds = odds_cache[match.id]
-            league_name = match.league.name if match.league else None
+            league_canonical = (
+                to_canonical(match.league.name, match.league.country) if match.league else None
+            )
             decision = _gem_pick_for_match(
-                proba_cal[i], home_odds, draw_odds, away_odds, league=league_name,
+                proba_cal[i], home_odds, draw_odds, away_odds, league=league_canonical,
             )
             if decision is None:
                 continue
@@ -531,7 +524,9 @@ def run_generate_picks_gem(
                 kelly_fraction=round(kelly, 4),
                 stake=stake,
                 model_version=MODEL_VERSION,
-                league_name=league_name,
+                # Persist raw display name; canonical form is recoverable from
+                # match.league.country via the API serializer.
+                league_name=match.league.name if match.league else None,
                 home_name=home,
                 away_name=away,
                 match_date=match.date,

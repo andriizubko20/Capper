@@ -20,7 +20,18 @@ MODEL_VERSIONS: dict[str, list[str]] = {
     "Gem":     ["gem_v1"],
 }
 
-LEAGUE_FLAGS: dict[str, str] = {
+# Flag lookup is hybrid:
+#   - (name, country) tuple keys disambiguate collisions ("Premier League" lives
+#     in both England and Ukraine).
+#   - Plain-string keys are used as a fallback when country is unknown or for
+#     leagues whose name is globally unique.
+# api/main.py::prediction_to_pick tries the tuple key first, then the string.
+LEAGUE_FLAGS: dict[tuple[str, str] | str, str] = {
+    # Disambiguated by country
+    ("Premier League", "England"): "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    ("Premier League", "Ukraine"): "🇺🇦",
+    ("Champions League", "Europe"): "🏆",
+    # Globally unique names (fallback)
     "Premier League":        "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
     "La Liga":               "🇪🇸",
     "Bundesliga":            "🇩🇪",

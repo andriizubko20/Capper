@@ -2,39 +2,69 @@
 model/gem/niches.py
 
 Constants for Gem model: league clusters, target leagues, one-hot names.
+
+League identity is a (name, country) tuple — both are needed because some
+league names collide across countries (e.g. "Premier League" exists in
+England and Ukraine). All single-string league IDs are produced via
+`to_canonical(name, country)` → "Country: Name" (e.g. "England: Premier League").
 """
 
 # Clusters define training groups and feature one-hot buckets.
-TOP5_UCL = {
-    "Premier League",
-    "La Liga",
-    "Bundesliga",
-    "Serie A",
-    "Ligue 1",
-    "Champions League",
+# Each entry is (league_name, country).
+TOP5_UCL: set[tuple[str, str]] = {
+    ("Premier League",   "England"),
+    ("La Liga",          "Spain"),
+    ("Bundesliga",       "Germany"),
+    ("Serie A",          "Italy"),
+    ("Ligue 1",          "France"),
+    ("Champions League", "Europe"),
 }
 
-SECOND_TIER = {
-    "Championship",
-    "2. Bundesliga",
-    "Eredivisie",
-    "Jupiler Pro League",
-    "Primeira Liga",
-    "Süper Lig",
-    "Eliteserien",
-    "Allsvenskan",
+SECOND_TIER: set[tuple[str, str]] = {
+    ("Championship",        "England"),
+    ("2. Bundesliga",       "Germany"),
+    ("Eredivisie",          "Netherlands"),
+    ("Jupiler Pro League",  "Belgium"),
+    ("Primeira Liga",       "Portugal"),
+    ("Süper Lig",           "Turkey"),
+    ("Eliteserien",         "Norway"),
+    ("Allsvenskan",         "Sweden"),
 }
 
-TARGET_LEAGUES = TOP5_UCL | SECOND_TIER
+TARGET_LEAGUES: set[tuple[str, str]] = TOP5_UCL | SECOND_TIER
+
+
+def to_canonical(name: str, country: str | None) -> str:
+    """Disambiguated league identifier — use everywhere a single string ID is needed.
+
+    Format: "Country: Name". Uniform — no special cases.
+    """
+    return f"{country}: {name}"
+
 
 # Deterministic order for one-hot encoding — keeps feature indices stable.
-LEAGUE_NAMES_ORDERED: list[str] = sorted(TARGET_LEAGUES)
+LEAGUE_NAMES_ORDERED: list[str] = sorted(to_canonical(n, c) for n, c in TARGET_LEAGUES)
 
 
-def league_cluster(name: str) -> str:
-    if name in TOP5_UCL:
+def league_cluster(name: str, country: str | None = None) -> str:
+    """Return cluster bucket for a league.
+
+    Accepts either a (name, country) pair or a canonical "Country: Name" string
+    via the `name` argument when country is None — the latter form is what gets
+    serialised in artifacts.
+    """
+    if country is None:
+        # `name` may already be in canonical "Country: Name" form
+        if ": " in name:
+            country, raw = name.split(": ", 1)
+            key = (raw, country)
+        else:
+            key = (name, "")
+    else:
+        key = (name, country)
+    if key in TOP5_UCL:
         return "top5_ucl"
-    if name in SECOND_TIER:
+    if key in SECOND_TIER:
         return "second_tier"
     return "other"
 

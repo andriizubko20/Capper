@@ -82,7 +82,7 @@ def build_feature_matrix(
 
         feat = build_gem_features(
             match_date=m.date,
-            league_name=m.league_name,
+            league_canonical=m.league_name,  # already in canonical "Country: Name" form
             home_state=home_state,
             away_state=away_state,
             h2h=h2h.get(mid, {}),

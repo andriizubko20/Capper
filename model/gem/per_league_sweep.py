@@ -14,9 +14,15 @@ For each league with enough data:
 Saves: model/gem/artifacts/per_league_thresholds.json
        reports/per_league_sweep.csv
 
+Keys in the JSON are CANONICAL league identifiers in "Country: Name" form
+(see model.gem.niches.to_canonical) — needed because some league names collide
+across countries (e.g. England vs Ukraine "Premier League"). The `info.parquet`
+fed in here already carries canonical names in `league_name` since the post-
+refactor `model/gem/data.py::load_historical()` produces them.
+
 Each entry:
   {
-    "League Name": {
+    "Country: League Name": {
       "devig":          "proportional" | "shin",
       "max_draw_prob":  float,
       "min_bet_prob":   float,

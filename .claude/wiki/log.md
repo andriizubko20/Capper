@@ -38,3 +38,4 @@ Append-only record of wiki operations.
 - Added n_jobs=2 в Optuna для 30-40% прискорення повного тренінгу
 - Roadmap: 2 тижні план до production Telegram + live WR
 ## [2026-04-26] ingest | Work plan: 6 blocks data infrastructure overhaul
+## [2026-04-26] ingest | Infra refactor session — per-league cherry-pick devig (+21u/yr), Kelly compounding, 3 Quick Wins, Mac proxy fix, ProxyMon + CLVMon Telegram alerts

@@ -16,6 +16,7 @@ export interface Pick {
   id: string
   model: Model
   league: string
+  leagueCountry?: string
   leagueFlag: string
   homeTeam: string
   awayTeam: string

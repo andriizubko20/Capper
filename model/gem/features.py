@@ -121,7 +121,7 @@ def market_probs(
 
 def build_gem_features(
     match_date: datetime,
-    league_name: str,
+    league_canonical: str,
     home_state: dict,
     away_state: dict,
     h2h: dict,
@@ -217,8 +217,9 @@ def build_gem_features(
     f["glicko_draw_prob"] = glicko_draw
 
     # ── 8. League context (2 binary clusters + 3 target-encoded priors + one-hot) ─
-    f["league_cluster_top5"]   = int(league_cluster(league_name) == "top5_ucl")
-    f["league_cluster_second"] = int(league_cluster(league_name) == "second_tier")
+    # `league_canonical` is the disambiguated "Country: Name" form (see niches.to_canonical).
+    f["league_cluster_top5"]   = int(league_cluster(league_canonical) == "top5_ucl")
+    f["league_cluster_second"] = int(league_cluster(league_canonical) == "second_tier")
     if league_priors is not None:
         f["league_prior_home_wr"]  = league_priors.get("home_wr")
         f["league_prior_draw_rate"] = league_priors.get("draw_rate")
@@ -229,7 +230,7 @@ def build_gem_features(
         f["league_prior_away_wr"]  = None
     for lg in LEAGUE_NAMES_ORDERED:
         key = _league_feature_key(lg)
-        f[key] = int(league_name == lg)
+        f[key] = int(league_canonical == lg)
 
     # ── 9. Composite / interaction features (v2) ──────────────────────
     # dominance_score: multiplicative interaction between strength gap and quality gap
@@ -262,8 +263,17 @@ def build_gem_features(
     return f
 
 
-def _league_feature_key(league_name: str) -> str:
-    return "is_" + league_name.lower().replace(" ", "_").replace(".", "").replace("ü", "u")
+def _league_feature_key(league_canonical: str) -> str:
+    """Stable feature-name key for one-hot column.
+
+    Accepts canonical "Country: Name" form. Sanitises colon and other punctuation
+    that would otherwise produce ugly column names.
+    """
+    s = league_canonical.lower()
+    # remove ": " separator → underscore between country and name
+    s = s.replace(": ", "_")
+    s = s.replace(" ", "_").replace(".", "").replace("ü", "u")
+    return "is_" + s
 
 
 def expected_feature_names() -> list[str]:

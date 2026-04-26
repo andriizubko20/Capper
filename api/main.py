@@ -89,10 +89,14 @@ def prediction_to_pick(pred: Prediction, match: Match) -> dict[str, Any]:
     """Серіалізує Prediction + Match у dict для фронту."""
     league_name = match.league.name if match.league else ""
     league_country = match.league.country if match.league else ""
-    flag = LEAGUE_FLAGS.get(league_name, "🏟")
-    # Resolve "Premier League" collision: Ukraine vs England
-    if league_name == "Premier League" and league_country == "Ukraine":
-        flag = "🇺🇦"
+    # Flag lookup is keyed by (name, country) → fall back to name-only,
+    # then to a globe. This handles "Premier League" / "Champions League"
+    # name collisions across countries.
+    flag = (
+        LEAGUE_FLAGS.get((league_name, league_country))
+        or LEAGUE_FLAGS.get(league_name)
+        or "🏟"
+    )
     home = match.home_team.name if match.home_team else ""
     away = match.away_team.name if match.away_team else ""
     home_id = match.home_team.api_id if match.home_team else 0
@@ -150,6 +154,7 @@ def prediction_to_pick(pred: Prediction, match: Match) -> dict[str, Any]:
     return {
         "id": str(pred.id),
         "league": league_name,
+        "leagueCountry": league_country,
         "leagueFlag": flag,
         "homeTeam": home,
         "awayTeam": away,
@@ -269,29 +274,35 @@ def get_stats(
             for p in preds[-20:]
         ]
 
-        # By league
-        league_map: dict[str, dict] = {}
+        # By league — keyed by (name, country) so colliding names (e.g.
+        # England vs Ukraine "Premier League") aggregate separately.
+        league_map: dict[tuple[str, str], dict] = {}
         for p in preds:
-            lg = (p.match.league.name if p.match and p.match.league else None) \
-                 or p.league_name or "Other"
-            if lg not in league_map:
-                league_map[lg] = {"bets": 0, "wins": 0, "pnl": 0.0, "stake": 0.0}
-            league_map[lg]["bets"] += 1
+            if p.match and p.match.league:
+                lg_key = (p.match.league.name, p.match.league.country or "")
+            else:
+                lg_key = (p.league_name or "Other", "")
+            if lg_key not in league_map:
+                league_map[lg_key] = {"bets": 0, "wins": 0, "pnl": 0.0, "stake": 0.0}
+            league_map[lg_key]["bets"] += 1
             if p.result == "win":
-                league_map[lg]["wins"] += 1
-            league_map[lg]["pnl"]   += p.pnl or 0
-            league_map[lg]["stake"] += p.stake or 0
+                league_map[lg_key]["wins"] += 1
+            league_map[lg_key]["pnl"]   += p.pnl or 0
+            league_map[lg_key]["stake"] += p.stake or 0
 
         by_league = [
             {
-                "league": lg,
-                "flag": LEAGUE_FLAGS.get(lg, "🏟"),
-                "bets": v["bets"],
+                "league":  lg_name,
+                "country": lg_country,
+                "flag":    LEAGUE_FLAGS.get((lg_name, lg_country))
+                           or LEAGUE_FLAGS.get(lg_name)
+                           or "🏟",
+                "bets":    v["bets"],
                 "winRate": round(v["wins"] / v["bets"] * 100, 1),
-                "pnl": round(v["pnl"], 2),
-                "roi": round(v["pnl"] / v["stake"] * 100, 1) if v["stake"] else 0.0,
+                "pnl":     round(v["pnl"], 2),
+                "roi":     round(v["pnl"] / v["stake"] * 100, 1) if v["stake"] else 0.0,
             }
-            for lg, v in sorted(league_map.items(), key=lambda x: -x[1]["bets"])
+            for (lg_name, lg_country), v in sorted(league_map.items(), key=lambda x: -x[1]["bets"])
         ]
 
         # Bankroll curve: стартує з STARTING_BALANCE, кожна ставка додає pnl

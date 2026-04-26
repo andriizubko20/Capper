@@ -14,9 +14,14 @@ from data.best_odds import best_1x2_odds, best_1x2_odds_dict
 
 @pytest.fixture
 def db():
-    """In-memory SQLite session with all tables created."""
+    """In-memory SQLite session — create only tables we need.
+
+    Skipping ``Base.metadata.create_all`` because some models (e.g. Lineup)
+    use Postgres-specific JSONB columns that SQLite cannot render.
+    """
     engine = create_engine("sqlite:///:memory:")
-    Base.metadata.create_all(engine)
+    for table in (League.__table__, Team.__table__, Match.__table__, Odds.__table__):
+        table.create(engine)
     Session = sessionmaker(bind=engine)
     session = Session()
     try:
