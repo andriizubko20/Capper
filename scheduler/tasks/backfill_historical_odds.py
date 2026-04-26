@@ -44,6 +44,7 @@ TARGET_LEAGUES: list[tuple[str, str]] = [
     ("Ekstraklasa",     "Poland"),
     ("Allsvenskan",     "Sweden"),
     ("Süper Lig",       "Turkey"),
+    ("Serie B",         "Italy"),
 ]
 
 DELAY = 1.5            # seconds between fixtures
