@@ -31,6 +31,7 @@ def _run_pure_late():
 from scheduler.tasks.update_monster_p_is import run_update_monster_p_is
 from scheduler.tasks.update_clv import run_clv_update
 from scheduler.tasks.clv_monitor import run_clv_monitor
+from scheduler.tasks.monitor_sstats_proxy import run_monitor_sstats_proxy
 from scheduler.tasks.update_results import run_update_results
 from scheduler.tasks.live_tracker import run_live_tracker
 from scheduler.tasks.confirm_picks import run_confirm_picks
@@ -163,6 +164,18 @@ def start() -> None:
         CronTrigger(hour="*/2", minute=50),
         id="rebalance_stakes",
         name="Rebalance stakes for unsettled picks (every 2h at :50)",
+        misfire_grace_time=300,
+    )
+
+    # Кожні 30 хв — health-check Mac SSH tunnel + socat proxy chain.
+    # SStats геоблочить datacenter IP-адреси → VPS отримує truncated 14762 байт.
+    # Tunnel через Mac (residential IP) дає повну відповідь. Якщо tunnel впав
+    # — alert у Telegram.
+    scheduler.add_job(
+        run_monitor_sstats_proxy,
+        CronTrigger(minute="*/30"),
+        id="monitor_sstats_proxy",
+        name="Monitor SStats proxy tunnel (every 30 min)",
         misfire_grace_time=300,
     )
 
