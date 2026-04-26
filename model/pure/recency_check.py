@@ -32,8 +32,26 @@ def wilson_lower(wins: int, n: int, z: float = 1.96) -> float:
 
 
 def evaluate_filtered(df: pd.DataFrame, niche: dict) -> dict:
-    """Same as compute_pis.evaluate_niche but uses pre-filtered df."""
-    return evaluate_niche(df, niche)
+    """Same as compute_pis.evaluate_niche but uses pre-filtered df.
+
+    Recency check needs raw "all rows in df" semantics (df_full vs df_recent
+    are already pre-filtered by date), so we explicitly disable the OOS split
+    inside evaluate_niche by passing oos_start=None.
+    """
+    return evaluate_niche(df, niche, oos_start=None)
+
+
+def positive_ev_at_lower_bound(p_lower_95: float, avg_odds: float | None) -> bool:
+    """Methodology guard: a niche should only be admitted when its lower-95
+    Wilson bound × avg_odds yields positive EV. Without this guard, a thin
+    sample could produce a high *point-estimate* p_is that admits noise.
+
+    Formula:  wilson_lower_95 * avg_odds - 1 > 0
+    Threshold: > 0  (strict positive EV at the lower confidence bound)
+    """
+    if avg_odds is None or p_lower_95 is None:
+        return False
+    return (p_lower_95 * avg_odds - 1.0) > 0.0
 
 
 def run(cutoff_date: str = "2025-01-01") -> None:
@@ -50,13 +68,23 @@ def run(cutoff_date: str = "2025-01-01") -> None:
     for league, niches in niches_by_league.items():
         for n in niches:
             n["_league"] = league
-            full_stats   = evaluate_niche(df_full,   n)
-            recent_stats = evaluate_niche(df_recent, n)
+            # Pass oos_start=None: recency_check splits df by date itself
+            # (df_full / df_recent), and we want the raw stats on each slice
+            # without an additional internal IS/OOS split.
+            full_stats   = evaluate_niche(df_full,   n, oos_start=None)
+            recent_stats = evaluate_niche(df_recent, n, oos_start=None)
             del n["_league"]
 
             full_p   = full_stats.get("p_is")
             recent_p = recent_stats.get("p_is")
             drift = (recent_p - full_p) if (full_p and recent_p) else None
+
+            # Methodology guard: ev_at_lower_95 must be > 0.
+            # This protects against thin-sample point estimates passing through
+            # while the lower-95 Wilson bound is actually break-even / negative.
+            full_ev_guard = positive_ev_at_lower_bound(
+                full_stats.get("p_is_lower_95"), full_stats.get("avg_odds")
+            )
 
             rows.append({
                 "league":      league,
@@ -69,25 +97,30 @@ def run(cutoff_date: str = "2025-01-01") -> None:
                 "recent_lo95": recent_stats["p_is_lower_95"],
                 "drift":       drift,
                 "avg_odds":    full_stats.get("avg_odds"),
+                "ev_lower_95_pos": full_ev_guard,
             })
 
     df_out = pd.DataFrame(rows)
 
     def verdict(r):
         if r.recent_n < 5:
-            return "🟡 small n"
+            return "small n"
         if r.recent_p_is is None:
-            return "❌ no data"
+            return "no data"
         if r.drift is None:
             return "?"
+        # Methodology guard: full-history lower-95 EV must be positive.
+        # Without it, point-estimate p_is alone could admit thin-sample noise.
+        if not r.ev_lower_95_pos:
+            return "DROP - lo95 EV<=0"
         # Strong decay = drift < -0.10 AND recent_lo95 < 0.55
         if r.drift < -0.15 and r.recent_lo95 < 0.55:
-            return "🔴 DROP — decayed"
+            return "DROP - decayed"
         if r.drift < -0.05 and r.recent_lo95 < 0.55:
-            return "🟠 watch — weakening"
+            return "watch - weakening"
         if r.recent_p_is >= r.full_p_is - 0.03:
-            return "🟢 stable"
-        return "🟡 mild drift"
+            return "stable"
+        return "mild drift"
 
     df_out["verdict"] = df_out.apply(verdict, axis=1)
     df_out.to_csv(REPORTS / "recency_check.csv", index=False)
