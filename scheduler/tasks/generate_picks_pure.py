@@ -19,9 +19,11 @@ import pandas as pd
 from loguru import logger
 
 from config.settings import settings
-from db.models import League as LeagueModel, Match, Odds, Prediction
+from db.models import League as LeagueModel, Match, Odds, Prediction, TeamRating
 from db.session import SessionLocal
 from model.gem.team_state import build_h2h, build_team_state
+from model.glicko.algorithm import TeamRating as TR, expected_score
+from model.glicko.compute import expected_home_win_prob
 
 MODEL_VERSION = "pure_v1"
 KELLY_FRAC = 0.25
@@ -123,30 +125,54 @@ def _load_match_stats_row(db, match_id: int) -> dict | None:
     }
 
 
+def _self_glicko(db, team_id: int) -> TR | None:
+    """Load self-computed Glicko rating from `team_ratings` table."""
+    row = db.query(TeamRating).filter_by(team_id=team_id).first()
+    if row is None:
+        return None
+    return TR(rating=row.rating, rd=row.rd, volatility=row.volatility)
+
+
 def _build_match_features(db, match: Match, team_state: dict, h2h_dict: dict) -> tuple[dict, dict] | None:
-    """Build (home_side_features, away_side_features) for a single match."""
+    """Build (home_side_features, away_side_features) for a single match.
+
+    Glicko priority: SELF-COMPUTED (team_ratings table) > SStats (match_stats).
+    Self-Glicko is used as primary because it's deterministic, recomputable,
+    and not subject to upstream API outages.
+    """
     h_state = team_state.get((match.id, "home"))
     a_state = team_state.get((match.id, "away"))
-
-    # If team_state lacks this match (it shouldn't if it's pre-match snapshot),
-    # try team_state by team_id from the latest snapshot built incrementally
     if h_state is None or a_state is None:
         logger.debug(f"[Pure] No team state for match {match.id}, skip")
         return None
 
-    if h_state.get("glicko_now") is None or a_state.get("glicko_now") is None:
-        logger.debug(f"[Pure] No Glicko in team state for match {match.id}, skip")
-        return None
     if h_state.get("xg_for_10") is None or a_state.get("xg_for_10") is None:
         logger.debug(f"[Pure] No xG in team state for match {match.id}, skip")
         return None
     if h_state.get("ppg_10") is None or a_state.get("ppg_10") is None:
         return None
 
-    # Match stats from DB (may be None for upcoming matches)
+    # ── Glicko: self first, fallback SStats ─────────────────────────────
+    self_h = _self_glicko(db, match.home_team_id)
+    self_a = _self_glicko(db, match.away_team_id)
+
     s_row = _load_match_stats_row(db, match.id)
-    home_glicko_prob = (s_row or {}).get("home_win_prob")
-    away_glicko_prob = (s_row or {}).get("away_win_prob")
+
+    # Override h_state/a_state glicko_now with self-Glicko if available
+    if self_h is not None and self_a is not None:
+        h_state = {**h_state, "glicko_now": self_h.rating}
+        a_state = {**a_state, "glicko_now": self_a.rating}
+        # Compute our own H/D/A probabilities from rating diff
+        p_home, p_draw, p_away = expected_home_win_prob(self_h, self_a)
+        home_glicko_prob = p_home
+        away_glicko_prob = p_away
+    elif h_state.get("glicko_now") is not None and a_state.get("glicko_now") is not None:
+        # Fallback: SStats glicko already in team_state, plus its win_prob
+        home_glicko_prob = (s_row or {}).get("home_win_prob")
+        away_glicko_prob = (s_row or {}).get("away_win_prob")
+    else:
+        logger.debug(f"[Pure] No Glicko (self or SStats) for match {match.id}, skip")
+        return None
 
     # Odds — from latest snapshot
     odds_rows = db.query(Odds).filter(

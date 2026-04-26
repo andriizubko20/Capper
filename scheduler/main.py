@@ -9,6 +9,7 @@ from scheduler.tasks.generate_picks_monster import run_generate_picks_monster
 from scheduler.tasks.generate_picks_aquamarine import run_generate_picks_aquamarine
 from scheduler.tasks.generate_picks_pure import run_generate_picks_pure
 from scheduler.tasks.rebalance_stakes import run_rebalance_stakes
+from scheduler.tasks.update_team_ratings import run_update_team_ratings
 from scheduler.tasks.update_monster_p_is import run_update_monster_p_is
 from scheduler.tasks.update_clv import run_clv_update
 from scheduler.tasks.update_results import run_update_results
@@ -66,6 +67,16 @@ def start() -> None:
         CronTrigger(minute=25),
         id="generate_picks_pure",
         name="Generate picks Pure (hourly)",
+        misfire_grace_time=300,
+    )
+
+    # Щогодини в :40 — пересчитати власний Glicko-2 з результатів finished matches.
+    # Зменшує залежність від SStats /Games/glicko/{fixture_id} endpoint.
+    scheduler.add_job(
+        run_update_team_ratings,
+        CronTrigger(minute=40),
+        id="update_team_ratings",
+        name="Update self-Glicko team ratings (hourly)",
         misfire_grace_time=300,
     )
 

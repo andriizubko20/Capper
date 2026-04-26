@@ -37,3 +37,4 @@ Append-only record of wiki operations.
 - Fixed bugs: xgb early_stopping, xgb save_model, catboost bootstrap_type/bagging_temp, lgb sklearn compat
 - Added n_jobs=2 в Optuna для 30-40% прискорення повного тренінгу
 - Roadmap: 2 тижні план до production Telegram + live WR
+## [2026-04-26] ingest | Work plan: 6 blocks data infrastructure overhaul

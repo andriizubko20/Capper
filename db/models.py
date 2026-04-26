@@ -214,3 +214,17 @@ class BankrollSnapshot(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     user: Mapped["User"] = relationship(back_populates="snapshots")
+
+
+class TeamRating(Base):
+    """Self-computed Glicko-2 rating per team. Replaces dependency on
+    SStats /Games/glicko/{fixture_id}. Updated by scheduler task."""
+    __tablename__ = "team_ratings"
+
+    team_id: Mapped[int] = mapped_column(ForeignKey("teams.id"), primary_key=True)
+    rating: Mapped[float] = mapped_column(Float, default=1500.0)
+    rd: Mapped[float] = mapped_column(Float, default=350.0)
+    volatility: Mapped[float] = mapped_column(Float, default=0.06)
+    matches_played: Mapped[int] = mapped_column(Integer, default=0)
+    last_match_date: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
