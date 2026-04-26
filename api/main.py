@@ -147,9 +147,15 @@ def prediction_to_pick(pred: Prediction, match: Match) -> dict[str, Any]:
     profit = round(pred.stake * (pred.odds_used - 1), 0) if pred.stake else 0
 
     # Derive timing from current date rather than DB field — confirm_picks only
-    # runs once daily at 07:00 UTC, so DB timing lags for early-morning matches
+    # runs once daily at 07:00 UTC, so DB timing lags for early-morning matches.
+    # Settled picks (result not None) are always "final" regardless of date.
     match_today = match.date.date() == datetime.now(timezone.utc).date()
-    timing = "final" if match_today else (pred.timing or "early")
+    if pred.result is not None:
+        timing = "final"
+    elif match_today:
+        timing = "final"
+    else:
+        timing = pred.timing or "early"
 
     return {
         "id": str(pred.id),
