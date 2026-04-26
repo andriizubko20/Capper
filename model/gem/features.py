@@ -5,6 +5,7 @@ Builds the 50-feature vector for a single match.
 
 No leakage: all inputs are expected to be PRE-match snapshots (see team_state.py).
 """
+import math
 from datetime import datetime
 
 from model.gem.niches import LEAGUE_NAMES_ORDERED, league_cluster
@@ -43,7 +44,7 @@ def market_probs_from_odds(
     draw_odds: float | None,
     away_odds: float | None,
 ) -> dict[str, float | None]:
-    """Removes bookmaker margin via normalization to 1.0."""
+    """Removes bookmaker margin via proportional normalization to 1.0."""
     if not (home_odds and draw_odds and away_odds):
         return {"home": None, "draw": None, "away": None}
     raw = {"home": 1 / home_odds, "draw": 1 / draw_odds, "away": 1 / away_odds}
@@ -51,6 +52,71 @@ def market_probs_from_odds(
     if s <= 0:
         return {"home": None, "draw": None, "away": None}
     return {k: v / s for k, v in raw.items()}
+
+
+def shin_probs_from_odds(
+    home_odds: float | None,
+    draw_odds: float | None,
+    away_odds: float | None,
+) -> dict[str, float | None]:
+    """
+    Shin (1992) de-vig: assumes a fraction z ∈ (0, 0.5) of bets come from
+    insiders with perfect info. Solves for z such that de-vigged probabilities
+    sum to 1.0 exactly. Better than proportional for draw-heavy / favorite-bias
+    markets — corrects the long-shot bias that proportional ignores.
+
+    For 3 outcomes with q_i = 1/odds_i, Q = Σ q_i:
+        true_p_i = (sqrt(z² + 4(1-z) q_i² / Q) - z) / (2(1-z))
+
+    Solves z by binary search such that Σ true_p_i = 1.
+
+    Falls back to proportional if odds are degenerate or solver fails to
+    converge (rare — happens only on near-fair markets where Q ≤ 1).
+    """
+    if not (home_odds and draw_odds and away_odds):
+        return {"home": None, "draw": None, "away": None}
+    qs = [1.0 / home_odds, 1.0 / draw_odds, 1.0 / away_odds]
+    Q = sum(qs)
+    if Q <= 1.0:
+        return {"home": qs[0] / Q, "draw": qs[1] / Q, "away": qs[2] / Q}
+
+    def sum_p(z: float) -> float:
+        if z <= 0 or z >= 1:
+            return 99.0
+        s = 0.0
+        for q in qs:
+            s += (math.sqrt(z * z + 4 * (1 - z) * q * q / Q) - z) / (2 * (1 - z))
+        return s
+
+    # Binary search for z ∈ (1e-6, 0.5) where sum_p(z) = 1.0
+    lo, hi = 1e-6, 0.5
+    if sum_p(lo) <= 1.0 or sum_p(hi) >= 1.0:
+        # Fallback: market is too tight or too loose for Shin
+        return {"home": qs[0] / Q, "draw": qs[1] / Q, "away": qs[2] / Q}
+    for _ in range(60):
+        mid = (lo + hi) / 2
+        if sum_p(mid) > 1.0:
+            lo = mid
+        else:
+            hi = mid
+    z = (lo + hi) / 2
+    p = [
+        (math.sqrt(z * z + 4 * (1 - z) * q * q / Q) - z) / (2 * (1 - z))
+        for q in qs
+    ]
+    return {"home": p[0], "draw": p[1], "away": p[2]}
+
+
+def market_probs(
+    home_odds: float | None,
+    draw_odds: float | None,
+    away_odds: float | None,
+    method: str = "proportional",
+) -> dict[str, float | None]:
+    """Dispatch to proportional or Shin de-vig."""
+    if method == "shin":
+        return shin_probs_from_odds(home_odds, draw_odds, away_odds)
+    return market_probs_from_odds(home_odds, draw_odds, away_odds)
 
 
 def build_gem_features(

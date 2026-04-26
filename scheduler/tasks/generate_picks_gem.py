@@ -37,7 +37,7 @@ from db.models import League as LeagueModel, Match, Odds, Prediction, TeamRating
 from db.session import SessionLocal
 from model.gem.calibration import GemCalibrator
 from model.gem.ensemble import GemEnsemble
-from model.gem.features import build_gem_features, expected_feature_names, market_probs_from_odds
+from model.gem.features import build_gem_features, expected_feature_names, market_probs
 from model.gem.niches import (
     FLAT_STAKE_FRAC,  # noqa: F401  (kept for parity with niches.py constants)
     MAX_DRAW_PROB,
@@ -324,12 +324,13 @@ def _gem_pick_for_match(
     max_draw_prob = thr["max_draw_prob"]
     min_bet_prob  = thr["min_bet_prob"]
     min_gem_score = thr["min_gem_score"]
+    devig_method  = thr.get("devig", "proportional")
 
     p_h, p_d, p_a = float(proba_cal[0]), float(proba_cal[1]), float(proba_cal[2])
     if p_d >= max_draw_prob:
         return None
 
-    market = market_probs_from_odds(home_odds, draw_odds, away_odds)
+    market = market_probs(home_odds, draw_odds, away_odds, method=devig_method)
     if market["home"] is None:
         return None
 
