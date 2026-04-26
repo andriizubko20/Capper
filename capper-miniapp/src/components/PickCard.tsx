@@ -1,4 +1,5 @@
 import type { Pick } from '@/lib/types'
+import { flagFor } from '@/lib/mockData'
 
 const logoUrl = (id: number) => `https://media.api-sports.io/football/teams/${id}.png`
 
@@ -27,7 +28,11 @@ export function PickCard({ pick }: { pick: Pick }) {
       {/* Header */}
       <div className="match-head">
         <div className="match-meta">
-          <span className="league">{pick.leagueFlag} {pick.league}</span>
+          <span className="league">{(() => {
+            const f = flagFor(pick.league, pick.leagueCountry)
+            // FE map returned a real flag → use it; otherwise trust server-provided flag.
+            return f !== '🏟' ? f : (pick.leagueFlag || '🏟')
+          })()} {pick.league}</span>
           <span className="dot"/>
           <span className="match-time">{pick.time}</span>
         </div>

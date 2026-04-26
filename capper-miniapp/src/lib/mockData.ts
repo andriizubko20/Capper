@@ -20,10 +20,72 @@ export type StreakResult = 'W' | 'L' | 'P'
 
 export interface LeagueRow {
   name: string
+  country?: string
   flag: string
   bets: number
   roi: number
   profit: number
+}
+
+// ─── Flag resolution ─────────────────────────────────────────────────────────
+// Two-tier lookup: composite (league, country) for disambiguating collisions
+// (e.g. "Premier League" exists in England AND Ukraine), then country-only,
+// then league-name fallback for backward compatibility.
+
+export const LEAGUE_FLAGS_COMPOSITE: Record<string, string> = {
+  'England:Premier League':  '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+  'Ukraine:Premier League':  '🇺🇦',
+  'Europe:Champions League': '🏆',
+}
+
+export const LEAGUE_FLAGS_BY_COUNTRY: Record<string, string> = {
+  England:     '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+  Spain:       '🇪🇸',
+  Germany:     '🇩🇪',
+  Italy:       '🇮🇹',
+  France:      '🇫🇷',
+  Netherlands: '🇳🇱',
+  Belgium:     '🇧🇪',
+  Ukraine:     '🇺🇦',
+  Europe:      '🏆',
+}
+
+export const LEAGUE_FLAGS_BY_NAME: Record<string, string> = {
+  'Premier League':           '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+  'La Liga':                  '🇪🇸',
+  'Bundesliga':               '🇩🇪',
+  'Serie A':                  '🇮🇹',
+  'Ligue 1':                  '🇫🇷',
+  'Champions League':         '🏆',
+  'UEFA Champions League':    '🏆',
+  'Eredivisie':               '🇳🇱',
+  'Jupiler Pro League':       '🇧🇪',
+  'Premier League (UA)':      '🇺🇦',
+  'Ukrainian Premier League': '🇺🇦',
+}
+
+/**
+ * Resolve a flag for a (league, country) pair.
+ * Priority:
+ *   1. Composite key (handles collisions like "Premier League" in EN/UA)
+ *   2. Country-only (most flexible — covers any league in a known country)
+ *   3. League-name fallback (legacy data without country)
+ *   4. Globe emoji
+ */
+export function flagFor(league?: string, country?: string): string {
+  if (league && country) {
+    const composite = LEAGUE_FLAGS_COMPOSITE[`${country}:${league}`]
+    if (composite) return composite
+  }
+  if (country) {
+    const byCountry = LEAGUE_FLAGS_BY_COUNTRY[country]
+    if (byCountry) return byCountry
+  }
+  if (league) {
+    const byName = LEAGUE_FLAGS_BY_NAME[league]
+    if (byName) return byName
+  }
+  return '🏟'
 }
 
 export interface CurvePoint {

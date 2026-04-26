@@ -84,11 +84,12 @@ function mapApiStats(api: ApiStats, fallback: StatsData): StatsData {
   ) as StatsData['streak']
 
   const byLeague = api.byLeague.map(l => ({
-    name:   l.league,
-    flag:   l.flag,
-    bets:   l.bets,
-    roi:    l.roi,
-    profit: l.pnl,
+    name:    l.league,
+    country: l.country,
+    flag:    l.flag,
+    bets:    l.bets,
+    roi:     l.roi,
+    profit:  l.pnl,
   }))
 
   // API curve = bankroll (e.g. 1050, 980…). Convert to PnL$ by subtracting start.
@@ -186,6 +187,35 @@ export async function getHistory(model: Model): Promise<HistoryDay[]> {
     return data.dates ?? []
   } catch {
     return []
+  }
+}
+
+// ─── CLV ──────────────────────────────────────────────────────────────────────
+// GET /api/clv?model=Gem&days=30 → ClvResponse
+
+export interface ClvTrendPoint {
+  date:    string  // ISO date (YYYY-MM-DD)
+  avg_clv: number  // fraction, e.g. 0.014 = +1.4 %
+  n:       number  // picks on that date
+}
+
+export interface ClvResponse {
+  model:    string
+  days:     number
+  avg_clv:  number          // fraction
+  n_picks:  number
+  pos_rate: number          // fraction of picks with CLV > 0
+  trend:    ClvTrendPoint[]
+}
+
+export async function getClv(model: Model, days = 30): Promise<ClvResponse | null> {
+  if (!BASE) return null
+  try {
+    return await apiFetch<ClvResponse>(
+      `/api/clv?model=${encodeURIComponent(model)}&days=${days}`
+    )
+  } catch {
+    return null
   }
 }
 

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { STATS_BY_MODEL_PERIOD } from '@/lib/mockData'
+import { STATS_BY_MODEL_PERIOD, flagFor } from '@/lib/mockData'
 import type { Period, CurvePoint, StatsData } from '@/lib/mockData'
 import type { Model } from '@/lib/types'
-import { getStats } from '@/lib/api'
+import { getStats, getClv, type ClvResponse } from '@/lib/api'
 
 function winRateColor(wr: number) {
   return wr >= 65 ? 'var(--green)' : wr >= 55 ? 'var(--indigo-2)' : 'var(--red)'
@@ -165,6 +165,89 @@ function ProfitCurve({
   )
 }
 
+// ─── CLV sparkline ────────────────────────────────────────────────────────────
+
+function ClvSparkline({ trend, height = 60 }: {
+  trend: { date: string; avg_clv: number; n: number }[]
+  height?: number
+}) {
+  const w = 360, h = height
+  const pad = 4
+  const values = trend.map(t => t.avg_clv)
+  const min = Math.min(0, ...values)
+  const max = Math.max(0, ...values)
+  const range = max - min || 1
+  const n = trend.length
+  const xFor = (i: number) => n === 1 ? w / 2 : (i / (n - 1)) * w
+  const yFor = (v: number) => h - pad - ((v - min) / range) * (h - pad * 2)
+  const pts = values.map((v, i) => [xFor(i), yFor(v)] as const)
+  const d = pts.map((p, i) => (i === 0 ? `M${p[0]},${p[1]}` : `L${p[0]},${p[1]}`)).join(' ')
+  const area = d + ` L${w},${h} L0,${h} Z`
+  const zeroY = yFor(0)
+  const lastV = values[values.length - 1] ?? 0
+  const stroke = lastV >= 0 ? 'var(--green)' : 'var(--red)'
+  const gradId = `clvGrad-${lastV >= 0 ? 'g' : 'r'}`
+
+  return (
+    <svg
+      viewBox={`0 0 ${w} ${h}`}
+      style={{ width: '100%', height, display: 'block' }}
+      preserveAspectRatio="none"
+    >
+      <defs>
+        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stopColor={lastV >= 0 ? '#22C55E' : '#EF4444'} stopOpacity="0.30"/>
+          <stop offset="100%" stopColor={lastV >= 0 ? '#22C55E' : '#EF4444'} stopOpacity="0"/>
+        </linearGradient>
+      </defs>
+      <line x1="0" x2={w} y1={zeroY} y2={zeroY} stroke="rgba(255,255,255,0.06)" strokeDasharray="2 4"/>
+      <path d={area} fill={`url(#${gradId})`}/>
+      <path d={d} fill="none" stroke={stroke} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+      {pts.length > 0 && (
+        <circle cx={pts[pts.length - 1][0]} cy={pts[pts.length - 1][1]} r="2.5" fill={stroke}/>
+      )}
+    </svg>
+  )
+}
+
+function ClvCard({ data }: { data: ClvResponse | null }) {
+  // Insufficient data → render hint instead of chart
+  const insufficient = !data || data.n_picks < 5 || !data.trend?.length
+  const avgPct = data ? data.avg_clv * 100 : 0
+  const avgColor = avgPct > 0 ? 'var(--green)' : avgPct < 0 ? 'var(--red)' : 'var(--text)'
+  const posPct = data ? Math.round(data.pos_rate * 100) : 0
+
+  return (
+    <div className="curve-card glass-strong" style={{ marginBottom: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: insufficient ? 8 : 10 }}>
+        <div>
+          <div className="eyebrow" style={{ marginBottom: 6 }}>CLV Trend (30d)</div>
+          {!insufficient && data ? (
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 26, color: avgColor, letterSpacing: '-0.5px' }}>
+                {avgPct >= 0 ? '+' : ''}{avgPct.toFixed(2)}%
+              </div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-dim)' }}>avg CLV</div>
+            </div>
+          ) : (
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: 'var(--text-dim)' }}>
+              Недостатньо даних
+            </div>
+          )}
+        </div>
+        {!insufficient && data && (
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-dim)' }}>
+              {data.n_picks} picks · {posPct}% pos
+            </div>
+          </div>
+        )}
+      </div>
+      {!insufficient && data && <ClvSparkline trend={data.trend}/>}
+    </div>
+  )
+}
+
 // ─── Screen ───────────────────────────────────────────────────────────────────
 
 interface Props { model: Model }
@@ -173,11 +256,18 @@ export function StatsScreen({ model }: Props) {
   const [period, setPeriod] = useState<Period>('30D')
   const [data, setData] = useState<StatsData>(STATS_BY_MODEL_PERIOD[model][period])
   const [loading, setLoading] = useState(false)
+  const [clv, setClv] = useState<ClvResponse | null>(null)
 
   useEffect(() => {
     setLoading(true)
     getStats(model, period).then(d => { setData(d); setLoading(false) })
   }, [model, period])
+
+  // CLV is always 30d window; refetched only on model change.
+  // Network errors → silently keep last known value (graceful degrade).
+  useEffect(() => {
+    getClv(model, 30).then(c => { if (c) setClv(c) })
+  }, [model])
 
   const finished = data.streak.filter(s => s !== 'P').slice(-15)
   const wins     = finished.filter(s => s === 'W').length
@@ -235,6 +325,9 @@ export function StatsScreen({ model }: Props) {
         </div>
       </div>
 
+      {/* CLV trend (30d, model-scoped) */}
+      <ClvCard data={clv}/>
+
       {/* Streak */}
       <div className="streak-card glass-strong">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -273,9 +366,13 @@ export function StatsScreen({ model }: Props) {
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', color: 'var(--text-mute)', minWidth: 44, textAlign: 'right' }}>ROI</span>
           </div>
         </div>
-        {data.byLeague.map(l => (
-          <div key={l.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '0.5px solid rgba(255,255,255,0.05)' }}>
-            <div style={{ fontSize: 13, color: 'var(--text)' }}>{l.flag} {l.name}</div>
+        {data.byLeague.map(l => {
+          const resolved = flagFor(l.name, l.country)
+          const flag = resolved !== '🏟' ? resolved : (l.flag || '🏟')
+          const key = l.country ? `${l.country}:${l.name}` : l.name
+          return (
+          <div key={key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '0.5px solid rgba(255,255,255,0.05)' }}>
+            <div style={{ fontSize: 13, color: 'var(--text)' }}>{flag} {l.name}</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-mute)', minWidth: 40, textAlign: 'right' }}>{l.bets}</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: l.profit >= 0 ? 'var(--green)' : 'var(--red)', minWidth: 52, textAlign: 'right' }}>
@@ -286,7 +383,8 @@ export function StatsScreen({ model }: Props) {
               </span>
             </div>
           </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )
