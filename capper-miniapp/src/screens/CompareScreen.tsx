@@ -167,33 +167,68 @@ export function CompareScreen({ model }: Props) {
         ))}
       </div>
 
-      {/* Comparison table */}
+      {/* Comparison table — rows = models, columns = metrics */}
       <div className="curve-card glass" style={{ marginTop: 14 }}>
         <div className="eyebrow" style={{ marginBottom: 10 }}>Деталі</div>
 
-        {/* Column headers */}
-        <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr', padding: '0 0 10px', borderBottom: '0.5px solid rgba(255,255,255,0.08)', gap: 6, alignItems: 'center' }}>
-          <div/>
-          {models.map(m => (
-            <div key={m.tag} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: m.color, boxShadow: `0 0 6px ${m.color}` }}/>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{m.name}</span>
-            </div>
+        {/* Column headers: Model | ROI | WR | Profit | Bets | Odds */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '90px repeat(5, 1fr)',
+          padding: '0 0 10px',
+          borderBottom: '0.5px solid rgba(255,255,255,0.08)',
+          gap: 4,
+          alignItems: 'center',
+        }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--text-mute)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Model</div>
+          {['ROI', 'WR', 'Profit', 'Bets', 'Odds'].map(label => (
+            <div key={label} style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: 9,
+              color: 'var(--text-mute)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
+              textAlign: 'center',
+            }}>{label}</div>
           ))}
         </div>
 
-        {[
-          { label: 'ROI',      vals: models.map(m => `${m.roi >= 0 ? '+' : ''}${m.roi}%`),                  getColor: (i: number) => roiColor(models[i].roi)                              },
-          { label: 'Win Rate', vals: models.map(m => `${m.win}%`),                                            getColor: (i: number) => winRateColor(models[i].win)                          },
-          { label: 'Profit',   vals: models.map(m => `${m.profit >= 0 ? '+' : '-'}$${Math.abs(m.profit)}`),  getColor: (i: number) => models[i].profit > 0 ? 'var(--green)' : 'var(--red)' },
-          { label: 'Bets',     vals: models.map(m => `${m.bets}`),                                            getColor: () => 'var(--text)'                                                  },
-          { label: 'Avg Odds', vals: models.map(m => m.avgOdds.toFixed(2)),                                   getColor: () => 'var(--text)'                                                  },
-        ].map(row => (
-          <div key={row.label} style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr', padding: '9px 0', borderBottom: '0.5px solid rgba(255,255,255,0.05)', alignItems: 'center', gap: 6 }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-mute)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{row.label}</div>
-            {row.vals.map((v, i) => (
-              <div key={i} style={{ fontFamily: 'var(--font-mono)', fontSize: 12, textAlign: 'center', fontWeight: 500, color: row.getColor(i) }}>{v}</div>
-            ))}
+        {models.map(m => (
+          <div key={m.tag} style={{
+            display: 'grid',
+            gridTemplateColumns: '90px repeat(5, 1fr)',
+            padding: '10px 0',
+            borderBottom: '0.5px solid rgba(255,255,255,0.05)',
+            alignItems: 'center',
+            gap: 4,
+            ...(m.name === model && { background: `${m.color}0d` }),
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+              <div style={{ width: 7, height: 7, borderRadius: '50%', background: m.color, boxShadow: `0 0 5px ${m.color}`, flexShrink: 0 }}/>
+              <span style={{
+                fontSize: 11,
+                fontWeight: m.name === model ? 600 : 500,
+                color: 'var(--text)',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}>{m.name}</span>
+            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textAlign: 'center', fontWeight: 600, color: roiColor(m.roi) }}>
+              {m.roi >= 0 ? '+' : ''}{m.roi}%
+            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textAlign: 'center', fontWeight: 500, color: winRateColor(m.win) }}>
+              {m.win}%
+            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textAlign: 'center', fontWeight: 500, color: m.profit > 0 ? 'var(--green)' : m.profit < 0 ? 'var(--red)' : 'var(--text-dim)' }}>
+              {m.profit >= 0 ? '+' : '-'}${Math.abs(m.profit)}
+            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textAlign: 'center', color: 'var(--text-dim)' }}>
+              {m.bets}
+            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textAlign: 'center', color: 'var(--text-dim)' }}>
+              {m.avgOdds.toFixed(2)}
+            </div>
           </div>
         ))}
       </div>
