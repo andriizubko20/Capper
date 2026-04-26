@@ -38,13 +38,17 @@ from db.session import SessionLocal
 # Leagues whose historical odds we want to fill — same set we plan to add to
 # Gem next. Format: (name, country) tuples.
 TARGET_LEAGUES: list[tuple[str, str]] = [
-    ("Premier League",  "Ukraine"),
-    ("Eliteserien",     "Norway"),
-    ("Premiership",     "Scotland"),
-    ("Ekstraklasa",     "Poland"),
-    ("Allsvenskan",     "Sweden"),
-    ("Süper Lig",       "Turkey"),
-    ("Serie B",         "Italy"),
+    ("Premier League",     "Ukraine"),
+    ("Eliteserien",        "Norway"),
+    ("Premiership",        "Scotland"),
+    ("Ekstraklasa",        "Poland"),
+    ("Allsvenskan",        "Sweden"),
+    ("Süper Lig",          "Turkey"),
+    ("Serie B",            "Italy"),
+    # Active Gem leagues that lost odds coverage somewhere — re-backfill
+    ("Eredivisie",         "Netherlands"),
+    ("Jupiler Pro League", "Belgium"),
+    ("Primeira Liga",      "Portugal"),
 ]
 
 DELAY = 1.5            # seconds between fixtures
