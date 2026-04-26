@@ -145,6 +145,7 @@ const MODEL_TAG: Record<string, string> = {
   'Monster': 'monster',
   'Aqua':    'aqua',
   'Pure':    'pure',
+  'Gem':     'gem',
 }
 
 export async function getCompare(period: Period): Promise<ModelData[]> {

@@ -13,12 +13,14 @@ class Settings(BaseSettings):
     telegram_bot_token: str = ""
     sstats_api_key: str = ""
     sstats_api_host: str = "https://api.sstats.net"
+    api_football_key: str = ""         # API-Football v3 (free tier 100 req/day)
     database_url: str = "postgresql://capper:capper@localhost:5432/capper"
     env: str = "development"
 
     # Betting
     bankroll: float = 1000.0
     picks_hours_before: int = 5        # фінальний пік за N годин до старту матчу
+    picks_hours_before_late: float = 1.5  # late-pass pick after lineups confirmed
     early_picks_days_ahead: int = 4    # ранній пік — матчі до N днів вперед
 
     # Mini App URL

@@ -6,7 +6,7 @@ import { StatsScreen } from '@/screens/StatsScreen'
 import { CompareScreen } from '@/screens/CompareScreen'
 import type { Screen, Model } from '@/lib/types'
 
-const MODELS: Model[] = ['WS Gap', 'Monster', 'Aqua', 'Pure']
+const MODELS: Model[] = ['WS Gap', 'Monster', 'Aqua', 'Pure', 'Gem']
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('picks')

@@ -8,6 +8,7 @@ MODEL_META = {
     "monster_v1_kelly":    {"name": "Monster", "color": "#F59E0B"},
     "aquamarine_v1_kelly": {"name": "Aqua",    "color": "#22D3EE"},
     "pure_v1":             {"name": "Pure",    "color": "#9D4EDD"},
+    "gem_v1":              {"name": "Gem",     "color": "#10B981"},
 }
 
 # model query param → list of model_version values
@@ -16,6 +17,7 @@ MODEL_VERSIONS: dict[str, list[str]] = {
     "Monster": ["monster_v1_kelly"],
     "Aqua":    ["aquamarine_v1_kelly"],
     "Pure":    ["pure_v1"],
+    "Gem":     ["gem_v1"],
 }
 
 LEAGUE_FLAGS: dict[str, str] = {

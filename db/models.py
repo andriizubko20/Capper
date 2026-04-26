@@ -3,6 +3,7 @@ from sqlalchemy import (
     BigInteger, Boolean, Date, DateTime, Float, ForeignKey,
     Integer, String, Text, UniqueConstraint
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db.session import Base
@@ -228,3 +229,39 @@ class TeamRating(Base):
     matches_played: Mapped[int] = mapped_column(Integer, default=0)
     last_match_date: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class PlayerStat(Base):
+    """API-Football player season stats + xG share within team.
+
+    Updated weekly by scheduler.tasks.collect_player_stats. Used to compute
+    `missing_xg_share` feature when injured players are detected.
+    """
+    __tablename__ = "player_stats"
+
+    player_id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    team_id:   Mapped[int | None] = mapped_column(ForeignKey("teams.id"), nullable=True)
+    name:      Mapped[str | None] = mapped_column(String(200), nullable=True)
+    league_id: Mapped[int | None] = mapped_column(ForeignKey("leagues.id"), nullable=True)
+    season:    Mapped[int | None] = mapped_column(Integer, nullable=True)
+    goals:           Mapped[int]   = mapped_column(Integer, default=0)
+    assists:         Mapped[int]   = mapped_column(Integer, default=0)
+    minutes_played:  Mapped[int]   = mapped_column(Integer, default=0)
+    xg_share:        Mapped[float] = mapped_column(Float, default=0.0)
+    updated_at:      Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class Lineup(Base):
+    """Confirmed starting XI per match-side, fetched from API-Football
+    ~1h before kickoff. Drives late-pick generation (1.5h)."""
+    __tablename__ = "lineups"
+
+    id:         Mapped[int] = mapped_column(Integer, primary_key=True)
+    match_id:   Mapped[int] = mapped_column(ForeignKey("matches.id"))
+    team_id:    Mapped[int] = mapped_column(ForeignKey("teams.id"))
+    side:       Mapped[str] = mapped_column(String(4))   # 'home' | 'away'
+    formation:  Mapped[str | None] = mapped_column(String(20), nullable=True)
+    starter_player_ids: Mapped[list] = mapped_column(JSONB)
+    fetched_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (UniqueConstraint("match_id", "side", name="uq_lineups_match_side"),)

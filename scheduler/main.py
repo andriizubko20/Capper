@@ -10,6 +10,23 @@ from scheduler.tasks.generate_picks_aquamarine import run_generate_picks_aquamar
 from scheduler.tasks.generate_picks_pure import run_generate_picks_pure
 from scheduler.tasks.rebalance_stakes import run_rebalance_stakes
 from scheduler.tasks.update_team_ratings import run_update_team_ratings
+from scheduler.tasks.track_odds_movement import run_track_odds_movement
+from scheduler.tasks.collect_injuries import run_collect_injuries
+from scheduler.tasks.collect_player_stats import run_collect_player_stats
+from scheduler.tasks.collect_lineups import run_collect_lineups
+from scheduler.tasks.generate_picks_gem import run_generate_picks_gem
+from datetime import datetime, timedelta, timezone
+
+
+def _run_pure_late():
+    """Pure late-pass — re-run pick generation 1.5h before kickoff using
+    confirmed lineups data."""
+    from scheduler.tasks.generate_picks_pure import run_generate_picks_pure
+    now = datetime.now(timezone.utc)
+    run_generate_picks_pure(
+        match_date_from=now + timedelta(hours=1.0),
+        match_date_to=now + timedelta(hours=2.0),
+    )
 from scheduler.tasks.update_monster_p_is import run_update_monster_p_is
 from scheduler.tasks.update_clv import run_clv_update
 from scheduler.tasks.update_results import run_update_results
@@ -68,6 +85,62 @@ def start() -> None:
         id="generate_picks_pure",
         name="Generate picks Pure (hourly)",
         misfire_grace_time=300,
+    )
+
+    # Кожні 30 хв — track 1x2 odds movement for upcoming 36h matches.
+    # Each call INSERTS new row (vs collect_data which UPDATES). Builds line-drift
+    # timeline for 3-month accumulation → unlocks market features in Gem v3.
+    scheduler.add_job(
+        run_track_odds_movement,
+        CronTrigger(minute="*/30"),
+        id="track_odds_movement",
+        name="Track odds movement (every 30 min)",
+        misfire_grace_time=300,
+    )
+
+    # Щогодини в :30 — Gem ML picks (3-model ensemble + calibration + gem filter)
+    scheduler.add_job(
+        run_generate_picks_gem,
+        CronTrigger(minute=33),
+        id="generate_picks_gem",
+        name="Generate picks Gem (hourly)",
+        misfire_grace_time=300,
+    )
+
+    # Щогодини в :35 — Pure LATE pass — re-pick using confirmed lineups
+    scheduler.add_job(
+        _run_pure_late,
+        CronTrigger(minute=35),
+        id="generate_picks_pure_late",
+        name="Generate picks Pure LATE (~1.5h, hourly)",
+        misfire_grace_time=300,
+    )
+
+    # Кожні 15 хв — confirmed lineups з API-Football (1.5-2h до старту)
+    scheduler.add_job(
+        run_collect_lineups,
+        CronTrigger(minute="*/15"),
+        id="collect_lineups",
+        name="Collect confirmed lineups (every 15 min)",
+        misfire_grace_time=300,
+    )
+
+    # 03:30 UTC щодня — оновлення injuries з API-Football
+    scheduler.add_job(
+        run_collect_injuries,
+        CronTrigger(hour=3, minute=30),
+        id="collect_injuries",
+        name="Daily injuries collection (API-Football)",
+        misfire_grace_time=600,
+    )
+
+    # Wed 04:00 UTC щотижня — top scorers + xG share per team
+    scheduler.add_job(
+        run_collect_player_stats,
+        CronTrigger(day_of_week="wed", hour=4, minute=0),
+        id="collect_player_stats",
+        name="Weekly player stats collection (API-Football)",
+        misfire_grace_time=3600,
     )
 
     # Щогодини в :40 — пересчитати власний Glicko-2 з результатів finished matches.

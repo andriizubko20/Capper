@@ -242,6 +242,14 @@ export const STATS_BY_MODEL_PERIOD: Record<Model, Record<Period, StatsData>> = {
     '90D': { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
     'ALL': { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
   },
+  // Gem model — fresh deployment, mock placeholder data
+  // (real stats come from /api/stats?model=Gem once picks accumulate)
+  'Gem': {
+    '7D':  { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
+    '30D': { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
+    '90D': { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
+    'ALL': { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
+  },
 }
 
 // ─── Compare screen ───────────────────────────────────────────────────────────
@@ -263,6 +271,7 @@ const MODEL_META = {
   monster: { name: 'Monster' as Model, tag: 'monster',  color: '#FACC15' },
   aqua:    { name: 'Aqua' as Model,    tag: 'aqua',     color: '#22D3EE' },
   pure:    { name: 'Pure' as Model,    tag: 'pure',    color: '#9D4EDD' },
+  gem:     { name: 'Gem' as Model,     tag: 'gem',     color: '#10B981' },
 }
 
 export const MODEL_COLOR: Record<Model, string> = {
@@ -270,6 +279,7 @@ export const MODEL_COLOR: Record<Model, string> = {
   'Monster': MODEL_META.monster.color,
   'Aqua':    MODEL_META.aqua.color,
   'Pure':    MODEL_META.pure.color,
+  'Gem':     MODEL_META.gem.color,
 }
 
 export const COMPARE_BY_PERIOD: Record<Period, ModelData[]> = {

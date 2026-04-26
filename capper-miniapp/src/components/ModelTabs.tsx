@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import type { Model } from '@/lib/types'
 
-const MODELS: Model[] = ['WS Gap', 'Monster', 'Aqua', 'Pure']
+const MODELS: Model[] = ['WS Gap', 'Monster', 'Aqua', 'Pure', 'Gem']
 
 interface Props {
   active: Model
