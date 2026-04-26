@@ -43,13 +43,14 @@ def league_cluster(name: str) -> str:
 ROLLING_10 = 10
 ROLLING_5 = 5
 
-# Gem filter thresholds (v3 — relaxed for higher yield)
-# v2 (P_bet>0.70, gem>0.12) gave only 28 picks/24mo (1.3/wk — too low for live use).
-# v3: relax all 3 thresholds → expected 80-150 picks/24mo (3-6/wk),
-# WR may drop 67%→62% but yield × ROI improves.
+# Gem filter thresholds (v4 — sweep-optimal yield × ROI)
+# v3 (P_bet>0.60, gem>0.05) was over-relaxed: 274 picks but ROI -4% on OOF.
+# v4 from threshold sweep: 0.62/0.15 wins on annual_units (+4.54 u/yr):
+#   60 picks/24mo (~22/yr, ~2/wk), WR 61.7%, lo95 49%, ROI +20.2%.
+# Trade-off: lower WR than v2 (67%) but 2× yield × ROI.
 MAX_DRAW_PROB = 0.32
-MIN_BET_PROB = 0.60
-MIN_GEM_SCORE = 0.05   # was 0.12 — still requires positive edge over market
+MIN_BET_PROB = 0.62
+MIN_GEM_SCORE = 0.15
 MIN_ODDS = 1.50
 MAX_ODDS = 3.00
 
