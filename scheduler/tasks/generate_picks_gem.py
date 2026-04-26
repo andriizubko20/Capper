@@ -325,6 +325,9 @@ def _gem_pick_for_match(
     min_bet_prob  = thr["min_bet_prob"]
     min_gem_score = thr["min_gem_score"]
     devig_method  = thr.get("devig", "proportional")
+    # Per-league odds range (sweet-spot of model edge); fall back to global
+    league_min_odds = thr.get("min_odds", MIN_ODDS)
+    league_max_odds = thr.get("max_odds", MAX_ODDS)
 
     p_h, p_d, p_a = float(proba_cal[0]), float(proba_cal[1]), float(proba_cal[2])
     if p_d >= max_draw_prob:
@@ -341,7 +344,7 @@ def _gem_pick_for_match(
     ):
         if p_side <= min_bet_prob:
             continue
-        if not (MIN_ODDS <= odds_side <= MAX_ODDS):
+        if not (league_min_odds <= odds_side <= league_max_odds):
             continue
         gem_score = p_side - mp
         if gem_score <= min_gem_score:

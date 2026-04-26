@@ -44,8 +44,10 @@ REPORTS   = Path(__file__).parent / "reports"
 MAX_DRAW_GRID = [0.25, 0.28, 0.30, 0.32, 0.35]
 MIN_BET_GRID  = [0.55, 0.60, 0.62, 0.65, 0.68, 0.70, 0.72]
 MIN_GEM_GRID  = [0.05, 0.08, 0.10, 0.12, 0.15, 0.18, 0.20]
-ODDS_LO = 1.50
-ODDS_HI = 3.00
+# Per-league odds bounds: each league has its own "sweet spot" — model is strong
+# on mid-range odds but unreliable on extremes (heavy favs / longshots).
+ODDS_LO_GRID  = [1.40, 1.50, 1.60]
+ODDS_HI_GRID  = [2.50, 3.00, 3.50]
 
 HISTORY_YEARS = 32 / 12.0
 
@@ -53,6 +55,7 @@ HISTORY_YEARS = 32 / 12.0
 MIN_N_LEAGUE = 12       # league must produce at least this many picks for sweep to be valid
 MIN_WR       = 0.55     # reject combos with WR below this
 MIN_ROI      = 0.05     # reject combos with ROI below +5%
+MIN_LO95     = 0.40     # reject thin-sample fits (Wilson lower bound on WR)
 
 
 def wilson_lower(wins: int, n: int, z: float = 1.96) -> float:
@@ -111,6 +114,7 @@ def evaluate_league_combo(
     home_odds: np.ndarray, draw_odds: np.ndarray, away_odds: np.ndarray,
     mp_h: np.ndarray, mp_a: np.ndarray,
     max_draw: float, min_bet: float, min_gem: float,
+    odds_lo: float, odds_hi: float,
 ) -> dict | None:
     if not mask.any():
         return None
@@ -127,7 +131,7 @@ def evaluate_league_combo(
         mask
         & (pD < max_draw)
         & (p_side > min_bet)
-        & (odds_side >= ODDS_LO) & (odds_side <= ODDS_HI)
+        & (odds_side >= odds_lo) & (odds_side <= odds_hi)
         & (p_side - mp_side > min_gem)
     )
     n = int(sel.sum())
@@ -192,26 +196,31 @@ def run() -> None:
 
         candidates = []
         for devig_name, (mp_h, mp_a) in DEVIG_METHODS.items():
-            for max_draw in MAX_DRAW_GRID:
-                for min_bet in MIN_BET_GRID:
-                    for min_gem in MIN_GEM_GRID:
-                        r = evaluate_league_combo(
-                            proba, y, league_mask,
-                            home_odds, draw_odds, away_odds,
-                            mp_h, mp_a,
-                            max_draw, min_bet, min_gem,
-                        )
-                        if r is None:
-                            continue
-                        r["devig"]    = devig_name
-                        r["max_draw"] = max_draw
-                        r["min_bet"]  = min_bet
-                        r["min_gem"]  = min_gem
-                        r["league"]   = league
-                        r["bets_per_year"] = r["n_bets"] / HISTORY_YEARS
-                        r["annual_units"]  = r["bets_per_year"] * r["roi"]
-                        all_rows.append(r)
-                        candidates.append(r)
+            for odds_lo in ODDS_LO_GRID:
+                for odds_hi in ODDS_HI_GRID:
+                    for max_draw in MAX_DRAW_GRID:
+                        for min_bet in MIN_BET_GRID:
+                            for min_gem in MIN_GEM_GRID:
+                                r = evaluate_league_combo(
+                                    proba, y, league_mask,
+                                    home_odds, draw_odds, away_odds,
+                                    mp_h, mp_a,
+                                    max_draw, min_bet, min_gem,
+                                    odds_lo, odds_hi,
+                                )
+                                if r is None:
+                                    continue
+                                r["devig"]    = devig_name
+                                r["odds_lo"]  = odds_lo
+                                r["odds_hi"]  = odds_hi
+                                r["max_draw"] = max_draw
+                                r["min_bet"]  = min_bet
+                                r["min_gem"]  = min_gem
+                                r["league"]   = league
+                                r["bets_per_year"] = r["n_bets"] / HISTORY_YEARS
+                                r["annual_units"]  = r["bets_per_year"] * r["roi"]
+                                all_rows.append(r)
+                                candidates.append(r)
 
         # Filter viable combos
         viable = [
@@ -219,15 +228,21 @@ def run() -> None:
             if c["n_bets"] >= MIN_N_LEAGUE
             and c["wr"]   >= MIN_WR
             and c["roi"]  >= MIN_ROI
+            and c["lo95"] >= MIN_LO95
         ]
         if not viable:
-            logger.warning(f"  ❌ {league}: no viable combo (n>={MIN_N_LEAGUE}, WR>={MIN_WR}, ROI>={MIN_ROI})")
+            logger.warning(
+                f"  ❌ {league}: no viable combo "
+                f"(n>={MIN_N_LEAGUE}, WR>={MIN_WR}, ROI>={MIN_ROI}, lo95>={MIN_LO95})"
+            )
             continue
 
         # Pick best by annual_units (then by lo95 as tiebreaker)
         best = sorted(viable, key=lambda c: (c["annual_units"], c["lo95"]), reverse=True)[0]
         best_per_league[league] = {
             "devig":          best["devig"],
+            "min_odds":       best["odds_lo"],
+            "max_odds":       best["odds_hi"],
             "max_draw_prob":  best["max_draw"],
             "min_bet_prob":   best["min_bet"],
             "min_gem_score":  best["min_gem"],
@@ -251,9 +266,9 @@ def run() -> None:
     print("\n" + "=" * 120)
     print("PER-LEAGUE OPTIMAL GEM THRESHOLDS (cherry-pick: best of {proportional, shin})")
     print("=" * 120)
-    print(f"{'League':>22s} | {'devig':>5s} {'mxD':>5s} {'mBet':>5s} {'mGem':>5s} | "
+    print(f"{'League':>22s} | {'devig':>5s} {'oLo':>4s} {'oHi':>4s} {'mxD':>5s} {'mBet':>5s} {'mGem':>5s} | "
           f"{'n':>4s} {'WR':>6s} {'lo95':>6s} {'ROI':>7s} {'odds':>5s} {'/yr':>5s} {'units/yr':>9s}")
-    print("-" * 120)
+    print("-" * 130)
     rows_sorted = sorted(best_per_league.items(), key=lambda kv: kv[1]["annual_units"], reverse=True)
     total_yr = 0.0
     total_n  = 0
@@ -262,13 +277,14 @@ def run() -> None:
         total_yr += units
         total_n  += t["n_bets_24mo"]
         print(
-            f"{league[:22]:>22s} | {t['devig'][:5]:>5s} {t['max_draw_prob']:>5.2f} {t['min_bet_prob']:>5.2f} {t['min_gem_score']:>5.2f} | "
+            f"{league[:22]:>22s} | {t['devig'][:5]:>5s} {t['min_odds']:>4.2f} {t['max_odds']:>4.2f} "
+            f"{t['max_draw_prob']:>5.2f} {t['min_bet_prob']:>5.2f} {t['min_gem_score']:>5.2f} | "
             f"{t['n_bets_24mo']:>4d} {t['wr']*100:>5.1f}% {t['wilson_lower_95']*100:>5.1f}% "
             f"{t['roi']*100:>+6.1f}% {t['avg_odds']:>5.2f} {t['n_bets_24mo']/HISTORY_YEARS:>5.1f} "
             f"{units:>+8.2f}"
         )
-    print("-" * 120)
-    print(f"{'TOTAL':>22s} | {' '*23} | {total_n:>4d} {' '*38} {total_n/HISTORY_YEARS:>5.1f} {total_yr:>+8.2f}")
+    print("-" * 130)
+    print(f"{'TOTAL':>22s} | {' '*33} | {total_n:>4d} {' '*38} {total_n/HISTORY_YEARS:>5.1f} {total_yr:>+8.2f}")
 
     print(f"\n  vs current PROD universal (0.62/0.15): n=60, +4.54 units/yr")
 
