@@ -9,6 +9,7 @@ from datetime import date, datetime
 from loguru import logger
 
 from data.api_client import SStatsClient
+from data.collectors.apifootball_fallback import fetch_fixture_status, is_finished
 from db.models import Match, Prediction, User, BankrollSnapshot
 from db.session import SessionLocal
 from scheduler.tasks._result_utils import calculate_result, calculate_pnl
@@ -65,6 +66,7 @@ def run_update_results() -> None:
 
         if past_unfinished:
             logger.info(f"Checking {len(past_unfinished)} matches via SStats")
+            sstats_stale: list[Match] = []  # status != 8 — try API-Football fallback
             with SStatsClient() as client:
                 for m in past_unfinished:
                     try:
@@ -75,9 +77,35 @@ def run_update_results() -> None:
                                 "home_score": fixture.get("homeFTResult"),
                                 "away_score": fixture.get("awayFTResult"),
                             }
+                        else:
+                            # SStats returns 0/1/2/etc — match supposedly hasn't
+                            # finished. But m.date is in the past. SStats can be
+                            # stale for postponed/rescheduled fixtures → API-Football
+                            # fallback.
+                            sstats_stale.append(m)
                         time.sleep(0.3)
                     except Exception as e:
                         logger.warning(f"Failed to fetch match {m.api_id}: {e}")
+                        sstats_stale.append(m)
+
+            if sstats_stale:
+                logger.info(
+                    f"SStats reports {len(sstats_stale)} matches as not-yet-finished "
+                    "despite past kickoff — checking API-Football fallback"
+                )
+                for m in sstats_stale:
+                    status = fetch_fixture_status(m.api_id)
+                    if is_finished(status):
+                        finished_map[m.id] = {
+                            "home_score": status["home_score"],
+                            "away_score": status["away_score"],
+                        }
+                        logger.info(
+                            f"  API-Football: {m.api_id} = "
+                            f"{status['home_score']}:{status['away_score']} "
+                            f"({status['status_short']})"
+                        )
+                    time.sleep(7)  # 10 req/min free tier — be polite
 
         if not finished_map:
             logger.info("No newly finished matches")
