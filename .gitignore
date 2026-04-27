@@ -18,6 +18,8 @@ build/
 *.pkl
 *.joblib
 *.model
+# But DO track production model artifacts (needed for VPS deployment/rollback)
+!model/*/artifacts/*.pkl
 
 # Logs
 *.log
