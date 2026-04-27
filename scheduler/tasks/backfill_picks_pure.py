@@ -19,8 +19,10 @@ from loguru import logger
 from db.models import League as LeagueModel, Match, Odds, Prediction
 from db.session import SessionLocal
 from model.gem.team_state import build_h2h, build_team_state
+from sqlalchemy import tuple_
+
 from scheduler.tasks.generate_picks_pure import (
-    LEAGUE_COUNTRY, MODEL_VERSION, KELLY_FRAC, KELLY_CAP,
+    PURE_LEAGUE_KEYS, MODEL_VERSION, KELLY_FRAC, KELLY_CAP,
     _load_historical_for_state, _build_match_features, _matches_niche, _load_niches,
     _compute_bankroll,
 )
@@ -37,21 +39,13 @@ def run_backfill(date_from: datetime, date_to: datetime) -> None:
     db = SessionLocal()
     try:
         # Pull all matches in range, regardless of status — backfill includes
-        # finished too so picks are immediately settled.
+        # finished too so picks are immediately settled. Country-aware filter
+        # (handles English vs Ukrainian Premier League etc.).
         matches = db.query(Match).join(LeagueModel).filter(
             Match.date >= date_from,
             Match.date <= date_to,
-            LeagueModel.name.in_(pure_leagues),
+            tuple_(LeagueModel.name, LeagueModel.country).in_(list(PURE_LEAGUE_KEYS)),
         ).all()
-        # Country allowlist filter (handles name collisions like
-        # German vs Austrian Bundesliga, English vs Ukrainian Premier League).
-        matches = [
-            m for m in matches
-            if m.league and (
-                m.league.name == "Champions League" or
-                m.league.country == LEAGUE_COUNTRY.get(m.league.name)
-            )
-        ]
         logger.info(f"[Pure backfill] Found {len(matches)} matches in window")
 
         # Build state from full history (finished + upcoming)
