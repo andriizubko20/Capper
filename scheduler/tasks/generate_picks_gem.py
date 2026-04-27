@@ -464,7 +464,11 @@ def run_generate_picks_gem(
         X = np.vstack(rows)
         info_df = pd.DataFrame(infos)
         proba_raw = ensemble.predict_proba_from_info(X, info_df)
-        proba_cal = calibrator.transform(proba_raw)
+        # Per-league calibration: dispatch each row to its league's head if
+        # available; falls back to global automatically.
+        proba_cal = calibrator.transform(
+            proba_raw, leagues=info_df["league_name"].to_numpy()
+        )
 
         new_picks = 0
         for i, match in enumerate(match_objs):

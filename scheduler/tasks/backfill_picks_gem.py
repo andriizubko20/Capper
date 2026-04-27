@@ -111,7 +111,9 @@ def run_backfill(date_from: datetime | str, date_to: datetime | str | None = Non
         X = np.vstack(rows)
         info_df = pd.DataFrame(infos)
         proba_raw = ensemble.predict_proba_from_info(X, info_df)
-        proba_cal = calibrator.transform(proba_raw)
+        proba_cal = calibrator.transform(
+            proba_raw, leagues=info_df["league_name"].to_numpy()
+        )
 
         added = 0
         for i, match in enumerate(match_objs):

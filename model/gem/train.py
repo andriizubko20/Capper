@@ -103,11 +103,20 @@ def run(
     raw_ens_oof[covered] = ensemble.meta_model.predict_proba(oof_stack[covered])
 
     # 5. Calibrate on the tail of OOF predictions
-    logger.info("Fitting calibrator on OOF tail …")
+    logger.info("Fitting calibrator on OOF tail (with per-league heads) …")
     calibrator = GemCalibrator(tail_frac=calib_tail_frac)
-    calibrator.fit(raw_ens_oof[covered], y[covered], info["date"][covered])
+    leagues_oof = info["league_name"].to_numpy()
+    calibrator.fit(
+        raw_ens_oof[covered],
+        y[covered],
+        info["date"][covered],
+        leagues=leagues_oof[covered],
+    )
     cal_ens_oof = raw_ens_oof.copy()
-    cal_ens_oof[covered] = calibrator.transform(raw_ens_oof[covered])
+    cal_ens_oof[covered] = calibrator.transform(
+        raw_ens_oof[covered],
+        leagues=leagues_oof[covered],
+    )
 
     # 6. Evaluate
     logger.info("=" * 72)
