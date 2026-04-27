@@ -27,6 +27,10 @@ SECOND_TIER: set[tuple[str, str]] = {
     ("Jupiler Pro League",  "Belgium"),
     ("Primeira Liga",       "Portugal"),
     ("Süper Lig",           "Turkey"),
+    ("Premier League",      "Ukraine"),
+    ("Premiership",         "Scotland"),
+    ("Ekstraklasa",         "Poland"),
+    ("Serie B",             "Italy"),
     ("Eliteserien",         "Norway"),
     ("Allsvenskan",         "Sweden"),
 }
