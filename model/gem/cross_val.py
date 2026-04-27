@@ -37,7 +37,7 @@ def walk_forward_splits(
     n_folds: int = 12,
     val_months: int = 2,
     gap_days: int = 10,
-    min_train_months: int = 12,
+    min_train_months: int = 18,
 ) -> list[WalkForwardSplit]:
     """
     Returns walk-forward (train, val) index splits in chronological order.
