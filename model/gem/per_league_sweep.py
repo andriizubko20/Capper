@@ -157,13 +157,32 @@ def evaluate_league_combo(
     }
 
 
-def run() -> None:
+def run(variant: str = "v1") -> None:
+    """Run per-league sweep.
+
+    variant: "v1" (default, prod) — uses oof_ensemble_calibrated key + writes
+             per_league_thresholds.json
+             "v2" (A/B) — uses oof_ensemble_calibrated_v2 key + writes
+             per_league_thresholds_v2.json
+    """
     REPORTS.mkdir(parents=True, exist_ok=True)
-    logger.info("Loading OOF + info …")
+    logger.info(f"Loading OOF + info … (variant={variant})")
     npz = np.load(ARTIFACTS / "oof.npz")
     info = pd.read_parquet(ARTIFACTS / "info.parquet")
 
-    proba   = npz["oof_ensemble_calibrated"]
+    if variant == "v2":
+        if "oof_ensemble_calibrated_v2" not in npz.files:
+            raise SystemExit(
+                "oof.npz lacks oof_ensemble_calibrated_v2 — retrain with new train.py first"
+            )
+        proba = npz["oof_ensemble_calibrated_v2"]
+        out_filename = "per_league_thresholds_v2.json"
+        report_filename = "per_league_sweep_v2.csv"
+    else:
+        proba = npz["oof_ensemble_calibrated"]
+        out_filename = "per_league_thresholds.json"
+        report_filename = "per_league_sweep.csv"
+
     y       = npz["y"]
     covered = npz["covered"]
 
@@ -261,9 +280,9 @@ def run() -> None:
         }
 
     df = pd.DataFrame(all_rows)
-    df.to_csv(REPORTS / "per_league_sweep.csv", index=False)
+    df.to_csv(REPORTS / report_filename, index=False)
 
-    out_path = ARTIFACTS / "per_league_thresholds.json"
+    out_path = ARTIFACTS / out_filename
     with open(out_path, "w") as f:
         json.dump(best_per_league, f, indent=2)
     logger.info(f"Saved → {out_path}")
@@ -296,4 +315,9 @@ def run() -> None:
 
 
 if __name__ == "__main__":
-    run()
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--variant", default="v1", choices=["v1", "v2"],
+                    help="v1=PROD (oof_ensemble_calibrated), v2=A/B (oof_ensemble_calibrated_v2)")
+    args = ap.parse_args()
+    run(variant=args.variant)

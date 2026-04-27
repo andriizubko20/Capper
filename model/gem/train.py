@@ -103,8 +103,14 @@ def run(
     raw_ens_oof[covered] = ensemble.meta_model.predict_proba(oof_stack[covered])
 
     # 5. Calibrate on the tail of OOF predictions
-    logger.info("Fitting calibrator on OOF tail (with per-league heads) …")
-    calibrator = GemCalibrator(tail_frac=calib_tail_frac)
+    # Fit TWO calibrators for A/B test:
+    #   - calibrator.pkl       (gem_v1 PROD: per-league heads + global)
+    #   - calibrator_v2.pkl    (gem_v2_kmeans3 EXPERIMENTAL: kmeans-3 cluster fallback,
+    #                           tighter mpl=20, smaller tail=0.10 — grid-search winner)
+    logger.info("Fitting V1 calibrator (per-league + global) on OOF tail …")
+    calibrator = GemCalibrator(
+        tail_frac=calib_tail_frac, min_per_league=30, cluster_strategy="none"
+    )
     leagues_oof = info["league_name"].to_numpy()
     calibrator.fit(
         raw_ens_oof[covered],
@@ -114,6 +120,23 @@ def run(
     )
     cal_ens_oof = raw_ens_oof.copy()
     cal_ens_oof[covered] = calibrator.transform(
+        raw_ens_oof[covered],
+        leagues=leagues_oof[covered],
+    )
+
+    logger.info("Fitting V2 EXPERIMENTAL calibrator (kmeans-3, mpl=20, tail=0.10) …")
+    calibrator_v2 = GemCalibrator(
+        tail_frac=0.10, min_per_league=20,
+        cluster_strategy="kmeans-3", min_per_cluster=50,
+    )
+    calibrator_v2.fit(
+        raw_ens_oof[covered],
+        y[covered],
+        info["date"][covered],
+        leagues=leagues_oof[covered],
+    )
+    cal_v2_ens_oof = raw_ens_oof.copy()
+    cal_v2_ens_oof[covered] = calibrator_v2.transform(
         raw_ens_oof[covered],
         leagues=leagues_oof[covered],
     )
@@ -195,6 +218,11 @@ def run(
     ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
     ensemble.save(ARTIFACTS_DIR)
     calibrator.save(ARTIFACTS_DIR)
+    # V2 EXPERIMENTAL calibrator — saved to a different filename so it
+    # coexists with the prod calibrator. Loaded by `generate_picks_gem_v2.py`.
+    import joblib as _joblib
+    _joblib.dump(calibrator_v2, ARTIFACTS_DIR / "calibrator_v2_kmeans3.pkl")
+    logger.info(f"V2 calibrator saved to {ARTIFACTS_DIR}/calibrator_v2_kmeans3.pkl")
 
     # Persist OOF + info for downstream analysis (analyze.py)
     np.savez_compressed(
@@ -204,6 +232,7 @@ def run(
         oof_cat=oof_arrays["cat"],
         oof_ensemble_raw=raw_ens_oof,
         oof_ensemble_calibrated=cal_ens_oof,
+        oof_ensemble_calibrated_v2=cal_v2_ens_oof,  # for sweep_v2
         y=y,
         covered=covered,
     )

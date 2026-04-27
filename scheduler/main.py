@@ -16,6 +16,7 @@ from scheduler.tasks.collect_injuries import run_collect_injuries
 from scheduler.tasks.collect_player_stats import run_collect_player_stats
 from scheduler.tasks.collect_lineups import run_collect_lineups
 from scheduler.tasks.generate_picks_gem import run_generate_picks_gem
+from scheduler.tasks.generate_picks_gem_v2 import run_generate_picks_gem_v2
 from datetime import datetime, timedelta, timezone
 
 
@@ -107,6 +108,16 @@ def start() -> None:
         CronTrigger(minute=33),
         id="generate_picks_gem",
         name="Generate picks Gem (hourly)",
+        misfire_grace_time=300,
+    )
+
+    # Щогодини в :37 — Gem v2 A/B variant (kmeans-3 calibration). Same ensemble,
+    # different calibrator + per-league thresholds. 30-day live shoot-out vs gem_v1.
+    scheduler.add_job(
+        run_generate_picks_gem_v2,
+        CronTrigger(minute=37),
+        id="generate_picks_gem_v2",
+        name="Generate picks Gem v2 kmeans3 (hourly A/B)",
         misfire_grace_time=300,
     )
 

@@ -4,11 +4,12 @@ from datetime import datetime, timezone
 
 # model_version → display name + color
 MODEL_META = {
-    "ws_gap_kelly_v1":     {"name": "WS Gap",  "color": "#F472B6"},
-    "monster_v1_kelly":    {"name": "Monster", "color": "#F59E0B"},
-    "aquamarine_v1_kelly": {"name": "Aqua",    "color": "#22D3EE"},
-    "pure_v1":             {"name": "Pure",    "color": "#9D4EDD"},
-    "gem_v1":              {"name": "Gem",     "color": "#10B981"},
+    "ws_gap_kelly_v1":     {"name": "WS Gap",   "color": "#F472B6"},
+    "monster_v1_kelly":    {"name": "Monster",  "color": "#F59E0B"},
+    "aquamarine_v1_kelly": {"name": "Aqua",     "color": "#22D3EE"},
+    "pure_v1":             {"name": "Pure",     "color": "#9D4EDD"},
+    "gem_v1":              {"name": "Gem",      "color": "#10B981"},
+    "gem_v2_kmeans3":      {"name": "Gem v2",   "color": "#34D399"},
 }
 
 # model query param → list of model_version values
@@ -18,6 +19,7 @@ MODEL_VERSIONS: dict[str, list[str]] = {
     "Aqua":    ["aquamarine_v1_kelly"],
     "Pure":    ["pure_v1"],
     "Gem":     ["gem_v1"],
+    "Gem v2":  ["gem_v2_kmeans3"],
 }
 
 # Flag lookup is hybrid:
