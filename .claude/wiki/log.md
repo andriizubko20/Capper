@@ -39,3 +39,4 @@ Append-only record of wiki operations.
 - Roadmap: 2 тижні план до production Telegram + live WR
 ## [2026-04-26] ingest | Work plan: 6 blocks data infrastructure overhaul
 ## [2026-04-26] ingest | Infra refactor session — per-league cherry-pick devig (+21u/yr), Kelly compounding, 3 Quick Wins, Mac proxy fix, ProxyMon + CLVMon Telegram alerts
+## [2026-04-27] ingest | Gem A/B kmeans3 — 12 calibration variants tested, +52.49 u/yr backtest, deployed as gem_v2_kmeans3 alongside gem_v1

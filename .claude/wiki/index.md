@@ -22,6 +22,7 @@ _Content catalog. Updated automatically on every INGEST or LINT operation._
 | [Gem Day 1 Analysis](pages/gem-analysis-2026-04-25.md) | Аналіз 1-го тренінгу: WR 70.3% але yield 1/wk; gem_score >20% → 85.7%; рекомендації для v2. |
 | [Work Plan 2026-04-26](pages/work-plan-2026-04-26.md) | 6 blocks today: Self-Glicko, opening odds collector, injuries, lineups, deploy Gem v2, monitoring. ~8h. |
 | [Session 2026-04-26 — Infra Refactor](pages/session-2026-04-26.md) | Per-league cherry-pick devig, Kelly compounding fix, 3 Quick Wins (bookmaker shopping/CLV monitor/movement filter), Mac proxy fix + ProxyMon. |
+| [Gem A/B kmeans3 (2026-04-27)](pages/gem-ab-kmeans3-2026-04-27.md) | Per-league calibration optimization — 12 variants tested, kmeans-3 winner deployed as gem_v2_kmeans3 A/B variant alongside gem_v1. |
 
 ## Football
 
