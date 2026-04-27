@@ -139,6 +139,7 @@ def _last10_stats(db, model_ver: str) -> dict:
 def run_generate_picks_monster(
     match_date_from: datetime | None = None,
     match_date_to: datetime | None = None,
+    include_finished: bool = False,
 ) -> None:
     now = datetime.now(timezone.utc)
     if match_date_from is None:
@@ -155,10 +156,12 @@ def run_generate_picks_monster(
     try:
         from db.models import League as LeagueModel
 
+        status_filter = ['Not Started'] if not include_finished else \
+            ['Not Started', 'Finished', 'FT', 'Match Finished']
         matches_db = db.query(Match).join(LeagueModel).filter(
             Match.date >= match_date_from.replace(tzinfo=None),
             Match.date <= match_date_to.replace(tzinfo=None),
-            Match.status == 'Not Started',
+            Match.status.in_(status_filter),
             LeagueModel.name.in_(MONSTER_LEAGUE_NAMES),
             LeagueModel.api_id.in_(LEAGUE_API_IDS),
         ).all()

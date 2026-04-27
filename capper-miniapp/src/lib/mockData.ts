@@ -312,6 +312,13 @@ export const STATS_BY_MODEL_PERIOD: Record<Model, Record<Period, StatsData>> = {
     '90D': { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
     'ALL': { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
   },
+  // Gem v2 — A/B variant with kmeans-3 calibrator
+  'Gem v2': {
+    '7D':  { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
+    '30D': { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
+    '90D': { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
+    'ALL': { roi: 0, winRate: 0, bets: 0, avgOdds: 0, curveData: [0], curvePoints: [], streak: [], byLeague: [] },
+  },
 }
 
 // ─── Compare screen ───────────────────────────────────────────────────────────
@@ -334,6 +341,7 @@ const MODEL_META = {
   aqua:    { name: 'Aqua' as Model,    tag: 'aqua',     color: '#22D3EE' },
   pure:    { name: 'Pure' as Model,    tag: 'pure',    color: '#9D4EDD' },
   gem:     { name: 'Gem' as Model,     tag: 'gem',     color: '#10B981' },
+  gem_v2:  { name: 'Gem v2' as Model,  tag: 'gem_v2',  color: '#34D399' },
 }
 
 export const MODEL_COLOR: Record<Model, string> = {
@@ -342,6 +350,7 @@ export const MODEL_COLOR: Record<Model, string> = {
   'Aqua':    MODEL_META.aqua.color,
   'Pure':    MODEL_META.pure.color,
   'Gem':     MODEL_META.gem.color,
+  'Gem v2':  MODEL_META.gem_v2.color,
 }
 
 export const COMPARE_BY_PERIOD: Record<Period, ModelData[]> = {
